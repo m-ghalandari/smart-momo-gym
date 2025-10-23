@@ -1,0 +1,10 @@
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ IDE
+.idea/
+*.iml
+
+# Log-Dateien
+*.log
+
