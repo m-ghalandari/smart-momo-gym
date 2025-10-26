@@ -1,10 +1,12 @@
 package de.momogym.services;
 
 import de.momogym.persistence.Athlete;
+import de.momogym.persistence.TrainingPlan;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 
 @Stateless
 public class AthleteService {
@@ -77,5 +79,58 @@ public class AthleteService {
         }
     }
 
+    /**
+     * Erstellt einen neuen, leeren Trainingsplan für einen Athleten.
+     *
+     * @param athleteId Die ID des Athleten, dem der Plan gehören soll.
+     * @param planName Der Name für den neuen Plan (z.B. "3er Split").
+     * @param makeActive Soll dieser Plan als der neue aktive Plan gesetzt werden?
+     * @return Der erstellte TrainingPlan.
+     * @throws Exception Wenn der Plan-Name bereits global vergeben ist (wegen unique=true).
+     */
+    public TrainingPlan createTrainingPlan(Long athleteId, String planName, boolean makeActive) throws Exception {
+
+        // Schritt 1: Prüfen, ob der Plan-Name global eindeutig ist
+        // (Wie in deiner Entity-Definition @Column(unique = true) gefordert)
+        if (planNameExists(planName)) {
+            throw new Exception("Der Plan-Name '" + planName + "' ist bereits vergeben.");
+        }
+
+        // Schritt 2: Den Besitzer (Athleten) laden
+        Athlete athlete = entityManager.find(Athlete.class, athleteId);
+        if (athlete == null) {
+            throw new Exception("Athlet mit ID " + athleteId + " nicht gefunden.");
+        }
+
+        // Schritt 3: (WICHTIG) Wenn dieser Plan aktiv sein soll, alle anderen Pläne
+        // dieses Athleten zuerst deaktivieren.
+        if (makeActive) {
+            entityManager.createQuery("UPDATE TrainingPlan p SET p.isActive = false WHERE p.athlete = :athlete")
+                    .setParameter("athlete", athlete)
+                    .executeUpdate();
+        }
+
+        // Schritt 4: Neuen Plan erstellen
+        TrainingPlan newPlan = new TrainingPlan();
+        newPlan.setAthlete(athlete);
+        newPlan.setName(planName);
+        newPlan.setActive(makeActive);
+        newPlan.setCurrentDaySequence(1); // Neuer Plan startet immer an Tag 1
+
+        // Schritt 5: Speichern
+        entityManager.persist(newPlan);
+
+        return newPlan;
+    }
+
+    /**
+     * Private Hilfsmethode, um die globale Einzigartigkeit des Plan-Namens zu prüfen.
+     */
+    private boolean planNameExists(String planName) {
+        TypedQuery<Long> query = entityManager.createQuery(
+                "SELECT COUNT(p) FROM TrainingPlan p WHERE p.name = :name", Long.class);
+        query.setParameter("name", planName);
+        return query.getSingleResult() > 0;
+    }
 
 }

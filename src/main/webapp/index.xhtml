@@ -2,32 +2,41 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
       lang="de">
 <h:head>
-    <title>JSF Test</title>
+    <title>Dashboard - Smarte Sport-App</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .nav-link {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 10px 0;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
 </h:head>
 
 <h:body>
-    <h1>Hallo JSF!</h1>
-    <h:form>
-        <h:messages globalOnly="true" style="color:red;" />
+    <h2>Dashboard</h2>
+    <p>Willkommen zur Smarten Sport-App.</p>
+    <hr />
 
-        <h:panelGrid columns="2">
-            <h:outputLabel for="usernameInput" value="Benutzername:" />
+    <h4>Aktionen</h4>
 
-            <h:inputText
-                    id="usernameInput"
-                    value="#{athleteSearchController.username}"
-                    required="true"
-                    requiredMessage="Name darf nicht leer sein." />
-        </h:panelGrid>
+    <div>
+        <h:link value="Neuen Athleten registrieren"
+                outcome="register"
+                styleClass="nav-link" />
+    </div>
 
-        <h:commandButton
-                value="Suchen &amp; Anzeigen"
-                action="#{athleteSearchController.search}" />
-
-    </h:form>
+    <div>
+        <h:link value="Athleten suchen &amp; laden"
+                outcome="athleteSearch"
+                styleClass="nav-link" />
+    </div>
 
 </h:body>
 </html>

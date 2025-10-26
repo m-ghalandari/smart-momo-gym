@@ -18,6 +18,11 @@ public class AthleteDetailController implements Serializable {
 
     private Athlete athlete; // Der Athlet, den wir anzeigen
 
+    private String newPlanName;
+    private boolean newPlanIsActive = false; // Standardmäßig nicht aktiv
+
+
+
     /**
      * Diese Methode wird direkt nach Erstellung der Bean aufgerufen (@PostConstruct).
      * Sie liest den 'athleteId'-Parameter aus der URL und lädt die Daten.
@@ -53,5 +58,57 @@ public class AthleteDetailController implements Serializable {
     // Getter für JSF, um auf den Athleten zuzugreifen
     public Athlete getAthlete() {
         return athlete;
+    }
+
+    /**
+     * Wird vom "Erstellen"-Button auf der Detailseite aufgerufen.
+     */
+    public String createNewPlan() {
+        if (athlete == null) {
+            addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Kein Athlet geladen.");
+            return null;
+        }
+
+        try {
+            // Service-Logik aufrufen
+            athleteService.createTrainingPlan(athlete.getId(), newPlanName, newPlanIsActive);
+
+            addMessage(FacesMessage.SEVERITY_INFO, "Erfolg", "Plan '" + newPlanName + "' erstellt.");
+
+            // WICHTIG: Athleten (und seine Pläne) neu laden, damit die Liste aktuell ist!
+            this.athlete = athleteService.findAthleteByIdWithPlans(athlete.getId());
+
+            // Formularfelder zurücksetzen
+            this.newPlanName = null;
+            this.newPlanIsActive = false;
+
+        } catch (Exception e) {
+            addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", e.getMessage());
+        }
+
+        // Auf der Seite bleiben (null returned)
+        return null;
+    }
+
+    private void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(severity, summary, detail));
+    }
+
+    // --- NEUE GETTER/SETTER (für das Formular) ---
+    public String getNewPlanName() {
+        return newPlanName;
+    }
+
+    public void setNewPlanName(String newPlanName) {
+        this.newPlanName = newPlanName;
+    }
+
+    public boolean isNewPlanIsActive() {
+        return newPlanIsActive;
+    }
+
+    public void setNewPlanIsActive(boolean newPlanIsActive) {
+        this.newPlanIsActive = newPlanIsActive;
     }
 }

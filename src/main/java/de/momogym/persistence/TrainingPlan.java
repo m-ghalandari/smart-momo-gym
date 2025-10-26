@@ -14,7 +14,7 @@ public class TrainingPlan {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "training_plan_seq")
     private Long id;
 
-    @Column(name = "PLAN_NAME", nullable = false, unique = true)
+    @Column(name = "PLAN_NAME", nullable = false)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
