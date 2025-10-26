@@ -42,6 +42,10 @@ public class Athlete {
 
     public Athlete() {
     }
+    public Athlete(String username) {
+        this.username = username;
+    }
+
 
     public Athlete(String username, List<TrainingPlan> trainingPlans, List<ExerciseLog> logs) {
         this.username = username;
