@@ -6,7 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "TRAINING_PLAN")
+@Table(name = "TRAINING_PLAN",
+        uniqueConstraints = @UniqueConstraint(
+                name = "UK_PLAN_NAME_PER_ATHLETE",
+                columnNames = {"PLAN_NAME", "ATHLETE_ID"}
+        )
+)
 public class TrainingPlan {
 
     @Id

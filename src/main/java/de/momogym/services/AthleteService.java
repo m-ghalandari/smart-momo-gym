@@ -79,31 +79,26 @@ public class AthleteService {
         }
     }
 
+
+
+
     /**
-     * Erstellt einen neuen, leeren Trainingsplan für einen Athleten.
-     *
-     * @param athleteId Die ID des Athleten, dem der Plan gehören soll.
-     * @param planName Der Name für den neuen Plan (z.B. "3er Split").
-     * @param makeActive Soll dieser Plan als der neue aktive Plan gesetzt werden?
-     * @return Der erstellte TrainingPlan.
-     * @throws Exception Wenn der Plan-Name bereits global vergeben ist (wegen unique=true).
+     * Erstellt einen neuen, leeren Trainingsplan für einen Athleten
      */
     public TrainingPlan createTrainingPlan(Long athleteId, String planName, boolean makeActive) throws Exception {
 
-        // Schritt 1: Prüfen, ob der Plan-Name global eindeutig ist
-        // (Wie in deiner Entity-Definition @Column(unique = true) gefordert)
-        if (planNameExists(planName)) {
-            throw new Exception("Der Plan-Name '" + planName + "' ist bereits vergeben.");
-        }
-
-        // Schritt 2: Den Besitzer (Athleten) laden
+        // Schritt 1: Den Besitzer (Athleten) laden (JETZT VOR DER PRÜFUNG)
         Athlete athlete = entityManager.find(Athlete.class, athleteId);
         if (athlete == null) {
             throw new Exception("Athlet mit ID " + athleteId + " nicht gefunden.");
         }
 
-        // Schritt 3: (WICHTIG) Wenn dieser Plan aktiv sein soll, alle anderen Pläne
-        // dieses Athleten zuerst deaktivieren.
+        // Schritt 2: Angepasste Prüfung (jetzt mit Athlete-Objekt)
+        if (planNameExistsForAthlete(planName, athlete)) { // ANPASSUNG
+            throw new Exception("Der Plan-Name '" + planName + "' ist für DIESEN Athleten bereits vergeben."); // ANPASSUNG
+        }
+
+        // Schritt 3: (WICHTIG) ... (Logik bleibt gleich)
         if (makeActive) {
             entityManager.createQuery("UPDATE TrainingPlan p SET p.isActive = false WHERE p.athlete = :athlete")
                     .setParameter("athlete", athlete)
@@ -112,10 +107,10 @@ public class AthleteService {
 
         // Schritt 4: Neuen Plan erstellen
         TrainingPlan newPlan = new TrainingPlan();
-        newPlan.setAthlete(athlete);
+        newPlan.setAthlete(athlete); // Wir nutzen das geladene Objekt
         newPlan.setName(planName);
         newPlan.setActive(makeActive);
-        newPlan.setCurrentDaySequence(1); // Neuer Plan startet immer an Tag 1
+        newPlan.setCurrentDaySequence(1);
 
         // Schritt 5: Speichern
         entityManager.persist(newPlan);
@@ -124,12 +119,15 @@ public class AthleteService {
     }
 
     /**
-     * Private Hilfsmethode, um die globale Einzigartigkeit des Plan-Namens zu prüfen.
+     * Prüft, ob der Plan-Name FÜR EINEN SPEZIFISCHEN Athleten existiert.
      */
-    private boolean planNameExists(String planName) {
+    private boolean planNameExistsForAthlete(String planName, Athlete athlete) { // ANPASSUNG
         TypedQuery<Long> query = entityManager.createQuery(
-                "SELECT COUNT(p) FROM TrainingPlan p WHERE p.name = :name", Long.class);
+                "SELECT COUNT(p) FROM TrainingPlan p WHERE p.name = :name AND p.athlete = :athlete", Long.class); // ANPASSUNG
+
         query.setParameter("name", planName);
+        query.setParameter("athlete", athlete); // ANPASSUNG
+
         return query.getSingleResult() > 0;
     }
 
