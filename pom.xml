@@ -57,6 +57,22 @@
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${wildfly-plugin.version}</version>
+                <configuration>
+                    <commands>
+                        <command>module add --name=com.oracle.jdbc --resources=${settings.localRepository}/com/oracle/database/jdbc/ojdbc11/23.4.0.24.05/ojdbc11-23.4.0.24.05.jar --dependencies=javax.api,javax.transaction.api</command>
+
+                        <command>/subsystem=datasources/jdbc-driver=oracle:add(driver-name=oracle,driver-module-name=com.oracle.jdbc,driver-class-name=oracle.jdbc.OracleDriver)</command>
+
+                        <command>data-source add --name=OracleDS --jndi-name=java:/jdbc/OracleDS --driver-name=oracle --connection-url=jdbc:oracle:thin:@localhost:1522/XEPDB1 --user-name=momogym_user --password=dbpass --min-pool-size=5 --max-pool-size=15 --blocking-timeout-wait-millis=5000 --enabled=true</command>
+                    </commands>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.oracle.database.jdbc</groupId>
+                        <artifactId>ojdbc11</artifactId>
+                        <version>23.4.0.24.05</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

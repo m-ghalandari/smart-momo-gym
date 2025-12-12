@@ -19,3 +19,11 @@ ALTER PLUGGABLE DATABASE ORCLPDB OPEN;
 
 Once the runtime starts, you can access the project at [http://localhost:8080/smart-momo-gym](http://localhost:8080/smart-momo-gym).
 
+ Beispielpfad - bitte anpassen!
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-21"
+
+ Prüfen, ob es geklappt hat (sollte jetzt java 21 anzeigen)
+& "$env:JAVA_HOME\bin\java.exe" -version
+
+mvn clean wildfly:run -s private-settings.xml
+
