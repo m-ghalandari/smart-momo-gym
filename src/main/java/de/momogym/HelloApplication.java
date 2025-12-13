@@ -1,4 +1,4 @@
-package de.momogym.jakarta.hello;
+package de.momogym;
 
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.ApplicationPath;

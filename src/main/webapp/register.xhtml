@@ -1,37 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      lang="de">
 
 <h:head>
     <title>Athlet Registrieren</title>
+    <style>
+        /* 1. Hintergrund und Zentrierung */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8; /* Leichtes Grau */
+            display: flex;
+            justify-content: center; /* Horizontal zentrieren */
+            align-items: center;     /* Vertikal zentrieren */
+            height: 100vh;           /* Volle Bildschirmhöhe nutzen */
+            margin: 0;
+        }
+
+        /* 2. Die "Karte" (Das weiße Formular) */
+        .register-card {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;      /* Abgerundete Ecken */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sanfter Schatten */
+            width: 100%;
+            max-width: 400px;        /* Nicht breiter als 400px */
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+        }
+
+        /* 3. Formular-Elemente */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box; /* Wichtig, damit Padding die Breite nicht sprengt */
+        }
+
+        .form-input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        /* 4. Der Button */
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745; /* Grün */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #218838; /* Dunkleres Grün beim Drüberfahren */
+        }
+
+        /* 5. Nachrichten und Links */
+        .error-msg {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .global-messages {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 15px;
+            color: #dc3545;
+            text-align: center;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #6c757d;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            color: #333;
+            text-decoration: underline;
+        }
+    </style>
 </h:head>
 
 <h:body>
-    <h2>Neuen Athleten registrieren</h2>
 
-    <h:form>
-        <h:messages globalOnly="false" showDetail="true" showSummary="true" />
+    <div class="register-card">
+        <h2>Konto erstellen</h2>
 
-        <h:panelGrid columns="3">
-            <h:outputLabel for="usernameInput" value="Benutzername:" />
+        <h:form>
+            <h:messages globalOnly="true" styleClass="global-messages" />
 
-            <h:inputText
-                    id="usernameInput"
-                    value="#{athleteController.username}"
-                    required="true"
-                    requiredMessage="Benutzername ist ein Pflichtfeld." />
+            <div class="form-group">
+                <h:outputLabel for="usernameInput" value="Benutzername" styleClass="form-label" />
 
-            <h:message for="usernameInput" style="color:red;" />
+                <h:inputText id="usernameInput"
+                             value="#{athleteController.username}"
+                             required="true"
+                             requiredMessage="Bitte gib einen Namen ein."
+                             styleClass="form-input" />
 
-            <h:commandButton
-                    value="Registrieren"
-                    action="#{athleteController.register}" />
+                <h:message for="usernameInput" styleClass="error-msg" />
+            </div>
 
-        </h:panelGrid>
-    </h:form>
+            <h:commandButton value="Jetzt Registrieren"
+                             action="#{athleteController.register}"
+                             styleClass="btn-submit" />
+        </h:form>
+
+        <h:link value="Zurück zum Dashboard" outcome="index.xhtml" styleClass="back-link" />
+    </div>
 
 </h:body>
 </html>

@@ -2,41 +2,113 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
       lang="de">
 <h:head>
-    <title>Dashboard - Smarte Sport-App</title>
+    <title>Dashboard - Smart Momo Gym</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .nav-link {
-            display: inline-block;
-            padding: 10px 15px;
-            margin: 10px 0;
-            background-color: #007bff;
+        body { font-family: 'Segoe UI', sans-serif; padding: 20px; color: #333; }
+
+        /* ... (Dein existierendes CSS für Header und Header-Container) ... */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-register {
+            background-color: #28a745;
             color: white;
+            padding: 10px 15px;
             text-decoration: none;
             border-radius: 5px;
+            font-weight: bold;
         }
+        .btn-register:hover { background-color: #218838; }
+
+        /* ... (Dein Tabellen CSS) ... */
+        .athlete-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .athlete-table th {
+            background-color: #f8f9fa;
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .athlete-table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .athlete-table tr:hover { background-color: #f1f1f1; }
+
+        /* Links */
+        .action-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 15px; /* Abstand zum Löschen Button */
+        }
+
+        /* Neuer Style für Löschen */
+        .delete-link {
+            color: #dc3545; /* Rot */
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .delete-link:hover { text-decoration: underline; }
     </style>
 </h:head>
 
 <h:body>
-    <h2>Dashboard</h2>
-    <p>Willkommen zur Smarten Sport-App.</p>
-    <hr />
 
-    <h4>Aktionen</h4>
-
-    <div>
-        <h:link value="Neuen Athleten registrieren"
-                outcome="register"
-                styleClass="nav-link" />
+    <div class="header-container">
+        <div>
+            <h2 style="margin:0;">Dashboard</h2>
+            <small>Smart Momo Gym Übersicht</small>
+        </div>
+        <h:link value="+ Neuer Athlet" outcome="register" styleClass="btn-register" />
     </div>
 
-    <div>
-        <h:link value="Athleten suchen &amp; laden"
-                outcome="athleteSearch"
-                styleClass="nav-link" />
-    </div>
+    <h3>Alle Athleten</h3>
+
+    <h:panelGroup rendered="#{empty dashboardController.allAthletes}">
+        <p>Noch keine Athleten registriert.</p>
+    </h:panelGroup>
+
+    <h:form id="dashboardForm" rendered="#{not empty dashboardController.allAthletes}">
+
+        <h:dataTable value="#{dashboardController.allAthletes}" var="athlete"
+                     styleClass="athlete-table">
+
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                #{athlete.username}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Aktionen</f:facet>
+
+                <h:link value="Details" outcome="athleteDetail" styleClass="action-link">
+                    <f:param name="athleteId" value="#{athlete.id}" />
+                </h:link>
+
+                <h:commandLink value="Löschen"
+                               action="#{dashboardController.deleteAthlete(athlete.id)}"
+                               styleClass="delete-link"
+                               onclick="return confirm('Soll der Athlet #{athlete.username} wirklich gelöscht werden?');">
+                </h:commandLink>
+
+            </h:column>
+
+        </h:dataTable>
+    </h:form>
 
 </h:body>
 </html>

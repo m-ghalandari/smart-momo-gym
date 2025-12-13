@@ -8,6 +8,8 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
+import java.util.List;
+
 @Stateless
 public class AthleteService {
 
@@ -58,6 +60,10 @@ public class AthleteService {
             return null; // Nichts gefunden
         }
     }
+
+	public List<Athlete> findAllAthletes(){
+		return entityManager.createQuery("SELECT a FROM Athlete a", Athlete.class).getResultList();
+	}
 
     /**
      * Findet einen Athleten anhand seiner ID (inkl. Pläne).
@@ -130,5 +136,13 @@ public class AthleteService {
 
         return query.getSingleResult() > 0;
     }
+
+	public void deleteAthlete(Long id){
+		Athlete athlete = entityManager.find(Athlete.class, id);
+
+		if (athlete != null) {
+			entityManager.remove(athlete);
+		}
+	}
 
 }

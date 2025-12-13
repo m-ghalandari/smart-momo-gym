@@ -118,6 +118,13 @@ Es ist keine manuelle Bearbeitung der `standalone.xml` nötig.
 ./mvnw clean package wildfly:deploy -s private-settings.xml
 ```
 
+*Terminal 2 (Zum Aktualisieren):*
+Wenn du Code geändert hast, öffne ein zweites Terminal (oder Tab in IntelliJ) und führe aus:
+```powershell
+./mvn package wildfly:deploy -s private-settings.xml
+```
+Was passiert da? Der Server in Terminal 1 bleibt an. Der Befehl in Terminal 2 baut nur deine .war Datei neu und schiebt sie in den laufenden Server. Das dauert meist nur wenige Sekunden statt Minuten.
+
 **Container Status prüfen:**
 
 ```powershell
