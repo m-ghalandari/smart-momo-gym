@@ -25,19 +25,17 @@ public class AthleteService {
         return athlete;
     }
 
-    private boolean usernameExists(String username) {
-        try {
-            entityManager.createQuery("SELECT a FROM Athlete a WHERE a.username = :username", Athlete.class)
-                    .setParameter("username", username)
-                    .getSingleResult();
+	public void deleteAthlete(Long id){
+		Athlete athlete = entityManager.find(Athlete.class, id);
 
-            return true;
+		if (athlete != null) {
+			entityManager.remove(athlete);
+		}
+	}
 
-        } catch (NoResultException e) {
-
-            return false;
-        }
-    }
+	public List<Athlete> findAllAthletes(){
+		return entityManager.createQuery("SELECT a FROM Athlete a", Athlete.class).getResultList();
+	}
 
     /**
      * Findet einen Athleten anhand seines Benutzernamens.
@@ -61,10 +59,6 @@ public class AthleteService {
         }
     }
 
-	public List<Athlete> findAllAthletes(){
-		return entityManager.createQuery("SELECT a FROM Athlete a", Athlete.class).getResultList();
-	}
-
     /**
      * Findet einen Athleten anhand seiner ID (inkl. Pläne).
      * Wird von der Detailseite benötigt, nachdem wir weitergeleitet haben.
@@ -85,64 +79,20 @@ public class AthleteService {
         }
     }
 
+	private boolean usernameExists(String username) {
+		try {
+			entityManager.createQuery("SELECT a FROM Athlete a WHERE a.username = :username", Athlete.class)
+				.setParameter("username", username)
+				.getSingleResult();
 
+			return true;
 
+		} catch (NoResultException e) {
 
-    /**
-     * Erstellt einen neuen, leeren Trainingsplan für einen Athleten
-     */
-    public TrainingPlan createTrainingPlan(Long athleteId, String planName, boolean makeActive) throws Exception {
-
-        // Schritt 1: Den Besitzer (Athleten) laden (JETZT VOR DER PRÜFUNG)
-        Athlete athlete = entityManager.find(Athlete.class, athleteId);
-        if (athlete == null) {
-            throw new Exception("Athlet mit ID " + athleteId + " nicht gefunden.");
-        }
-
-        // Schritt 2: Angepasste Prüfung (jetzt mit Athlete-Objekt)
-        if (planNameExistsForAthlete(planName, athlete)) { // ANPASSUNG
-            throw new Exception("Der Plan-Name '" + planName + "' ist für DIESEN Athleten bereits vergeben."); // ANPASSUNG
-        }
-
-        // Schritt 3: (WICHTIG) ... (Logik bleibt gleich)
-        if (makeActive) {
-            entityManager.createQuery("UPDATE TrainingPlan p SET p.isActive = false WHERE p.athlete = :athlete")
-                    .setParameter("athlete", athlete)
-                    .executeUpdate();
-        }
-
-        // Schritt 4: Neuen Plan erstellen
-        TrainingPlan newPlan = new TrainingPlan();
-        newPlan.setAthlete(athlete); // Wir nutzen das geladene Objekt
-        newPlan.setName(planName);
-        newPlan.setActive(makeActive);
-        newPlan.setCurrentDaySequence(1);
-
-        // Schritt 5: Speichern
-        entityManager.persist(newPlan);
-
-        return newPlan;
-    }
-
-    /**
-     * Prüft, ob der Plan-Name FÜR EINEN SPEZIFISCHEN Athleten existiert.
-     */
-    private boolean planNameExistsForAthlete(String planName, Athlete athlete) { // ANPASSUNG
-        TypedQuery<Long> query = entityManager.createQuery(
-                "SELECT COUNT(p) FROM TrainingPlan p WHERE p.name = :name AND p.athlete = :athlete", Long.class); // ANPASSUNG
-
-        query.setParameter("name", planName);
-        query.setParameter("athlete", athlete); // ANPASSUNG
-
-        return query.getSingleResult() > 0;
-    }
-
-	public void deleteAthlete(Long id){
-		Athlete athlete = entityManager.find(Athlete.class, id);
-
-		if (athlete != null) {
-			entityManager.remove(athlete);
+			return false;
 		}
 	}
+
+
 
 }

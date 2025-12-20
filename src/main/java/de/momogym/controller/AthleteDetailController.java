@@ -1,6 +1,7 @@
 package de.momogym.controller;
 import de.momogym.persistence.Athlete;
 import de.momogym.services.AthleteService;
+import de.momogym.services.TrainingPlanService;
 import jakarta.faces.view.ViewScoped; // Wichtig: Hält die Daten, solange man auf der Seite ist
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -15,6 +16,9 @@ public class AthleteDetailController implements Serializable {
 
     @Inject
     private AthleteService athleteService;
+
+	@Inject
+    private TrainingPlanService trainingPlanService;
 
     private Athlete athlete; // Der Athlet, den wir anzeigen
 
@@ -71,7 +75,7 @@ public class AthleteDetailController implements Serializable {
 
         try {
             // Service-Logik aufrufen
-            athleteService.createTrainingPlan(athlete.getId(), newPlanName, newPlanIsActive);
+            trainingPlanService.createTrainingPlan(athlete.getId(), newPlanName, newPlanIsActive);
 
             addMessage(FacesMessage.SEVERITY_INFO, "Erfolg", "Plan '" + newPlanName + "' erstellt.");
 
