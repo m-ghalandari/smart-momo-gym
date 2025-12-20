@@ -22,9 +22,6 @@ public class AthleteDetailController implements Serializable {
 
     private Athlete athlete; // Der Athlet, den wir anzeigen
 
-    private String newPlanName;
-    private boolean newPlanIsActive = false; // Standardmäßig nicht aktiv
-
 
 
     /**
@@ -54,6 +51,21 @@ public class AthleteDetailController implements Serializable {
         }
     }
 
+	public String deletePlan(Long planId) {
+		try {
+			trainingPlanService.deleteTrainingPlan(planId);
+
+			addMessage(FacesMessage.SEVERITY_INFO, "Erfolg", "Plan wurde gelöscht.");
+
+			// WICHTIG: Athlet neu laden, damit der gelöschte Plan aus der Liste verschwindet!
+			this.athlete = athleteService.findAthleteByIdWithPlans(this.athlete.getId());
+
+		} catch (Exception e) {
+			addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Löschen fehlgeschlagen: " + e.getMessage());
+		}
+		return null; // Bleibt auf der gleichen Seite
+	}
+
     private void addErrorMessage(String detail) {
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler", detail));
@@ -64,55 +76,10 @@ public class AthleteDetailController implements Serializable {
         return athlete;
     }
 
-    /**
-     * Wird vom "Erstellen"-Button auf der Detailseite aufgerufen.
-     */
-    public String createNewPlan() {
-        if (athlete == null) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Kein Athlet geladen.");
-            return null;
-        }
-
-        try {
-            // Service-Logik aufrufen
-            trainingPlanService.createTrainingPlan(athlete.getId(), newPlanName, newPlanIsActive);
-
-            addMessage(FacesMessage.SEVERITY_INFO, "Erfolg", "Plan '" + newPlanName + "' erstellt.");
-
-            // WICHTIG: Athleten (und seine Pläne) neu laden, damit die Liste aktuell ist!
-            this.athlete = athleteService.findAthleteByIdWithPlans(athlete.getId());
-
-            // Formularfelder zurücksetzen
-            this.newPlanName = null;
-            this.newPlanIsActive = false;
-
-        } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", e.getMessage());
-        }
-
-        // Auf der Seite bleiben (null returned)
-        return null;
-    }
 
     private void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(severity, summary, detail));
     }
 
-    // --- NEUE GETTER/SETTER (für das Formular) ---
-    public String getNewPlanName() {
-        return newPlanName;
-    }
-
-    public void setNewPlanName(String newPlanName) {
-        this.newPlanName = newPlanName;
-    }
-
-    public boolean isNewPlanIsActive() {
-        return newPlanIsActive;
-    }
-
-    public void setNewPlanIsActive(boolean newPlanIsActive) {
-        this.newPlanIsActive = newPlanIsActive;
-    }
 }
