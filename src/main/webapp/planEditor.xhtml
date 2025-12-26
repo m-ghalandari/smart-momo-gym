@@ -3,9 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets">
-
-<h:head>
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:c="jakarta.tags.core"> <h:head>
     <title>Plan Editor</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; padding: 20px; background-color: #121212; color: #e0e0e0; }
@@ -43,7 +42,6 @@
         .back-link { color: #64b5f6; text-decoration: none; font-weight: bold;}
     </style>
 </h:head>
-
 <h:body>
     <h:messages globalOnly="true" style="color: #ff6b6b; list-style: none;" />
 
@@ -59,7 +57,7 @@
         </h:link>
     </div>
 
-    <ui:repeat value="#{planEditorController.trainingPlan.trainingDays}" var="day">
+    <c:forEach items="#{planEditorController.trainingPlan.trainingDays}" var="day">
 
         <div class="day-block">
             <h3 class="day-title">#{day.name}</h3>
@@ -111,7 +109,7 @@
 
         </div>
 
-    </ui:repeat>
+    </c:forEach>
 
 </h:body>
 </html>

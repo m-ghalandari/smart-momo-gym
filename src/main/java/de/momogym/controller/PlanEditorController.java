@@ -23,7 +23,7 @@ public class PlanEditorController implements Serializable {
 	private TrainingPlanService trainingPlanService;
 
 	@Inject
-	private ExerciseService exerciseService; // Wir brauchen die Übungen für das Dropdown
+	private ExerciseService exerciseService;
 
 	private Long planId;
 	private TrainingPlan trainingPlan;
