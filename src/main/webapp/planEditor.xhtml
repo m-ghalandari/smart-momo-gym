@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+
+<h:head>
+    <title>Plan Editor</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; padding: 20px; background-color: #121212; color: #e0e0e0; }
+        h2, h3, h4 { color: white; margin-top: 0; }
+
+        .header-container { border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;}
+
+        /* Tag-Container */
+        .day-block {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .day-title { color: #64b5f6; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px; }
+
+        /* Innere Tabelle für Übungen */
+        .exercise-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .exercise-table th { text-align: left; border-bottom: 1px solid #555; padding: 8px; color: #b0b0b0; }
+        .exercise-table td { border-bottom: 1px solid #333; padding: 8px; }
+
+        /* Formularzeile (Add Exercise) */
+        .add-row { display: flex; gap: 10px; align-items: flex-end; background: #252525; padding: 15px; border-radius: 6px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-label { font-size: 0.85em; font-weight: bold; margin-bottom: 4px; color: #aaa; }
+
+        .input-dark { background: #333; border: 1px solid #555; color: white; padding: 6px; border-radius: 4px; }
+
+        .btn-add { background-color: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; height: 32px;}
+        .btn-add:hover { background-color: #34ce57; }
+
+        .back-link { color: #64b5f6; text-decoration: none; font-weight: bold;}
+    </style>
+</h:head>
+
+<h:body>
+    <h:messages globalOnly="true" style="color: #ff6b6b; list-style: none;" />
+
+    <div class="header-container">
+        <div>
+            <h2>Plan Editor</h2>
+            <h:panelGroup rendered="#{planEditorController.trainingPlan != null}">
+                <small>Bearbeite: <strong>#{planEditorController.trainingPlan.name}</strong></small>
+            </h:panelGroup>
+        </div>
+        <h:link value="← Zurück" outcome="athleteDetail" styleClass="back-link">
+            <f:param name="athleteId" value="#{planEditorController.trainingPlan.athlete.id}" />
+        </h:link>
+    </div>
+
+    <ui:repeat value="#{planEditorController.trainingPlan.trainingDays}" var="day">
+
+        <div class="day-block">
+            <h3 class="day-title">#{day.name}</h3>
+
+            <h:dataTable value="#{day.plannedExercises}" var="pe" styleClass="exercise-table">
+                <h:column>
+                    <f:facet name="header">Übung</f:facet>
+                    #{pe.exercise.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Sätze</f:facet>
+                    #{pe.sets}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Wdh.</f:facet>
+                    #{pe.reps}
+                </h:column>
+            </h:dataTable>
+
+            <h:panelGroup rendered="#{empty day.plannedExercises}">
+                <p style="color: #777; font-style: italic;">Freier Tag (noch keine Übungen).</p>
+            </h:panelGroup>
+
+            <h:form>
+                <div class="add-row">
+
+                    <div class="form-group" style="flex-grow: 2;">
+                        <span class="form-label">Übung wählen</span>
+                        <h:selectOneMenu value="#{planEditorController.getInputForDay(day.id).exerciseId}" styleClass="input-dark" style="width: 100%;">
+                            <f:selectItem itemLabel="-- Bitte wählen --" itemValue="#{null}" />
+                            <f:selectItems value="#{planEditorController.availableExercises}" var="ex"
+                                           itemValue="#{ex.id}" itemLabel="#{ex.name} (#{ex.targetMuscle})" />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="form-group" style="width: 70px;">
+                        <span class="form-label">Sätze</span>
+                        <h:inputText value="#{planEditorController.getInputForDay(day.id).sets}" styleClass="input-dark" />
+                    </div>
+
+                    <div class="form-group" style="width: 80px;">
+                        <span class="form-label">Wdh.</span>
+                        <h:inputText value="#{planEditorController.getInputForDay(day.id).reps}" styleClass="input-dark" />
+                    </div>
+
+                    <h:commandButton value="+" action="#{planEditorController.addExercise(day.id)}" styleClass="btn-add" />
+                </div>
+            </h:form>
+
+        </div>
+
+    </ui:repeat>
+
+</h:body>
+</html>

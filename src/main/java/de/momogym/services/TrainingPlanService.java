@@ -1,14 +1,19 @@
 package de.momogym.services;
 
 import de.momogym.persistence.Athlete;
+import de.momogym.persistence.Exercise;
+import de.momogym.persistence.PlannedExercise;
 import de.momogym.persistence.TrainingDay;
 import de.momogym.persistence.TrainingPlan;
 import jakarta.ejb.Stateless;
+import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Stateless
 public class TrainingPlanService {
@@ -71,6 +76,36 @@ public class TrainingPlanService {
 		}
 	}
 
+	public void addExerciseToTrainingDay(Long dayId, Long exerciseId, int sets, String reps) {
+		TrainingDay day = entityManager.find(TrainingDay.class, dayId);
+		if (day == null) throw new IllegalArgumentException("Tag nicht gefunden");
+
+		Exercise exercise = entityManager.find(Exercise.class, exerciseId);
+		if (exercise == null) throw new IllegalArgumentException("Übung nicht gefunden");
+
+		PlannedExercise plannedExercise = new PlannedExercise();
+		plannedExercise.setTrainingDay(day);
+		plannedExercise.setExercise(exercise);
+		plannedExercise.setSets(sets);
+		plannedExercise.setReps(reps);
+
+		plannedExercise.setSortOrder(day.getPlannedExercises().size() + 1);
+
+		entityManager.persist(plannedExercise);
+	}
+
+	public TrainingPlan findTrainingPlanByIdWithDaysAndExercises(Long planId) {
+
+		// Wir aktivieren den oben definierten Graphen
+		EntityGraph<?> graph = entityManager.getEntityGraph("TrainingPlan.withDaysAndExercises");
+
+		Map<String, Object> properties = new HashMap<>();
+		// "fetchgraph" bedeutet: Lade alles im Graphen, der Rest ist LAZY.
+		properties.put("jakarta.persistence.fetchgraph", graph);
+
+		return entityManager.find(TrainingPlan.class, planId, properties);
+	}
+
 	/**
 	 * Prüft, ob der Plan-Name FÜR EINEN SPEZIFISCHEN Athleten existiert.
 	 */
@@ -83,4 +118,5 @@ public class TrainingPlanService {
 
 		return query.getSingleResult() > 0;
 	}
+
 }

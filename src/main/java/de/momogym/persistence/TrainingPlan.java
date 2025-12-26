@@ -12,6 +12,14 @@ import java.util.List;
                 columnNames = {"PLAN_NAME", "ATHLETE_ID"}
         )
 )
+@NamedEntityGraph(
+	name = "TrainingPlan.withDaysAndExercises",
+	attributeNodes = @NamedAttributeNode(value = "trainingDays", subgraph = "days"),
+	subgraphs = {
+		@NamedSubgraph(name = "days", attributeNodes = @NamedAttributeNode(value = "plannedExercises", subgraph = "exercises")),
+		@NamedSubgraph(name = "exercises", attributeNodes = @NamedAttributeNode("exercise"))
+	}
+)
 public class TrainingPlan {
 
     @Id
@@ -39,7 +47,7 @@ public class TrainingPlan {
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
-    @OrderBy("daySequence ASC") // WICHTIG: Sortiert nach 1, 2, 3...
+    @OrderBy("id ASC")
     private List<TrainingDay> trainingDays = new ArrayList<>();
 
     public TrainingPlan() {

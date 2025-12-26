@@ -152,6 +152,9 @@
                         </h:commandLink>
                     </div>
 
+                    <h:link value="✏️ Bearbeiten" outcome="planEditor" styleClass="btn-edit">
+                        <f:param name="planId" value="#{plan.id}" />
+                    </h:link>
                 </div>
             </ui:repeat>
         </h:form>
