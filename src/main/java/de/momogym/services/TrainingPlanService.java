@@ -1,0 +1,86 @@
+package de.momogym.services;
+
+import de.momogym.persistence.Athlete;
+import de.momogym.persistence.TrainingDay;
+import de.momogym.persistence.TrainingPlan;
+import jakarta.ejb.Stateless;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+
+import java.util.List;
+
+@Stateless
+public class TrainingPlanService {
+
+	@PersistenceContext(unitName = "trainingsverwaltung-pu")
+	private EntityManager entityManager;
+
+	/**
+	 * Erstellt einen neuen, leeren Trainingsplan für einen Athleten
+	 */
+	public TrainingPlan createTrainingPlan(Long athleteId, String planName, boolean makeActive, List<String> selectedDays) throws Exception {
+
+		// Schritt 1: Den Besitzer (Athleten) laden (JETZT VOR DER PRÜFUNG)
+		Athlete athlete = entityManager.find(Athlete.class, athleteId);
+		if (athlete == null) {
+			throw new Exception("Athlet mit ID " + athleteId + " nicht gefunden.");
+		}
+
+		// Schritt 2: Angepasste Prüfung (jetzt mit Athlete-Objekt)
+		if (planNameExistsForAthlete(planName, athlete)) { // ANPASSUNG
+			throw new Exception("Der Plan-Name '" + planName + "' ist für DIESEN Athleten bereits vergeben."); // ANPASSUNG
+		}
+
+		// Schritt 3: (WICHTIG) ... (Logik bleibt gleich)
+		if (makeActive) {
+			entityManager.createQuery("UPDATE TrainingPlan p SET p.isActive = false WHERE p.athlete = :athlete")
+				.setParameter("athlete", athlete)
+				.executeUpdate();
+		}
+
+		// Schritt 4: Neuen Plan erstellen
+		TrainingPlan newPlan = new TrainingPlan();
+		newPlan.setAthlete(athlete); // Wir nutzen das geladene Objekt
+		newPlan.setName(planName);
+		newPlan.setActive(makeActive);
+		newPlan.setCurrentDaySequence(1);
+		entityManager.persist(newPlan);
+		// --- NEU: Trainings-Tage erstellen ---
+		// Wir gehen die Liste der Strings durch (z.B. "Montag", "Mittwoch")
+		if (selectedDays != null && !selectedDays.isEmpty()) {
+			int sequence = 1;
+			for (String dayName : selectedDays) {
+				TrainingDay day = new TrainingDay();
+				day.setName(dayName);           // Name z.B. "Montag"
+				day.setTrainingPlan(newPlan);   // Verknüpfung zum Plan
+				// Optional: Falls du eine Reihenfolge in der DB hast
+				// day.setSequence(sequence++);
+
+				entityManager.persist(day);
+			}
+		}
+
+		return newPlan;
+	}
+
+	public void deleteTrainingPlan(Long planId) {
+		TrainingPlan plan = entityManager.find(TrainingPlan.class, planId);
+		if (plan != null) {
+			entityManager.remove(plan);
+		}
+	}
+
+	/**
+	 * Prüft, ob der Plan-Name FÜR EINEN SPEZIFISCHEN Athleten existiert.
+	 */
+	private boolean planNameExistsForAthlete(String planName, Athlete athlete) {
+		TypedQuery<Long> query = entityManager.createQuery(
+			"SELECT COUNT(p) FROM TrainingPlan p WHERE p.name = :name AND p.athlete = :athlete", Long.class);
+
+		query.setParameter("name", planName);
+		query.setParameter("athlete", athlete);
+
+		return query.getSingleResult() > 0;
+	}
+}

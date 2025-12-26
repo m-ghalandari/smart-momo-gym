@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Neuen Plan erstellen</title>
+    <style>
+        /* --- GLOBAL DARK MODE SETTINGS --- */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #121212; /* Sehr dunkles Grau */
+            color: #e0e0e0;            /* Helles Grau für Text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* CARD STYLE */
+        .card {
+            background-color: #1e1e1e; /* Dunkle Karte */
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Tiefer Schatten */
+            border: 1px solid #333;    /* Dunkler Rand */
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #ffffff; /* Weiß */
+            margin-top: 0;
+        }
+
+        /* FORMULAR ELEMENTE */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #b0b0b0; /* Label etwas dunkler */
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            background-color: #2d2d2d; /* Dunkles Feld */
+            border: 1px solid #444;    /* Dunkler Rand */
+            border-radius: 4px;
+            font-size: 16px;
+            color: white;              /* Helle Eingabe */
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        /* BUTTON */
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff; /* Blau */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        /* LINKS */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #64b5f6; /* Hellblau */
+            text-decoration: none;
+        }
+        .back-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* CHECKBOXEN STYLING */
+        .checkbox-table {
+            width: 100%;
+        }
+
+        .checkbox-table td {
+            padding: 5px 0;
+        }
+
+        /* WICHTIG: Die Labels der Checkboxen hell machen */
+        .checkbox-table label {
+            margin-left: 8px;
+            color: #e0e0e0;
+            cursor: pointer;
+        }
+
+        /* Checkbox Input selbst etwas anpassen (Browser-abhängig, aber hilft) */
+        input[type="checkbox"] {
+            accent-color: #007bff; /* Checkbox Farbe modern */
+            cursor: pointer;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="card">
+        <h2>Neuer Plan</h2>
+
+        <h:panelGroup rendered="#{planController.athlete != null}">
+            <p style="text-align: center; color: #b0b0b0;">
+                für Athlet: <strong style="color: #fff;">#{planController.athlete.username}</strong>
+            </p>
+        </h:panelGroup>
+
+        <h:form>
+            <h:messages globalOnly="true" style="color:#ff6b6b; list-style:none; text-align:center; padding:0; margin-bottom:10px;"/>
+
+            <div class="form-group">
+                <h:outputLabel value="Bezeichnung des Plans" styleClass="form-label"/>
+                <h:inputText value="#{planController.planName}"
+                             required="true"
+                             requiredMessage="Bitte einen Namen eingeben."
+                             styleClass="form-input"/>
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel value="Trainingstage auswählen" styleClass="form-label"/>
+
+                <h:selectManyCheckbox value="#{planController.selectedDays}"
+                                      layout="pageDirection"
+                                      styleClass="checkbox-table">
+                    <f:selectItems value="#{planController.availableDays}"/>
+                </h:selectManyCheckbox>
+            </div>
+
+            <div class="form-group">
+                <h:outputLabel value="Status" styleClass="form-label"/>
+
+                <div style="display: flex; align-items: center;">
+                    <h:selectBooleanCheckbox value="#{planController.active}" id="chkActive"/>
+                    <h:outputLabel for="chkActive" value=" Plan sofort aktivieren" style="margin-left: 8px; color: #b0b0b0; cursor: pointer;"/>
+                </div>
+            </div>
+
+            <h:commandButton value="Plan Speichern"
+                             action="#{planController.save}"
+                             styleClass="btn-submit"/>
+
+            <h:link value="Abbrechen" outcome="athleteDetail" styleClass="back-link">
+                <f:param name="athleteId" value="#{planController.athleteId}"/>
+            </h:link>
+
+        </h:form>
+    </div>
+</h:body>
+</html>

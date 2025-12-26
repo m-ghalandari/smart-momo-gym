@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Übungskatalog</title>
+    <style>
+        /* --- GLOBAL DARK MODE SETTINGS --- */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #121212; /* Sehr dunkles Grau */
+            color: #e0e0e0;            /* Helles Grau für Text */
+            padding: 20px;
+        }
+
+        /* Container für Layout */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2, h3 {
+            color: #ffffff; /* Überschriften Weiß */
+            margin-top: 0;
+        }
+
+        /* CARD STYLE (Formular) */
+        .card {
+            background-color: #1e1e1e; /* Dunkle Karte */
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Tieferer Schatten */
+            margin-bottom: 30px;
+            border: 1px solid #333;
+        }
+
+        /* FORMULAR STYLING */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: #b0b0b0; /* Label etwas abgedunkelt */
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            background-color: #2d2d2d; /* Dunkles Feld */
+            border: 1px solid #444;    /* Dunkler Rand */
+            border-radius: 4px;
+            color: white;              /* Helle Eingabe */
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        /* BUTTONS */
+        .btn-save {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-save:hover {
+            background-color: #34ce57;
+        }
+
+        /* TABELLE STYLING */
+        .exercise-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1e1e1e; /* Dunkler Hintergrund */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .exercise-table th {
+            background-color: #2c2c2c; /* Header etwas heller als Body */
+            color: white;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #444;
+        }
+
+        .exercise-table td {
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            color: #cfcfcf;
+        }
+
+        .exercise-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .exercise-table tr:hover {
+            background-color: #333; /* Hover Effekt */
+        }
+
+        /* LINKS */
+        a {
+            color: #64b5f6; /* Hellblau für guten Kontrast */
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="container">
+
+        <h:link value="← Zurück zum Dashboard" outcome="index.xhtml" styleClass="back-link"/>
+
+        <div class="card">
+            <h2>Neue Übung erfassen</h2>
+            <h:form>
+                <h:messages globalOnly="true" style="color:#ff6b6b; list-style:none; padding:0; margin-bottom: 15px;"/>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <h:outputLabel value="Name der Übung" styleClass="form-label"/>
+                        <h:inputText value="#{exerciseController.newExercise.name}"
+                                     required="true"
+                                     requiredMessage="Name ist Pflicht."
+                                     styleClass="form-input"/>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Zielmuskel" styleClass="form-label"/>
+                        <h:inputText value="#{exerciseController.newExercise.targetMuscle}"
+                                     styleClass="form-input"/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <h:outputLabel value="Video Link (YouTube etc.)" styleClass="form-label"/>
+                        <h:inputText value="#{exerciseController.newExercise.videoLink}"
+                                     styleClass="form-input"/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <h:outputLabel value="Gif Link (YouTube etc.)" styleClass="form-label"/>
+                        <h:inputText value="#{exerciseController.newExercise.gifUrl}"
+                                     styleClass="form-input"/>
+                    </div>
+                </div>
+
+                <h:commandButton value="Übung speichern"
+                                 action="#{exerciseController.createExercise}"
+                                 styleClass="btn-save"/>
+            </h:form>
+        </div>
+
+        <h3>Übungskatalog</h3>
+
+        <h:dataTable value="#{exerciseController.allExercises}" var="ex"
+                     styleClass="exercise-table"
+                     rendered="#{not empty exerciseController.allExercises}">
+
+            <h:column>
+                <f:facet name="header">Name</f:facet>
+                #{ex.name}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Muskelgruppe</f:facet>
+                #{ex.targetMuscle}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Video</f:facet>
+                <h:outputLink value="#{ex.videoLink}" target="_blank" rendered="#{not empty ex.videoLink}">
+                    Ansehen
+                </h:outputLink>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Gif</f:facet>
+                <h:outputLink value="#{ex.gifUrl}" target="_blank" rendered="#{not empty ex.gifUrl}">
+                    Ansehen
+                </h:outputLink>
+            </h:column>
+
+        </h:dataTable>
+
+        <h:panelGroup rendered="#{empty exerciseController.allExercises}">
+            <p style="color: #888; text-align: center;">Noch keine Übungen vorhanden.</p>
+        </h:panelGroup>
+
+    </div>
+</h:body>
+</html>

@@ -1,0 +1,247 @@
+/* =========================================
+   GLOBAL DARK MODE THEME - SMART MOMO GYM
+   ========================================= */
+
+:root {
+    --bg-body: #121212;
+    --bg-card: #1e1e1e;
+    --bg-input: #2d2d2d;
+    --bg-hover: #333333;
+
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --text-muted: #6c757d;
+
+    --border-color: #444444;
+
+    /* Akzentfarben */
+    --primary-blue: #007bff;
+    --primary-blue-hover: #0056b3;
+    --success-green: #28a745;
+    --success-green-hover: #218838;
+    --info-cyan: #17a2b8;
+    --info-cyan-hover: #138496;
+    --danger-red: #dc3545;
+    --danger-red-hover: #bd2130;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    padding: 20px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* --- TYPOGRAFIE --- */
+h2, h3, h4 {
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+small {
+    color: var(--text-secondary);
+}
+
+a {
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+/* --- LAYOUT CONTAINER --- */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Flex Header (wird auf fast allen Seiten genutzt) */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* --- CARDS (für Formulare & Listen) --- */
+.card, .register-card, .plan-card {
+    background-color: var(--bg-card);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Dunkler Schatten */
+    margin-bottom: 20px;
+    border: 1px solid #333;
+}
+
+/* Speziell für zentrierte Login/Register Seiten */
+.register-card {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto; /* Zentrierung muss durch Parent-Flexbox erfolgen */
+}
+
+/* Flexbox für Plan-Karten (Text links, Button rechts) */
+.plan-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+/* --- FORMULARE --- */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+.form-input, input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    background-color: #383838;
+}
+
+/* Checkboxen Tabelle */
+.checkbox-table {
+    width: 100%;
+}
+.checkbox-table td {
+    padding: 5px 0;
+}
+.checkbox-table label {
+    margin-left: 10px;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+/* --- BUTTONS --- */
+.btn-save, .btn-submit, .btn-register, .btn-create, .btn-exercises {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-save:active, .btn-submit:active {
+    transform: scale(0.98);
+}
+
+/* Farben Mapping */
+.btn-register, .btn-save { background-color: var(--success-green); }
+.btn-register:hover, .btn-save:hover { background-color: var(--success-green-hover); }
+
+.btn-create, .btn-submit { background-color: var(--primary-blue); }
+.btn-create:hover, .btn-submit:hover { background-color: var(--primary-blue-hover); }
+
+.btn-exercises { background-color: var(--info-cyan); }
+.btn-exercises:hover { background-color: var(--info-cyan-hover); }
+
+/* Löschen Button (Outline Style) */
+.btn-delete, .delete-link {
+    background: transparent;
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+.btn-delete:hover, .delete-link:hover {
+    background-color: var(--danger-red);
+    color: white;
+    border-color: var(--danger-red);
+    text-decoration: none;
+}
+
+/* --- TABELLEN --- */
+.athlete-table, .exercise-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.athlete-table th, .exercise-table th {
+    background-color: #2c2c2c;
+    color: #ffffff;
+    text-align: left;
+    padding: 15px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.athlete-table td, .exercise-table td {
+    padding: 15px;
+    border-bottom: 1px solid #333;
+    color: var(--text-primary);
+}
+
+.athlete-table tr:hover, .exercise-table tr:hover {
+    background-color: var(--bg-hover);
+}
+
+/* --- LINKS --- */
+.action-link {
+    color: #64b5f6;
+    font-weight: 600;
+    margin-right: 15px;
+}
+.action-link:hover { text-decoration: underline; }
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: var(--text-muted);
+}
+.back-link:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+}
+
+/* --- MESSAGES --- */
+ul li { list-style: none; }

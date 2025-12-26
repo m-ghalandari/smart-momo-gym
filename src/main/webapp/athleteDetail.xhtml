@@ -8,48 +8,103 @@
 <h:head>
     <title>Athleten Details</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; padding: 20px; color: #333; }
+        /* --- GLOBAL DARK MODE SETTINGS --- */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+            background-color: #121212; /* Sehr dunkles Grau */
+            color: #e0e0e0;            /* Helles Grau für Text */
+        }
 
-        .header-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
-        .btn-create { background-color: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; }
-        .btn-create:hover { background-color: #0056b3; }
+        h2, h3 {
+            color: #ffffff; /* Überschriften Weiß */
+        }
 
-        .plan-card {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 10px;
+        small {
+            color: #b0b0b0; /* Sekundärtext dunkler */
+        }
+
+        /* HEADER */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333; /* Dunkle Linie */
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* BUTTONS */
+        .btn-create {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
             border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
 
+        .btn-create:hover {
+            background-color: #0056b3;
+        }
+
+        /* PLAN CARDS (Dunkles Design) */
+        .plan-card {
+            background-color: #1e1e1e; /* Dunkle Karte */
+            border: 1px solid #333;    /* Dunkler Rand */
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Schatten für Tiefe */
 
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .status-active { color: green; font-weight: bold; }
-        .status-inactive { color: gray; }
+        /* STATUS INDIKATOREN */
+        .status-active {
+            color: #4caf50; /* Helles Grün für gute Lesbarkeit auf Dunkel */
+            font-weight: bold;
+        }
 
+        .status-inactive {
+            color: #b0b0b0; /* Grau */
+        }
+
+        /* LÖSCHEN BUTTON (Angepasst für Dark Mode) */
         .btn-delete {
-            color: #dc3545; /* Rot */
+            color: #ff6b6b; /* Hellrot (Pastell) für besseren Kontrast */
             background: none;
-            border: 1px solid #dc3545;
-            padding: 5px 10px;
+            border: 1px solid #ff6b6b;
+            padding: 5px 12px;
             border-radius: 4px;
             cursor: pointer;
             text-decoration: none;
             font-size: 0.9em;
             transition: all 0.2s;
         }
+
         .btn-delete:hover {
-            background-color: #dc3545;
+            background-color: #dc3545; /* Dunkleres Rot beim Hover */
+            border-color: #dc3545;
             color: white;
+        }
+
+        /* Link zurück zum Dashboard */
+        a {
+            color: #64b5f6; /* Hellblau für Links */
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </h:head>
 
 <h:body>
-    <h:messages showDetail="true" showSummary="true" />
+    <h:messages showDetail="true" showSummary="true" style="color: #ff6b6b;"/>
 
     <h:panelGroup rendered="#{athleteDetailController.athlete != null}">
 
@@ -60,16 +115,16 @@
             </div>
 
             <h:link value="+ Neuer Trainingsplan"
-                    outcome="trainingPlan"
+                    outcome="/trainingPlan.xhtml"
                     styleClass="btn-create">
-                <f:param name="athleteId" value="#{athleteDetailController.athlete.id}" />
+                <f:param name="athleteId" value="#{athleteDetailController.athlete.id}"/>
             </h:link>
         </div>
 
         <h3>Trainingspläne</h3>
 
         <h:panelGroup rendered="#{empty athleteDetailController.athlete.trainingPlans}">
-            <p>Dieser Athlet hat noch keine Trainingspläne.</p>
+            <p style="color: #888;">Dieser Athlet hat noch keine Trainingspläne.</p>
         </h:panelGroup>
 
         <h:form>
@@ -78,10 +133,10 @@
                 <div class="plan-card">
 
                     <div>
-                        <div style="font-size: 1.2em; font-weight: bold;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #fff; margin-bottom: 5px;">
                             #{plan.name}
                         </div>
-                        <div>
+                        <div style="font-size: 0.9em;">
                             Status:
                             <span class="#{plan.active ? 'status-active' : 'status-inactive'}">
                                 #{plan.active ? 'AKTIV' : 'Inaktiv'}
@@ -93,7 +148,7 @@
                         <h:commandLink action="#{athleteDetailController.deletePlan(plan.id)}"
                                        styleClass="btn-delete"
                                        onclick="return confirm('Diesen Plan wirklich löschen?');">
-                            <h:outputText value="🗑 Löschen" />
+                            <h:outputText value="🗑 Löschen"/>
                         </h:commandLink>
                     </div>
 
@@ -104,11 +159,11 @@
     </h:panelGroup>
 
     <h:panelGroup rendered="#{athleteDetailController.athlete == null}">
-        <p style="color:red">Kein Athlet geladen.</p>
+        <p style="color: #ff6b6b;">Kein Athlet geladen.</p>
     </h:panelGroup>
 
-    <br />
-    <h:link value="Zurück zum Dashboard" outcome="index.xhtml" />
+    <br/>
+    <h:link value="← Zurück zum Dashboard" outcome="index.xhtml"/>
 
 </h:body>
 </html>

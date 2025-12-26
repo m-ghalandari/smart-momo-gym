@@ -8,34 +8,36 @@
 <h:head>
     <title>Athlet Registrieren</title>
     <style>
-        /* 1. Hintergrund und Zentrierung */
+        /* --- GLOBAL DARK MODE SETTINGS --- */
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f6f8; /* Leichtes Grau */
+            background-color: #121212; /* Sehr dunkles Grau */
+            color: #e0e0e0;            /* Helles Grau für Text */
             display: flex;
-            justify-content: center; /* Horizontal zentrieren */
-            align-items: center;     /* Vertikal zentrieren */
-            height: 100vh;           /* Volle Bildschirmhöhe nutzen */
+            justify-content: center;   /* Horizontal zentrieren */
+            align-items: center;       /* Vertikal zentrieren */
+            height: 100vh;             /* Volle Bildschirmhöhe */
             margin: 0;
         }
 
-        /* 2. Die "Karte" (Das weiße Formular) */
+        /* CARD STYLE (Das Formular) */
         .register-card {
-            background-color: white;
+            background-color: #1e1e1e; /* Dunkle Karte */
             padding: 40px;
-            border-radius: 8px;      /* Abgerundete Ecken */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sanfter Schatten */
+            border-radius: 8px;
+            border: 1px solid #333;    /* Dunkler Rand */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5); /* Tiefer Schatten */
             width: 100%;
-            max-width: 400px;        /* Nicht breiter als 400px */
+            max-width: 400px;
         }
 
         h2 {
             text-align: center;
-            color: #333;
+            color: #ffffff; /* Weiß */
             margin-top: 0;
         }
 
-        /* 3. Formular-Elemente */
+        /* FORMULAR ELEMENTE */
         .form-group {
             margin-bottom: 20px;
         }
@@ -44,16 +46,18 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #555;
+            color: #b0b0b0; /* Label etwas dunkler */
         }
 
         .form-input {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
+            background-color: #2d2d2d; /* Dunkles Feld */
+            border: 1px solid #444;    /* Dunkler Rand */
             border-radius: 4px;
             font-size: 16px;
-            box-sizing: border-box; /* Wichtig, damit Padding die Breite nicht sprengt */
+            color: white;              /* Helle Eingabe */
+            box-sizing: border-box;
         }
 
         .form-input:focus {
@@ -61,7 +65,7 @@
             outline: none;
         }
 
-        /* 4. Der Button */
+        /* BUTTON */
         .btn-submit {
             width: 100%;
             padding: 12px;
@@ -76,12 +80,12 @@
         }
 
         .btn-submit:hover {
-            background-color: #218838; /* Dunkleres Grün beim Drüberfahren */
+            background-color: #218838; /* Dunkler beim Hover */
         }
 
-        /* 5. Nachrichten und Links */
+        /* NACHRICHTEN */
         .error-msg {
-            color: #dc3545;
+            color: #ff6b6b; /* Helles Rot für Lesbarkeit */
             font-size: 14px;
             margin-top: 5px;
             display: block;
@@ -91,19 +95,20 @@
             list-style: none;
             padding: 0;
             margin-bottom: 15px;
-            color: #dc3545;
+            color: #ff6b6b;
             text-align: center;
         }
 
+        /* LINKS */
         .back-link {
             display: block;
             text-align: center;
             margin-top: 20px;
-            color: #6c757d;
+            color: #64b5f6; /* Hellblau */
             text-decoration: none;
         }
         .back-link:hover {
-            color: #333;
+            color: #ffffff;
             text-decoration: underline;
         }
     </style>

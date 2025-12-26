@@ -30,16 +30,16 @@ public class Exercise {
     private String gifUrl;
 
     @Column(name = "VIDEO_LINK")
-    private String vidoeLink;
+    private String videoLink;
 
     public Exercise() {
     }
 
-    public Exercise(String name, String targetMuscle, String gifUrl, String vidoeLink){
+    public Exercise(String name, String targetMuscle, String gifUrl, String videoLink){
         this.name = name;
         this.targetMuscle = targetMuscle;
         this.gifUrl = gifUrl;
-        this.vidoeLink = vidoeLink;
+        this.videoLink = videoLink;
     }
 
 
@@ -71,11 +71,11 @@ public class Exercise {
         this.gifUrl = gifUrl;
     }
 
-    public String getVidoeLink() {
-        return vidoeLink;
+    public String getVideoLink() {
+        return videoLink;
     }
 
-    public void setVidoeLink(String vidoeLink) {
-        this.vidoeLink = vidoeLink;
+    public void setVideoLink(String videoLink) {
+        this.videoLink = videoLink;
     }
 }
