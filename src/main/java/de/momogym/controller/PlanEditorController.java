@@ -84,6 +84,15 @@ public class PlanEditorController implements Serializable {
 		}
 	}
 
+	public void toggleActiveStatus(){
+		boolean currentStatus = trainingPlan.isActive();
+
+		trainingPlanService.updatePlanStatus(planId, currentStatus);
+
+		String statusText = currentStatus ? "aktiviert" : "deaktiviert";
+		addMessage(FacesMessage.SEVERITY_INFO, "Status geändert", "Plan wurde " + statusText);
+	}
+
 	private void addMessage(FacesMessage.Severity severity, String summary, String detail) {
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, summary, detail));
 	}

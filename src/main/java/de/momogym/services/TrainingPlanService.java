@@ -106,6 +106,17 @@ public class TrainingPlanService {
 		return entityManager.find(TrainingPlan.class, planId, properties);
 	}
 
+	public void updatePlanStatus(Long planId, boolean isActive){
+		TrainingPlan plan = entityManager.find(TrainingPlan.class, planId);
+		if(isActive){
+			entityManager.createQuery("UPDATE TrainingPlan p SET p.isActive = false WHERE p.athlete = :athlete")
+				.setParameter("athlete", plan.getAthlete())
+				.executeUpdate();
+			entityManager.refresh(plan);
+		}
+		plan.setActive(isActive);
+	}
+
 	/**
 	 * Prüft, ob der Plan-Name FÜR EINEN SPEZIFISCHEN Athleten existiert.
 	 */

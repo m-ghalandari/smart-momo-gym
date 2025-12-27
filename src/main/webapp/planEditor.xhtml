@@ -45,17 +45,27 @@
 <h:body>
     <h:messages globalOnly="true" style="color: #ff6b6b; list-style: none;" />
 
-    <div class="header-container">
-        <div>
-            <h2>Plan Editor</h2>
-            <h:panelGroup rendered="#{planEditorController.trainingPlan != null}">
-                <small>Bearbeite: <strong>#{planEditorController.trainingPlan.name}</strong></small>
-            </h:panelGroup>
+    <h:form id="headerForm">
+        <div class="header-container">
+            <div>
+                <h2>Plan Editor</h2>
+                <h:panelGroup rendered="#{planEditorController.trainingPlan != null}">
+                    <small>Bearbeite: <strong>#{planEditorController.trainingPlan.name}</strong></small>
+                </h:panelGroup>
+            </div>
+
+            <div style="display:flex; align-items:center;">
+                <h:selectBooleanCheckbox value="#{planEditorController.trainingPlan.active}">
+                    <f:ajax listener="#{planEditorController.toggleActiveStatus}" render="@form" />
+                </h:selectBooleanCheckbox>
+                <span style="color:#aaa; margin-left:5px; font-size:0.9em;">Aktiv</span>
+            </div>
+
+            <h:link value="← Zurück" outcome="athleteDetail" styleClass="back-link">
+                <f:param name="athleteId" value="#{planEditorController.trainingPlan.athlete.id}" />
+            </h:link>
         </div>
-        <h:link value="← Zurück" outcome="athleteDetail" styleClass="back-link">
-            <f:param name="athleteId" value="#{planEditorController.trainingPlan.athlete.id}" />
-        </h:link>
-    </div>
+    </h:form>
 
     <c:forEach items="#{planEditorController.trainingPlan.trainingDays}" var="day">
 
