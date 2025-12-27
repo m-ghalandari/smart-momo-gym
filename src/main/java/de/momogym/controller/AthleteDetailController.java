@@ -37,19 +37,24 @@ public class AthleteDetailController implements Serializable {
 
         if (idParam != null && !idParam.isEmpty()) {
             try {
-                Long athleteId = Long.parseLong(idParam);
-
-                // Athleten (inkl. Pläne) über den Service laden
-                this.athlete = athleteService.findAthleteByIdWithPlans(athleteId);
-
-                if (this.athlete == null) {
-                    addErrorMessage("Athlet nicht gefunden.");
-                }
+                refreshAthlete(Long.parseLong(idParam));
             } catch (NumberFormatException e) {
                 addErrorMessage("Ungültige Athleten-ID in der URL.");
             }
         }
     }
+
+	private void refreshAthlete(long l) {
+		this.athlete = athleteService.findAthleteByIdWithPlans(l);
+
+		if (this.athlete != null && this.athlete.getTrainingPlans() != null){
+			this.athlete.getTrainingPlans().sort((p1, p2)-> {
+				int activeCompare = Boolean.compare(p2.isActive(), p1.isActive());
+				if (activeCompare != 0) return activeCompare;
+				return p1.getName().compareTo(p2.getName());
+			});
+		}
+	}
 
 	public String deletePlan(Long planId) {
 		try {

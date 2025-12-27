@@ -49,6 +49,30 @@
             background-color: #0056b3;
         }
 
+        /* EDIT BUTTON (Gelb/Orange) */
+        .btn-edit {
+            color: #ffc107; /* Helles Bernstein-Gelb */
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid #ffc107;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            margin-right: 10px; /* Abstand zum Löschen Button */
+        }
+
+        .btn-edit:hover {
+            background-color: #ffc107;
+            color: black; /* Schwarzer Text auf gelbem Grund für Lesbarkeit */
+        }
+
+        /* Container für die Buttons rechts in der Karte */
+        .card-actions {
+            display: flex;
+            align-items: center;
+        }
+
         /* PLAN CARDS (Dunkles Design) */
         .plan-card {
             background-color: #1e1e1e; /* Dunkle Karte */
@@ -131,7 +155,6 @@
             <ui:repeat value="#{athleteDetailController.athlete.trainingPlans}" var="plan">
 
                 <div class="plan-card">
-
                     <div>
                         <div style="font-size: 1.2em; font-weight: bold; color: #fff; margin-bottom: 5px;">
                             #{plan.name}
@@ -144,19 +167,18 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div class="card-actions">
+                        <h:link value="✏️ Bearbeiten" outcome="planEditor" styleClass="btn-edit">
+                            <f:param name="planId" value="#{plan.id}" />
+                        </h:link>
+
                         <h:commandLink action="#{athleteDetailController.deletePlan(plan.id)}"
                                        styleClass="btn-delete"
                                        onclick="return confirm('Diesen Plan wirklich löschen?');">
                             <h:outputText value="🗑 Löschen"/>
                         </h:commandLink>
                     </div>
-
-                    <h:link value="✏️ Bearbeiten" outcome="planEditor" styleClass="btn-edit">
-                        <f:param name="planId" value="#{plan.id}" />
-                    </h:link>
-                </div>
-            </ui:repeat>
+                </div>            </ui:repeat>
         </h:form>
 
     </h:panelGroup>
