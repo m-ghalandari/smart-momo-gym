@@ -76,7 +76,7 @@ public class TrainingPlanService {
 		}
 	}
 
-	public void addExerciseToTrainingDay(Long dayId, Long exerciseId, int sets, String reps) {
+	public void addExerciseToTrainingDay(Long dayId, Long exerciseId, int sets, String reps, Double weight) {
 		TrainingDay day = entityManager.find(TrainingDay.class, dayId);
 		if (day == null) throw new IllegalArgumentException("Tag nicht gefunden");
 
@@ -88,6 +88,7 @@ public class TrainingPlanService {
 		plannedExercise.setExercise(exercise);
 		plannedExercise.setSets(sets);
 		plannedExercise.setReps(reps);
+		plannedExercise.setWeight(weight);
 
 		plannedExercise.setSortOrder(day.getPlannedExercises().size() + 1);
 

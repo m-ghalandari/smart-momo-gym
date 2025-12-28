@@ -31,6 +31,9 @@ public class PlannedExercise {
     @Column(name = "SORT_ORDER")
     private int sortOrder; // Reihenfolge der Übung am Tag
 
+	@Column(name = "WEIGHT_KG")
+	private Double weight;
+
     public PlannedExercise() {
     }
 
@@ -85,4 +88,11 @@ public class PlannedExercise {
     public void setSortOrder(int sortOrder) {
         this.sortOrder = sortOrder;
     }
+
+	public Double getWeight() {
+		return weight;
+	}
+	public void setWeight(Double weight) {
+		this.weight = weight;
+	}
 }

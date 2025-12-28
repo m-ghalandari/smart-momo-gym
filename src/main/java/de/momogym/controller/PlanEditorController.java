@@ -69,7 +69,7 @@ public class PlanEditorController implements Serializable {
 				return;
 			}
 
-			trainingPlanService.addExerciseToTrainingDay(dayId, input.getExerciseId(), input.getSets(), input.getReps());
+			trainingPlanService.addExerciseToTrainingDay(dayId, input.getExerciseId(), input.getSets(), input.getReps(), input.getWeight());
 
 			// Ansicht aktualisieren
 			loadTrainingPlan();
@@ -106,6 +106,7 @@ public class PlanEditorController implements Serializable {
 		private Long exerciseId;
 		private int sets = 3;    // Standardwert
 		private String reps = "8-12"; // Standardwert
+		private Double weight = 0.0;
 
 		// Getter und Setter
 		public Long getExerciseId() { return exerciseId; }
@@ -114,5 +115,7 @@ public class PlanEditorController implements Serializable {
 		public void setSets(int sets) { this.sets = sets; }
 		public String getReps() { return reps; }
 		public void setReps(String reps) { this.reps = reps; }
+		public Double getWeight() { return weight; }
+		public void setWeight(Double weight) { this.weight = weight; }
 	}
 }
