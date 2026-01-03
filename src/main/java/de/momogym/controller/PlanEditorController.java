@@ -84,6 +84,16 @@ public class PlanEditorController implements Serializable {
 		}
 	}
 
+	public void removeExercise(Long plannedExerciseId) {
+		try {
+			trainingPlanService.removePlannedExercise(plannedExerciseId);
+			loadTrainingPlan();
+			addMessage(FacesMessage.SEVERITY_INFO, "Gelöscht", "Übung wurde entfernt.");
+		} catch (Exception e) {
+			addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", e.getMessage());
+		}
+	}
+
 	public void toggleActiveStatus(){
 		boolean currentStatus = trainingPlan.isActive();
 

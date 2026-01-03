@@ -4,13 +4,29 @@
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:ui="jakarta.faces.facelets"
-      xmlns:c="jakarta.tags.core"> <h:head>
+      xmlns:c="jakarta.tags.core"><h:head>
     <title>Plan Editor</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; padding: 20px; background-color: #121212; color: #e0e0e0; }
-        h2, h3, h4 { color: white; margin-top: 0; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
 
-        .header-container { border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;}
+        h2, h3, h4 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .header-container {
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
         /* Tag-Container */
         .day-block {
@@ -19,31 +35,89 @@
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
-        .day-title { color: #64b5f6; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 15px; }
+        .day-title {
+            color: #64b5f6;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
 
         /* Innere Tabelle für Übungen */
-        .exercise-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .exercise-table th { text-align: left; border-bottom: 1px solid #555; padding: 8px; color: #b0b0b0; }
-        .exercise-table td { border-bottom: 1px solid #333; padding: 8px; }
+        .exercise-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .exercise-table th {
+            text-align: left;
+            border-bottom: 1px solid #555;
+            padding: 8px;
+            color: #b0b0b0;
+        }
+
+        .exercise-table td {
+            border-bottom: 1px solid #333;
+            padding: 8px;
+        }
 
         /* Formularzeile (Add Exercise) */
-        .add-row { display: flex; gap: 10px; align-items: flex-end; background: #252525; padding: 15px; border-radius: 6px; }
-        .form-group { display: flex; flex-direction: column; }
-        .form-label { font-size: 0.85em; font-weight: bold; margin-bottom: 4px; color: #aaa; }
+        .add-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+            background: #252525;
+            padding: 15px;
+            border-radius: 6px;
+        }
 
-        .input-dark { background: #333; border: 1px solid #555; color: white; padding: 6px; border-radius: 4px; }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
 
-        .btn-add { background-color: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; height: 32px;}
-        .btn-add:hover { background-color: #34ce57; }
+        .form-label {
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #aaa;
+        }
 
-        .back-link { color: #64b5f6; text-decoration: none; font-weight: bold;}
+        .input-dark {
+            background: #333;
+            border: 1px solid #555;
+            color: white;
+            padding: 6px;
+            border-radius: 4px;
+        }
+
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            height: 32px;
+        }
+
+        .btn-add:hover {
+            background-color: #34ce57;
+        }
+
+        .back-link {
+            color: #64b5f6;
+            text-decoration: none;
+            font-weight: bold;
+        }
     </style>
 </h:head>
 <h:body>
-    <h:messages globalOnly="true" style="color: #ff6b6b; list-style: none;" />
+    <h:messages globalOnly="true" style="color: #ff6b6b; list-style: none;"/>
 
     <h:form id="headerForm">
         <div class="header-container">
@@ -56,13 +130,13 @@
 
             <div style="display:flex; align-items:center;">
                 <h:selectBooleanCheckbox value="#{planEditorController.trainingPlan.active}">
-                    <f:ajax listener="#{planEditorController.toggleActiveStatus}" render="@form" />
+                    <f:ajax listener="#{planEditorController.toggleActiveStatus}" render="@form"/>
                 </h:selectBooleanCheckbox>
                 <span style="color:#aaa; margin-left:5px; font-size:0.9em;">Aktiv</span>
             </div>
 
             <h:link value="← Zurück" outcome="athleteDetail" styleClass="back-link">
-                <f:param name="athleteId" value="#{planEditorController.trainingPlan.athlete.id}" />
+                <f:param name="athleteId" value="#{planEditorController.trainingPlan.athlete.id}"/>
             </h:link>
         </div>
     </h:form>
@@ -89,6 +163,15 @@
                     <f:facet name="header">Kg</f:facet>
                     #{pe.weight}
                 </h:column>
+                <h:column>
+                    <f:facet name="header"></f:facet> <h:commandLink
+                        action="#{planEditorController.removeExercise(pe.id)}"
+                        style="color: #ff6b6b; text-decoration: none; font-weight: bold; font-size: 1.2em;"
+                        title="Übung entfernen"
+                        onclick="return confirm('Diese Übung wirklich vom Tag entfernen?');">
+                    ✕
+                </h:commandLink>
+                </h:column>
             </h:dataTable>
 
             <h:panelGroup rendered="#{empty day.plannedExercises}">
@@ -100,30 +183,34 @@
 
                     <div class="form-group" style="flex-grow: 2;">
                         <span class="form-label">Übung wählen</span>
-                        <h:selectOneMenu value="#{planEditorController.getInputForDay(day.id).exerciseId}" styleClass="input-dark" style="width: 100%;">
-                            <f:selectItem itemLabel="-- Bitte wählen --" itemValue="#{null}" />
+                        <h:selectOneMenu value="#{planEditorController.getInputForDay(day.id).exerciseId}"
+                                         styleClass="input-dark" style="width: 100%;">
+                            <f:selectItem itemLabel="-- Bitte wählen --" itemValue="#{null}"/>
                             <f:selectItems value="#{planEditorController.availableExercises}" var="ex"
-                                           itemValue="#{ex.id}" itemLabel="#{ex.name} (#{ex.targetMuscle})" />
+                                           itemValue="#{ex.id}" itemLabel="#{ex.name} (#{ex.targetMuscle})"/>
                         </h:selectOneMenu>
                     </div>
 
                     <div class="form-group" style="width: 70px;">
                         <span class="form-label">Sätze</span>
-                        <h:inputText value="#{planEditorController.getInputForDay(day.id).sets}" styleClass="input-dark" />
+                        <h:inputText value="#{planEditorController.getInputForDay(day.id).sets}"
+                                     styleClass="input-dark"/>
                     </div>
 
                     <div class="form-group" style="width: 80px;">
                         <span class="form-label">Wdh.</span>
-                        <h:inputText value="#{planEditorController.getInputForDay(day.id).reps}" styleClass="input-dark" />
+                        <h:inputText value="#{planEditorController.getInputForDay(day.id).reps}"
+                                     styleClass="input-dark"/>
                     </div>
 
                     <div class="form-group" style="width: 70px;">
                         <span class="form-label">Kg</span>
                         <h:inputText value="#{planEditorController.getInputForDay(day.id).weight}"
-                                     styleClass="input-dark" />
+                                     styleClass="input-dark"/>
                     </div>
 
-                    <h:commandButton value="+" action="#{planEditorController.addExercise(day.id)}" styleClass="btn-add" />
+                    <h:commandButton value="+" action="#{planEditorController.addExercise(day.id)}"
+                                     styleClass="btn-add"/>
                 </div>
             </h:form>
 

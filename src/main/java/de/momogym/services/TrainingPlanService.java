@@ -76,6 +76,13 @@ public class TrainingPlanService {
 		}
 	}
 
+	public void removePlannedExercise(Long exerciseId) {
+		PlannedExercise exercise = entityManager.find(PlannedExercise.class, exerciseId);
+		if (exercise != null) {
+			entityManager.remove(exercise);
+		}
+	}
+
 	public void addExerciseToTrainingDay(Long dayId, Long exerciseId, int sets, String reps, Double weight) {
 		TrainingDay day = entityManager.find(TrainingDay.class, dayId);
 		if (day == null) throw new IllegalArgumentException("Tag nicht gefunden");
