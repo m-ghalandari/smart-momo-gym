@@ -28,7 +28,7 @@ public class AthleteController {
             this.username = null;
 
             // Bleibe auf derselben Seite (oder navigiere zu "login.xhtml")
-            return "register.xhtml?faces-redirect=true"; // Redirect, um Formular-Neusenden zu verhindern
+            return "index.xhtml?faces-redirect=true"; // Redirect, um Formular-Neusenden zu verhindern
 
         } catch (Exception e) {
             // Fehler an den Benutzer melden
