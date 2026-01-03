@@ -41,6 +41,17 @@ public class ExerciseController implements Serializable {
 		}
 	}
 
+	public void deleteExercise(Long exerciseId){
+		try {
+			this.exerciseService.deleteExercise(exerciseId);
+			addMessage(FacesMessage.SEVERITY_INFO, "Gelöscht", "Die Übung ist erfolgreich gelöscht.");
+			init();
+		} catch (Exception e) {
+			addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", e.getMessage());
+		}
+
+	}
+
 	public List<Exercise> getAllExercises() {
 		return this.allExercises;
 	}

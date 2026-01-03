@@ -185,6 +185,9 @@
 
         <h3>Übungskatalog</h3>
 
+        <h:form id="exerciseListFrom">
+
+
         <h:dataTable value="#{exerciseController.allExercises}" var="ex"
                      styleClass="exercise-table"
                      rendered="#{not empty exerciseController.allExercises}">
@@ -213,7 +216,19 @@
                 </h:outputLink>
             </h:column>
 
+            <h:column>
+                <f:facet name="header"></f:facet>
+                <h:commandLink
+                        action="#{exerciseController.deleteExercise(ex.id)}"
+                        style="color: #ff6b6b; text-decoration: none; font-weight: bold; font-size: 1.2em;"
+                        title="Übung Löschen"
+                        onclick="return confirm('Diese Übung wirklich löschen?');">
+                    ✕
+                </h:commandLink>
+            </h:column>
+
         </h:dataTable>
+        </h:form>
 
         <h:panelGroup rendered="#{empty exerciseController.allExercises}">
             <p style="color: #888; text-align: center;">Noch keine Übungen vorhanden.</p>

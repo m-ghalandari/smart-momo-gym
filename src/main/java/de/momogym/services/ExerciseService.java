@@ -28,8 +28,28 @@ public class ExerciseService {
 		return exercise;
 	}
 
-	// Method findAllExercises(): Should return all exercises sorted alphabetically.
 	public List<Exercise> findAllExercises() {
 		return entityManager.createQuery("SELECT e FROM Exercise e ORDER BY e.name ASC", Exercise.class).getResultList();
+	}
+
+	public void deleteExercise(Long exerciseId){
+		Exercise exercise = entityManager.find(Exercise.class, exerciseId);
+
+		if (exercise == null) {
+			return;
+		}
+
+		// 1. Zuerst abhängige Logs löschen (Bulk Delete)
+		// Ein Befehl löscht Tausende Einträge -> Viel schneller!
+		entityManager.createQuery("DELETE FROM ExerciseLog l WHERE l.exercise = :exercise")
+			.setParameter("exercise", exercise)
+			.executeUpdate();
+
+		// 2. Dann geplante Übungen aus den Plänen entfernen (Bulk Delete)
+		entityManager.createQuery("DELETE FROM PlannedExercise p WHERE p.exercise = :exercise")
+			.setParameter("exercise", exercise)
+			.executeUpdate();
+
+		entityManager.remove(exercise);
 	}
 }
