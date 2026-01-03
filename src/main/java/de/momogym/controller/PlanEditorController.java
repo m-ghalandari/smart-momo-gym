@@ -86,6 +86,7 @@ public class PlanEditorController implements Serializable {
 
 	public void removeExercise(Long plannedExerciseId) {
 		try {
+			System.out.println( "Removing exercise " + plannedExerciseId);
 			trainingPlanService.removePlannedExercise(plannedExerciseId);
 			loadTrainingPlan();
 			addMessage(FacesMessage.SEVERITY_INFO, "Gelöscht", "Übung wurde entfernt.");

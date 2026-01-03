@@ -146,33 +146,40 @@
         <div class="day-block">
             <h3 class="day-title">#{day.name}</h3>
 
-            <h:dataTable value="#{day.plannedExercises}" var="pe" styleClass="exercise-table">
-                <h:column>
-                    <f:facet name="header">Übung</f:facet>
-                    #{pe.exercise.name}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Sätze</f:facet>
-                    #{pe.sets}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Wdh.</f:facet>
-                    #{pe.reps}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Kg</f:facet>
-                    #{pe.weight}
-                </h:column>
-                <h:column>
-                    <f:facet name="header"></f:facet> <h:commandLink
-                        action="#{planEditorController.removeExercise(pe.id)}"
-                        style="color: #ff6b6b; text-decoration: none; font-weight: bold; font-size: 1.2em;"
-                        title="Übung entfernen"
-                        onclick="return confirm('Diese Übung wirklich vom Tag entfernen?');">
-                    ✕
-                </h:commandLink>
-                </h:column>
-            </h:dataTable>
+            <h:form id="form-day-#{day.id}">
+                <h:dataTable value="#{day.plannedExercises}" var="pe" styleClass="exercise-table">
+                    <h:column>
+                        <f:facet name="header">Übung</f:facet>
+                        #{pe.exercise.name}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Sätze</f:facet>
+                        #{pe.sets}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Wdh.</f:facet>
+                        #{pe.reps}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Kg</f:facet>
+                        #{pe.weight}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header"></f:facet>
+                        <h:commandLink
+                                action="#{planEditorController.removeExercise(pe.id)}"
+                                style="color: #ff6b6b; text-decoration: none; font-weight: bold; font-size: 1.2em;"
+                                title="Übung entfernen"
+                                onclick="return confirm('Diese Übung wirklich vom Tag entfernen?');">
+                            ✕
+                        </h:commandLink>
+                    </h:column>
+
+                </h:dataTable>
+
+            </h:form>
+
 
             <h:panelGroup rendered="#{empty day.plannedExercises}">
                 <p style="color: #777; font-style: italic;">Freier Tag (noch keine Übungen).</p>

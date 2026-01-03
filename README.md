@@ -125,6 +125,12 @@ Wenn du Code geändert hast, öffne ein zweites Terminal (oder Tab in IntelliJ) 
 ```
 Was passiert da? Der Server in Terminal 1 bleibt an. Der Befehl in Terminal 2 baut nur deine .war Datei neu und schiebt sie in den laufenden Server. Das dauert meist nur wenige Sekunden statt Minuten.
 
+**Debugging:**
+```powershell
+./mvn clean wildfly:run "-Dwildfly.javaOpts=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8787" -s private-settings.xml
+
+```
+
 **Container Status prüfen:**
 
 ```powershell
