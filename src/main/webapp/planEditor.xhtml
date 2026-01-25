@@ -3,227 +3,415 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:c="jakarta.tags.core"><h:head>
+      xmlns:ui="jakarta.faces.facelets">
+
+<h:head>
     <title>Plan Editor</title>
     <style>
+        /* --- GLOBAL THEME --- */
         body {
-            font-family: 'Segoe UI', sans-serif;
-            padding: 20px;
-            background-color: #121212;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0a0a0a;
             color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
         }
 
-        h2, h3, h4 {
-            color: white;
-            margin-top: 0;
+        /* CONTAINER */
+        .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
         }
 
-        .header-container {
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+        /* HEADER (3-Spalten Layout für exakte Zentrierung) */
+        .header-bar {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Tag-Container */
-        .day-block {
+        /* Flex-Aufteilung: Links und Rechts nehmen Platz, Mitte den Rest */
+        .header-left {
+            flex: 1;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .header-center {
+            flex: 2; /* Nimmt doppelt so viel Platz, damit es sicher mittig ist */
+            text-align: center;
+        }
+
+        .header-right {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 1.8em;
+            color: white;
+            white-space: nowrap; /* Kein Umbruch im Titel */
+        }
+
+        .subtitle {
+            display: block;
+            font-size: 0.6em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        /* TAB NAVIGATION (ZENTRIERT) */
+        .tabs-container {
+            display: flex;
+            justify-content: center; /* ZENTRIERT DIE TABS */
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            scrollbar-width: thin;
+            scrollbar-color: #333 #0a0a0a;
+        }
+
+        .tab-btn {
             background-color: #1e1e1e;
             border: 1px solid #333;
+            color: #aaa;
+            padding: 12px 20px;
             border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            white-space: nowrap;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .day-title {
-            color: #64b5f6;
-            border-bottom: 1px solid #444;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+        .tab-btn:hover {
+            background-color: #2a2a2a;
+            color: white;
         }
 
-        /* Innere Tabelle für Übungen */
+        .tab-btn.active {
+            background-color: #4facfe;
+            color: #000;
+            border-color: #4facfe;
+            box-shadow: 0 0 15px rgba(79, 172, 254, 0.4);
+        }
+
+        /* CONTENT CARD */
+        .day-card {
+            background-color: #161616;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* TABELLE */
         .exercise-table {
             width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 25px;
         }
 
         .exercise-table th {
             text-align: left;
-            border-bottom: 1px solid #555;
-            padding: 8px;
-            color: #b0b0b0;
+            color: #666;
+            text-transform: uppercase;
+            font-size: 0.75em;
+            letter-spacing: 1px;
+            padding: 10px;
+            border-bottom: 1px solid #333;
         }
 
         .exercise-table td {
-            border-bottom: 1px solid #333;
-            padding: 8px;
+            padding: 15px 10px;
+            border-bottom: 1px solid #222;
+            color: #ddd;
+            vertical-align: middle;
         }
 
-        /* Formularzeile (Add Exercise) */
-        .add-row {
+        .exercise-table tr:last-child td { border-bottom: none; }
+        .exercise-table tr:hover td { background-color: #1a1a1a; }
+
+        /* ADD FORM (Unten) */
+        .add-form-container {
+            background-color: #1f1f1f;
+            padding: 15px;
+            border-radius: 8px;
             display: flex;
             gap: 10px;
             align-items: flex-end;
-            background: #252525;
-            padding: 15px;
-            border-radius: 6px;
+            border: 1px solid #333;
+            flex-wrap: wrap;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
+        .input-group { display: flex; flex-direction: column; }
 
-        .form-label {
-            font-size: 0.85em;
+        .input-group label {
+            font-size: 0.75em;
+            color: #888;
+            margin-bottom: 5px;
             font-weight: bold;
-            margin-bottom: 4px;
-            color: #aaa;
         }
 
-        .input-dark {
-            background: #333;
-            border: 1px solid #555;
+        .dark-input {
+            background-color: #2b2b2b;
+            border: 1px solid #444;
             color: white;
-            padding: 6px;
-            border-radius: 4px;
+            padding: 10px;
+            border-radius: 6px;
+            outline: none;
         }
 
+        .dark-input:focus { border-color: #4facfe; }
+
+        /* BUTTONS */
         .btn-add {
             background-color: #28a745;
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
+            border-radius: 6px;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5em;
             cursor: pointer;
-            font-weight: bold;
-            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
         }
+        .btn-add:hover { transform: scale(1.05); background-color: #34ce57; }
 
-        .btn-add:hover {
-            background-color: #34ce57;
+        .btn-delete-icon {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-size: 1.1em;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            background: transparent;
+            border: none;
+            cursor: pointer;
         }
+        .btn-delete-icon:hover { opacity: 1; transform: scale(1.1); }
 
         .back-link {
-            color: #64b5f6;
+            color: #888;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.2s;
         }
+        .back-link:hover { color: #fff; }
+
+        /* TOGGLE SWITCH CSS */
+        .header-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #1a1a1a;
+            padding: 8px 15px;
+            border-radius: 30px;
+            border: 1px solid #333;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #444;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: #28a745; }
+        input:checked + .slider:before { transform: translateX(22px); }
+
     </style>
 </h:head>
+
 <h:body>
-    <h:messages globalOnly="true" style="color: #ff6b6b; list-style: none;"/>
+    <h:messages globalOnly="true"
+                style="background: #333; color: #4caf50; padding: 10px; border-radius: 5px; list-style:none; text-align:center; margin-bottom: 20px;" />
 
-    <h:form id="headerForm">
-        <div class="header-container">
-            <div>
-                <h2>Plan Editor</h2>
-                <h:panelGroup rendered="#{planEditorController.trainingPlan != null}">
-                    <small>Bearbeite: <strong>#{planEditorController.trainingPlan.name}</strong></small>
-                </h:panelGroup>
+    <h:form id="mainForm">
+
+        <div class="header-bar">
+
+            <div class="header-left">
+                <h:link outcome="athleteDetail" styleClass="back-link">
+                    <f:param name="athleteId" value="#{planEditorController.trainingPlan.athlete.id}"/>
+                    <span>← Zurück</span>
+                </h:link>
             </div>
 
-            <div style="display:flex; align-items:center;">
-                <h:selectBooleanCheckbox value="#{planEditorController.trainingPlan.active}">
-                    <f:ajax listener="#{planEditorController.toggleActiveStatus}" render="@form"/>
-                </h:selectBooleanCheckbox>
-                <span style="color:#aaa; margin-left:5px; font-size:0.9em;">Aktiv</span>
+            <div class="header-center">
+                <span class="subtitle">Plan Editor</span>
+                <h2>#{planEditorController.trainingPlan.name}</h2>
             </div>
 
-            <h:link value="← Zurück" outcome="athleteDetail" styleClass="back-link">
-                <f:param name="athleteId" value="#{planEditorController.trainingPlan.athlete.id}"/>
-            </h:link>
-        </div>
-    </h:form>
-
-    <c:forEach items="#{planEditorController.trainingPlan.trainingDays}" var="day">
-
-        <div class="day-block">
-            <h3 class="day-title">#{day.name}</h3>
-
-            <h:form id="form-day-#{day.id}">
-                <h:dataTable value="#{day.plannedExercises}" var="pe" styleClass="exercise-table">
-                    <h:column>
-                        <f:facet name="header">Übung</f:facet>
-                        #{pe.exercise.name}
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Sätze</f:facet>
-                        #{pe.sets}
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Wdh.</f:facet>
-                        #{pe.reps}
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Kg</f:facet>
-                        #{pe.weight}
-                    </h:column>
-
-                    <h:column>
-                        <f:facet name="header"></f:facet>
-                        <h:commandLink
-                                action="#{planEditorController.removeExercise(pe.id)}"
-                                style="color: #ff6b6b; text-decoration: none; font-weight: bold; font-size: 1.2em;"
-                                title="Übung entfernen"
-                                onclick="return confirm('Diese Übung wirklich vom Tag entfernen?');">
-                            ✕
-                        </h:commandLink>
-                    </h:column>
-
-                </h:dataTable>
-
-            </h:form>
-
-
-            <h:panelGroup rendered="#{empty day.plannedExercises}">
-                <p style="color: #777; font-style: italic;">Freier Tag (noch keine Übungen).</p>
-            </h:panelGroup>
-
-            <h:form>
-                <div class="add-row">
-
-                    <div class="form-group" style="flex-grow: 2;">
-                        <span class="form-label">Übung wählen</span>
-                        <h:selectOneMenu value="#{planEditorController.getInputForDay(day.id).exerciseId}"
-                                         styleClass="input-dark" style="width: 100%;">
-                            <f:selectItem itemLabel="-- Bitte wählen --" itemValue="#{null}"/>
-                            <f:selectItems value="#{planEditorController.availableExercises}" var="ex"
-                                           itemValue="#{ex.id}" itemLabel="#{ex.name} (#{ex.targetMuscle})"/>
-                        </h:selectOneMenu>
-                    </div>
-
-                    <div class="form-group" style="width: 70px;">
-                        <span class="form-label">Sätze</span>
-                        <h:inputText value="#{planEditorController.getInputForDay(day.id).sets}"
-                                     styleClass="input-dark"/>
-                    </div>
-
-                    <div class="form-group" style="width: 80px;">
-                        <span class="form-label">Wdh.</span>
-                        <h:inputText value="#{planEditorController.getInputForDay(day.id).reps}"
-                                     styleClass="input-dark"/>
-                    </div>
-
-                    <div class="form-group" style="width: 70px;">
-                        <span class="form-label">Kg</span>
-                        <h:inputText value="#{planEditorController.getInputForDay(day.id).weight}"
-                                     styleClass="input-dark"/>
-                    </div>
-
-                    <h:commandButton value="+" action="#{planEditorController.addExercise(day.id)}"
-                                     styleClass="btn-add"/>
+            <div class="header-right">
+                <div class="header-toggle">
+                    <span style="color: #aaa; font-size: 0.85em; font-weight: 600;">Aktiv</span>
+                    <label class="switch">
+                        <h:selectBooleanCheckbox value="#{planEditorController.trainingPlan.active}">
+                            <f:ajax listener="#{planEditorController.toggleActiveStatus}" />
+                        </h:selectBooleanCheckbox>
+                        <span class="slider"></span>
+                    </label>
                 </div>
-            </h:form>
+            </div>
 
         </div>
 
-    </c:forEach>
+        <div class="content-container">
+
+            <div class="tabs-container">
+                <ui:repeat value="#{planEditorController.trainingPlan.trainingDays}" var="day">
+                    <h:commandLink value="#{day.name}"
+                                   action="#{planEditorController.switchDay(day.id)}"
+                                   styleClass="tab-btn #{planEditorController.activeDayId == day.id ? 'active' : ''}">
+                        <f:ajax render="@form" />
+                    </h:commandLink>
+                </ui:repeat>
+            </div>
+
+            <h:panelGroup id="dayContent">
+
+                <ui:repeat value="#{planEditorController.trainingPlan.trainingDays}" var="day">
+                    <h:panelGroup rendered="#{planEditorController.activeDayId == day.id}">
+
+                        <div class="day-card">
+
+                            <h:dataTable value="#{day.plannedExercises}" var="pe"
+                                         styleClass="exercise-table"
+                                         rendered="#{not empty day.plannedExercises}">
+
+                                <h:column>
+                                    <f:facet name="header">Übung</f:facet>
+                                    <strong style="color: #fff;">#{pe.exercise.name}</strong>
+                                    <div style="font-size: 0.8em; color: #666;">#{pe.exercise.targetMuscle}</div>
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header">Sätze</f:facet>
+                                    #{pe.sets}
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header">Wdh.</f:facet>
+                                    #{pe.reps}
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header">Gewicht</f:facet>
+                                    <span style="color: #4facfe;">#{pe.weight} kg</span>
+                                </h:column>
+
+                                <h:column>
+                                    <f:facet name="header"></f:facet>
+                                    <div style="text-align: right;">
+                                        <h:commandLink action="#{planEditorController.removeExercise(pe.id)}"
+                                                       styleClass="btn-delete-icon"
+                                                       title="Entfernen"
+                                                       onclick="return confirm('Weg damit?');">
+                                            🗑️
+                                            <f:ajax render="@form" />
+                                        </h:commandLink>
+                                    </div>
+                                </h:column>
+                            </h:dataTable>
+
+                            <h:panelGroup rendered="#{empty day.plannedExercises}">
+                                <div style="text-align: center; padding: 30px; color: #555; border: 2px dashed #333; border-radius: 8px; margin-bottom: 20px;">
+                                    Keine Übungen für #{day.name} geplant.
+                                </div>
+                            </h:panelGroup>
+
+                            <div class="add-form-container">
+
+                                <div class="input-group" style="flex-grow: 2; min-width: 150px;">
+                                    <label>Übung hinzufügen</label>
+                                    <h:selectOneMenu value="#{planEditorController.getInputForDay(day.id).exerciseId}"
+                                                     styleClass="dark-input">
+                                        <f:selectItem itemLabel="Wählen..." itemValue="#{null}"/>
+                                        <f:selectItems value="#{planEditorController.availableExercises}" var="ex"
+                                                       itemValue="#{ex.id}"
+                                                       itemLabel="#{ex.name}" />
+                                    </h:selectOneMenu>
+                                </div>
+
+                                <div class="input-group" style="width: 60px;">
+                                    <label>Sätze</label>
+                                    <h:inputText value="#{planEditorController.getInputForDay(day.id).sets}"
+                                                 styleClass="dark-input" style="text-align: center;"/>
+                                </div>
+
+                                <div class="input-group" style="width: 70px;">
+                                    <label>Wdh.</label>
+                                    <h:inputText value="#{planEditorController.getInputForDay(day.id).reps}"
+                                                 styleClass="dark-input" style="text-align: center;"/>
+                                </div>
+
+                                <div class="input-group" style="width: 70px;">
+                                    <label>Kg</label>
+                                    <h:inputText value="#{planEditorController.getInputForDay(day.id).weight}"
+                                                 styleClass="dark-input" style="text-align: center;"/>
+                                </div>
+
+                                <h:commandButton value="+"
+                                                 action="#{planEditorController.addExercise(day.id)}"
+                                                 styleClass="btn-add">
+                                    <f:ajax execute="@form" render="@form" />
+                                </h:commandButton>
+                            </div>
+
+                        </div>
+                    </h:panelGroup>
+                </ui:repeat>
+
+            </h:panelGroup>
+        </div>
+
+    </h:form>
 
 </h:body>
 </html>

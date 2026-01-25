@@ -31,6 +31,7 @@ public class PlanEditorController implements Serializable {
 
 	// Der Trick: Für jede Day-ID speichern wir ein eigenes Eingabe-Objekt
 	private Map<Long, ExerciseInput> inputsPerDay = new HashMap<>();
+	private Long activeDayId;
 
 	@PostConstruct
 	public void init() {
@@ -44,6 +45,9 @@ public class PlanEditorController implements Serializable {
 
 		// 2. Alle Übungen laden (für Dropdown)
 		this.availableExercises = exerciseService.findAllExercises();
+		if (this.trainingPlan != null && !this.trainingPlan.getTrainingDays().isEmpty()) {
+			this.activeDayId = this.trainingPlan.getTrainingDays().get(0).getId();
+		}
 	}
 
 	private void loadTrainingPlan() {
@@ -106,6 +110,18 @@ public class PlanEditorController implements Serializable {
 
 	private void addMessage(FacesMessage.Severity severity, String summary, String detail) {
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, summary, detail));
+	}
+	public Long getActiveDayId() {
+		return activeDayId;
+	}
+
+	public void setActiveDayId(Long activeDayId) {
+		this.activeDayId = activeDayId;
+	}
+
+	// Methode zum Umschalten per Klick (AJAX)
+	public void switchDay(Long dayId) {
+		this.activeDayId = dayId;
 	}
 
 	// --- Getter ---
