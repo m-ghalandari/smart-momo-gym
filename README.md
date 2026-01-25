@@ -115,19 +115,19 @@ Es ist keine manuelle Bearbeitung der `standalone.xml` nötig.
 **Deployment manuell anstoßen:**
 
 ```powershell
-./mvnw clean package wildfly:deploy -s private-settings.xml
+mvn clean package wildfly:deploy -s private-settings.xml
 ```
 
 *Terminal 2 (Zum Aktualisieren):*
 Wenn du Code geändert hast, öffne ein zweites Terminal (oder Tab in IntelliJ) und führe aus:
 ```powershell
-./mvn package wildfly:deploy -s private-settings.xml
+mvn package wildfly:deploy -s private-settings.xml
 ```
 Was passiert da? Der Server in Terminal 1 bleibt an. Der Befehl in Terminal 2 baut nur deine .war Datei neu und schiebt sie in den laufenden Server. Das dauert meist nur wenige Sekunden statt Minuten.
 
 **Debugging:**
 ```powershell
-./mvn clean wildfly:run "-Dwildfly.javaOpts=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8787" -s private-settings.xml
+mvn clean wildfly:run "-Dwildfly.javaOpts=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8787" -s private-settings.xml
 
 ```
 
@@ -143,3 +143,33 @@ docker logs oracle-db
 ```powershell
 docker restart oracle-db
 ```
+
+## 🌍 Mobile Deployment (Via Ngrok)
+
+Um die Anwendung auf dem Smartphone (z.B. im Fitnessstudio) zu nutzen, ohne einen Server zu mieten, "tunneln" wir den lokalen Port ins Internet.
+
+**Voraussetzung:**
+* Der Server muss lokal laufen (`mvn clean wildfly:run ...`).
+* Ngrok muss installiert sein.
+
+**1. Tunnel starten:**
+Öffne ein **neues** Terminal-Fenster und führe aus:
+
+```powershell
+ngrok http 8080
+```
+
+**2. URL ablesen:**
+Du siehst im Terminal eine Ausgabe wie:
+`Forwarding https://abcd-1234-5678.ngrok-free.app -> http://localhost:8080`
+
+**3. Auf dem Handy öffnen:**
+Kopiere die URL und hänge **zwingend** den Projektnamen an:
+
+`https://[DEINE-NGROK-ID].ngrok-free.app/smart-momo-gym/`
+
+**Wichtig:**
+
+* Das Terminal mit Ngrok darf **nicht geschlossen** werden, sonst bricht die Verbindung ab.
+* Die URL ändert sich bei jedem Neustart von Ngrok (in der Free-Version).
+* Beim ersten Aufruf auf dem Handy zeigt Ngrok eine Warnseite ("You are visiting..."). Klicke dort auf "Visit Site".
