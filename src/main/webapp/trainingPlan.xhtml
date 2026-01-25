@@ -7,114 +7,209 @@
 <h:head>
     <title>Neuen Plan erstellen</title>
     <style>
-        /* --- GLOBAL DARK MODE SETTINGS --- */
+        /* --- CORE SETTINGS --- */
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #121212; /* Sehr dunkles Grau */
-            color: #e0e0e0;            /* Helles Grau für Text */
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh; /* Volle Höhe */
             margin: 0;
+            padding: 10px; /* Weniger Padding außen */
         }
 
-        /* CARD STYLE */
+        /* CARD DESIGN (Kompakter) */
         .card {
-            background-color: #1e1e1e; /* Dunkle Karte */
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Tiefer Schatten */
-            border: 1px solid #333;    /* Dunkler Rand */
+            background-color: #161616;
+            padding: 25px; /* Reduziert von 40px */
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            border: 1px solid #333;
             width: 100%;
-            max-width: 500px;
+            max-width: 420px; /* Etwas schmaler */
         }
 
+        /* TYPOGRAPHY */
         h2 {
             text-align: center;
-            color: #ffffff; /* Weiß */
+            color: #ffffff;
             margin-top: 0;
+            margin-bottom: 2px; /* Weniger Abstand */
+            font-size: 1.5em;   /* Etwas kleiner */
+            font-weight: 700;
         }
 
-        /* FORMULAR ELEMENTE */
-        .form-group {
-            margin-bottom: 20px;
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 20px; /* Reduziert */
+            font-size: 0.9em;
         }
+
+        .highlight { color: #4facfe; font-weight: 600; }
+
+        /* INPUT FIELDS */
+        .form-group { margin-bottom: 15px; /* Deutlich reduziert von 25px */ }
 
         .form-label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #b0b0b0; /* Label etwas dunkler */
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.8em;
+            color: #b0b0b0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .form-input {
             width: 100%;
-            padding: 10px;
-            background-color: #2d2d2d; /* Dunkles Feld */
-            border: 1px solid #444;    /* Dunkler Rand */
-            border-radius: 4px;
-            font-size: 16px;
-            color: white;              /* Helle Eingabe */
+            padding: 10px; /* Kleineres Padding */
+            background-color: #212121;
+            border: 1px solid #333;
+            border-radius: 6px;
+            font-size: 15px;
+            color: white;
             box-sizing: border-box;
+            transition: border-color 0.2s;
         }
 
         .form-input:focus {
-            border-color: #007bff;
+            border-color: #4facfe;
             outline: none;
         }
 
-        /* BUTTON */
+        /* --- GRID STYLE FÜR TAGE (KOMPAKT) --- */
+        .checkbox-table {
+            width: 100%;
+            display: block;
+        }
+
+        .checkbox-table tbody {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr; /* JETZT 3 SPALTEN! */
+            gap: 6px; /* Engerer Abstand */
+            width: 100%;
+        }
+
+        .checkbox-table tr { display: flex; }
+
+        .checkbox-table td {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Zentriert */
+            background-color: #212121;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 6px; /* Viel weniger Padding */
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-table td:hover {
+            background-color: #2a2a2a;
+            border-color: #555;
+        }
+
+        .checkbox-table label {
+            color: #ccc;
+            font-size: 0.85em; /* Kleinere Schrift */
+            font-weight: 500;
+            cursor: pointer;
+            margin-left: 5px;
+            white-space: nowrap; /* Kein Umbruch */
+        }
+
+        .checkbox-table input[type="checkbox"] {
+            accent-color: #4facfe;
+            transform: scale(1.1);
+            cursor: pointer;
+            margin: 0;
+        }
+
+        /* TOGGLE SWITCH (Kompakter) */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            background: #212121;
+            padding: 8px 12px; /* Flacher */
+            border-radius: 6px;
+            border: 1px solid #333;
+            justify-content: space-between;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px; /* Kleiner */
+            height: 22px; /* Kleiner */
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #444;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px; width: 16px; /* Kleiner */
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: #28a745; }
+        input:checked + .slider:before { transform: translateX(18px); }
+
+        /* BUTTONS */
         .btn-submit {
             width: 100%;
-            padding: 12px;
-            background-color: #007bff; /* Blau */
-            color: white;
+            padding: 12px; /* Etwas flacher */
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #000;
             border: none;
-            border-radius: 4px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
+            transition: transform 0.2s;
         }
 
-        .btn-submit:hover {
-            background-color: #0056b3;
-        }
+        .btn-submit:hover { transform: translateY(-1px); }
 
-        /* LINKS */
         .back-link {
             display: block;
             text-align: center;
             margin-top: 15px;
-            color: #64b5f6; /* Hellblau */
+            color: #666;
             text-decoration: none;
+            font-size: 0.85em;
         }
-        .back-link:hover {
-            color: #ffffff;
-            text-decoration: underline;
-        }
+        .back-link:hover { color: #fff; }
 
-        /* CHECKBOXEN STYLING */
-        .checkbox-table {
-            width: 100%;
-        }
-
-        .checkbox-table td {
-            padding: 5px 0;
-        }
-
-        /* WICHTIG: Die Labels der Checkboxen hell machen */
-        .checkbox-table label {
-            margin-left: 8px;
-            color: #e0e0e0;
-            cursor: pointer;
-        }
-
-        /* Checkbox Input selbst etwas anpassen (Browser-abhängig, aber hilft) */
-        input[type="checkbox"] {
-            accent-color: #007bff; /* Checkbox Farbe modern */
-            cursor: pointer;
+        .error-box {
+            background-color: rgba(255, 107, 107, 0.1);
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            text-align: center;
+            list-style: none;
+            font-size: 0.9em;
         }
     </style>
 </h:head>
@@ -123,25 +218,27 @@
     <div class="card">
         <h2>Neuer Plan</h2>
 
-        <h:panelGroup rendered="#{planController.athlete != null}">
-            <p style="text-align: center; color: #b0b0b0;">
-                für Athlet: <strong style="color: #fff;">#{planController.athlete.username}</strong>
-            </p>
-        </h:panelGroup>
+        <div class="subtitle">
+            <h:panelGroup rendered="#{planController.athlete != null}">
+                für <span class="highlight">#{planController.athlete.username}</span>
+            </h:panelGroup>
+        </div>
 
         <h:form>
-            <h:messages globalOnly="true" style="color:#ff6b6b; list-style:none; text-align:center; padding:0; margin-bottom:10px;"/>
+            <h:messages globalOnly="true" styleClass="error-box" style="padding:0; margin:0;" />
 
             <div class="form-group">
-                <h:outputLabel value="Bezeichnung des Plans" styleClass="form-label"/>
+                <h:outputLabel value="Bezeichnung" styleClass="form-label"/>
                 <h:inputText value="#{planController.planName}"
                              required="true"
-                             requiredMessage="Bitte einen Namen eingeben."
-                             styleClass="form-input"/>
+                             requiredMessage="Name fehlt."
+                             styleClass="form-input"
+                             f:passThroughAttribute="placeholder"
+                             f:passThroughValue="z.B. Push Pull Legs"/>
             </div>
 
             <div class="form-group">
-                <h:outputLabel value="Trainingstage auswählen" styleClass="form-label"/>
+                <h:outputLabel value="Tage auswählen" styleClass="form-label"/>
 
                 <h:selectManyCheckbox value="#{planController.selectedDays}"
                                       layout="pageDirection"
@@ -151,15 +248,18 @@
             </div>
 
             <div class="form-group">
-                <h:outputLabel value="Status" styleClass="form-label"/>
+                <h:outputLabel value="Optionen" styleClass="form-label"/>
 
-                <div style="display: flex; align-items: center;">
-                    <h:selectBooleanCheckbox value="#{planController.active}" id="chkActive"/>
-                    <h:outputLabel for="chkActive" value=" Plan sofort aktivieren" style="margin-left: 8px; color: #b0b0b0; cursor: pointer;"/>
+                <div class="toggle-container">
+                    <span style="font-weight: 500; color: #ccc; font-size: 0.9em;">Sofort aktivieren</span>
+                    <label class="switch">
+                        <h:selectBooleanCheckbox value="#{planController.active}" />
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
 
-            <h:commandButton value="Plan Speichern"
+            <h:commandButton value="Speichern"
                              action="#{planController.save}"
                              styleClass="btn-submit"/>
 
