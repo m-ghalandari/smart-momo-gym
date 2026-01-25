@@ -2,144 +2,194 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      lang="de">
+      xmlns:f="jakarta.faces.core">
 
 <h:head>
     <title>Athlet Registrieren</title>
     <style>
-        /* --- GLOBAL DARK MODE SETTINGS --- */
+        /* --- GLOBAL THEME --- */
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #121212; /* Sehr dunkles Grau */
-            color: #e0e0e0;            /* Helles Grau für Text */
-            display: flex;
-            justify-content: center;   /* Horizontal zentrieren */
-            align-items: center;       /* Vertikal zentrieren */
-            height: 100vh;             /* Volle Bildschirmhöhe */
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0a0a0a; /* Deep Black */
+            color: #e0e0e0;
             margin: 0;
+            padding: 0;
+            height: 100vh; /* Volle Höhe */
+            display: flex;
+            flex-direction: column; /* Header oben, Rest darunter */
         }
 
-        /* CARD STYLE (Das Formular) */
+        /* HEADER BAR (Nur für den Zurück-Link) */
+        .header-bar {
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            position: absolute; /* Fixiert oben links */
+            top: 0;
+            left: 0;
+        }
+
+        .back-link {
+            color: #888;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+            font-size: 1rem;
+        }
+        .back-link:hover { color: #fff; }
+
+        /* MAIN CONTENT (Zentriert die Karte) */
+        .main-content {
+            flex: 1; /* Nimmt den restlichen Platz ein */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* CARD STYLE */
         .register-card {
-            background-color: #1e1e1e; /* Dunkle Karte */
+            background-color: #161616;
             padding: 40px;
-            border-radius: 8px;
-            border: 1px solid #333;    /* Dunkler Rand */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5); /* Tiefer Schatten */
+            border-radius: 16px; /* Etwas runder */
+            border: 1px solid #333;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7); /* Tiefer, edler Schatten */
             width: 100%;
             max-width: 400px;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h2 {
             text-align: center;
-            color: #ffffff; /* Weiß */
+            color: #ffffff;
             margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            letter-spacing: -0.5px;
         }
 
         /* FORMULAR ELEMENTE */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-label {
             display: block;
             margin-bottom: 8px;
-            font-weight: bold;
-            color: #b0b0b0; /* Label etwas dunkler */
+            font-weight: 600;
+            font-size: 0.85em;
+            color: #b0b0b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .form-input {
             width: 100%;
-            padding: 10px;
-            background-color: #2d2d2d; /* Dunkles Feld */
-            border: 1px solid #444;    /* Dunkler Rand */
-            border-radius: 4px;
+            padding: 14px;
+            background-color: #212121;
+            border: 1px solid #333;
+            border-radius: 8px;
             font-size: 16px;
-            color: white;              /* Helle Eingabe */
+            color: white;
             box-sizing: border-box;
+            transition: all 0.2s;
         }
 
         .form-input:focus {
-            border-color: #007bff;
+            border-color: #4facfe;
+            background-color: #262626;
             outline: none;
+            box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.1); /* Glow Effekt */
         }
 
-        /* BUTTON */
+        /* BUTTON (Modern Gradient) */
         .btn-submit {
             width: 100%;
-            padding: 12px;
-            background-color: #28a745; /* Grün */
-            color: white;
+            padding: 14px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #000; /* Schwarz auf Hellblau = Top Kontrast */
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
         }
 
         .btn-submit:hover {
-            background-color: #218838; /* Dunkler beim Hover */
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
         }
 
-        /* NACHRICHTEN */
-        .error-msg {
-            color: #ff6b6b; /* Helles Rot für Lesbarkeit */
-            font-size: 14px;
-            margin-top: 5px;
-            display: block;
-        }
-
+        /* MESSAGES */
         .global-messages {
             list-style: none;
             padding: 0;
-            margin-bottom: 15px;
-            color: #ff6b6b;
+            margin-bottom: 20px;
             text-align: center;
         }
 
-        /* LINKS */
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #64b5f6; /* Hellblau */
-            text-decoration: none;
+        /* Fehlermeldungen schön rot */
+        .global-messages li {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 107, 107, 0.3);
         }
-        .back-link:hover {
-            color: #ffffff;
-            text-decoration: underline;
+
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: block;
         }
     </style>
 </h:head>
 
 <h:body>
 
-    <div class="register-card">
-        <h2>Konto erstellen</h2>
+    <div class="header-bar">
+        <h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link" />
+    </div>
 
-        <h:form>
-            <h:messages globalOnly="true" styleClass="global-messages" />
+    <div class="main-content">
+        <div class="register-card">
+            <h2>Neuer Athlet</h2>
 
-            <div class="form-group">
-                <h:outputLabel for="usernameInput" value="Benutzername" styleClass="form-label" />
+            <h:form>
+                <h:messages globalOnly="true" styleClass="global-messages" />
 
-                <h:inputText id="usernameInput"
-                             value="#{athleteController.username}"
-                             required="true"
-                             requiredMessage="Bitte gib einen Namen ein."
-                             styleClass="form-input" />
+                <div class="form-group">
+                    <h:outputLabel for="usernameInput" value="Benutzername" styleClass="form-label" />
 
-                <h:message for="usernameInput" styleClass="error-msg" />
-            </div>
+                    <h:inputText id="usernameInput"
+                                 value="#{athleteController.username}"
+                                 required="true"
+                                 requiredMessage="Bitte Namen eingeben."
+                                 styleClass="form-input"
+                                 f:passThroughAttribute="placeholder"
+                                 f:passThroughValue="Dein Name..." />
 
-            <h:commandButton value="Jetzt Registrieren"
-                             action="#{athleteController.register}"
-                             styleClass="btn-submit" />
-        </h:form>
+                    <h:message for="usernameInput" styleClass="error-msg" />
+                </div>
 
-        <h:link value="Zurück zum Dashboard" outcome="index.xhtml" styleClass="back-link" />
+                <h:commandButton value="Konto erstellen"
+                                 action="#{athleteController.register}"
+                                 styleClass="btn-submit" />
+            </h:form>
+        </div>
     </div>
 
 </h:body>

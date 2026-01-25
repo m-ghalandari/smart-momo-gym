@@ -8,19 +8,49 @@
 <h:head>
     <title>Athleten Details</title>
     <style>
+        /* --- GLOBAL THEME --- */
         body {
             font-family: 'Segoe UI', sans-serif;
-            padding: 20px;
             background-color: #121212;
             color: #e0e0e0;
+            margin: 0;
+            padding: 0; /* Reset für Header-Positionierung */
         }
 
-        /* Navigations-Leiste oben links */
-        .nav-header {
-            margin-bottom: 20px;
+        /* HEADER BAR (Identisch zu register.xhtml) */
+        .header-bar {
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            position: absolute; /* Fixiert oben links */
+            top: 0;
+            left: 0;
+            z-index: 10; /* Über dem Inhalt */
         }
 
-        /* Überschriften zentriert */
+        .back-link {
+            color: #888;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+            font-size: 1rem;
+        }
+        .back-link:hover { color: #fff; }
+
+        /* HAUPT-CONTAINER */
+        .main-container {
+            padding-top: 80px; /* Platz für den Header schaffen */
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 40px;
+            max-width: 800px;
+            margin: 0 auto; /* Zentriert */
+        }
+
+        /* TYPOGRAPHY */
         h2, h3 {
             color: #ffffff;
             text-align: center;
@@ -66,17 +96,16 @@
             transition: transform 0.2s ease;
         }
 
-        /* Kleiner Hover-Effekt für die Karte */
         .plan-card:hover {
             border-color: #444;
             transform: translateY(-2px);
         }
 
-        /* STATUS INDIKATOREN */
+        /* STATUS */
         .status-active { color: #4caf50; font-weight: bold; }
         .status-inactive { color: #b0b0b0; }
 
-        /* NEU: KLICKBARER TITEL */
+        /* LINK AUF NAME */
         .plan-name-link {
             font-size: 1.3em;
             font-weight: bold;
@@ -87,11 +116,11 @@
         }
 
         .plan-name-link:hover {
-            color: #64b5f6; /* Blau beim Drüberfahren */
+            color: #64b5f6;
             text-decoration: underline;
         }
 
-        /* NEU: LÖSCHEN ICON BUTTON */
+        /* DELETE BUTTON */
         .btn-icon-delete {
             color: #ff6b6b;
             background: transparent;
@@ -114,16 +143,7 @@
             cursor: pointer;
         }
 
-        /* Link zurück */
-        .back-link {
-            color: #64b5f6;
-            text-decoration: none;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-        .back-link:hover { text-decoration: underline; }
-
-        /* Container für den Button unten */
+        /* Container für Button unten */
         .action-container {
             text-align: center;
             margin-top: 30px;
@@ -133,68 +153,66 @@
 </h:head>
 
 <h:body>
-    <h:messages showDetail="true" showSummary="true" style="color: #ff6b6b; list-style:none; text-align:center;"/>
+    <div class="header-bar">
+        <h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link"/>
+    </div>
 
-    <h:panelGroup rendered="#{athleteDetailController.athlete != null}">
+    <div class="main-container">
+        <h:messages showDetail="true" showSummary="true" style="color: #ff6b6b; list-style:none; text-align:center;"/>
 
-        <div class="nav-header">
-            <h:link value="← Zurück zum Dashboard" outcome="index.xhtml" styleClass="back-link"/>
-        </div>
+        <h:panelGroup rendered="#{athleteDetailController.athlete != null}">
 
-        <h2>#{athleteDetailController.athlete.username}</h2>
-        <h3>Trainingspläne</h3>
+            <h2>#{athleteDetailController.athlete.username}</h2>
+            <h3>Trainingspläne</h3>
 
-        <h:panelGroup rendered="#{empty athleteDetailController.athlete.trainingPlans}">
-            <p style="color: #888; text-align: center;">Dieser Athlet hat noch keine Trainingspläne.</p>
-        </h:panelGroup>
+            <h:panelGroup rendered="#{empty athleteDetailController.athlete.trainingPlans}">
+                <p style="color: #888; text-align: center;">Dieser Athlet hat noch keine Trainingspläne.</p>
+            </h:panelGroup>
 
-        <h:form>
-            <ui:repeat value="#{athleteDetailController.athlete.trainingPlans}" var="plan">
+            <h:form>
+                <ui:repeat value="#{athleteDetailController.athlete.trainingPlans}" var="plan">
 
-                <div class="plan-card">
+                    <div class="plan-card">
+                        <div>
+                            <h:link outcome="planEditor" styleClass="plan-name-link">
+                                <f:param name="planId" value="#{plan.id}" />
+                                #{plan.name}
+                            </h:link>
 
-                    <div>
-                        <h:link outcome="planEditor" styleClass="plan-name-link">
-                            <f:param name="planId" value="#{plan.id}" />
-                            #{plan.name}
-                        </h:link>
+                            <div style="font-size: 0.9em;">
+                                Status:
+                                <span class="#{plan.active ? 'status-active' : 'status-inactive'}">
+                                    #{plan.active ? 'AKTIV' : 'Inaktiv'}
+                                </span>
+                            </div>
+                        </div>
 
-                        <div style="font-size: 0.9em;">
-                            Status:
-                            <span class="#{plan.active ? 'status-active' : 'status-inactive'}">
-                                #{plan.active ? 'AKTIV' : 'Inaktiv'}
-                            </span>
+                        <div>
+                            <h:commandLink action="#{athleteDetailController.deletePlan(plan.id)}"
+                                           styleClass="btn-icon-delete"
+                                           title="Plan löschen"
+                                           onclick="return confirm('Diesen Plan wirklich löschen?');">
+                                🗑️
+                            </h:commandLink>
                         </div>
                     </div>
+                </ui:repeat>
+            </h:form>
 
-                    <div>
-                        <h:commandLink action="#{athleteDetailController.deletePlan(plan.id)}"
-                                       styleClass="btn-icon-delete"
-                                       title="Plan löschen"
-                                       onclick="return confirm('Diesen Plan wirklich löschen?');">
-                            🗑️
-                        </h:commandLink>
-                    </div>
-                </div>
-            </ui:repeat>
-        </h:form>
+            <div class="action-container">
+                <h:link value="+ Neuer Trainingsplan"
+                        outcome="/trainingPlan.xhtml"
+                        styleClass="btn-create">
+                    <f:param name="athleteId" value="#{athleteDetailController.athlete.id}"/>
+                </h:link>
+            </div>
 
-        <div class="action-container">
-            <h:link value="+ Neuer Trainingsplan"
-                    outcome="/trainingPlan.xhtml"
-                    styleClass="btn-create">
-                <f:param name="athleteId" value="#{athleteDetailController.athlete.id}"/>
-            </h:link>
-        </div>
+        </h:panelGroup>
 
-    </h:panelGroup>
-
-    <h:panelGroup rendered="#{athleteDetailController.athlete == null}">
-        <p style="color: #ff6b6b; text-align: center;">Kein Athlet geladen.</p>
-        <div style="text-align: center; margin-top: 20px;">
-            <h:link value="Zurück zum Dashboard" outcome="index.xhtml" styleClass="back-link"/>
-        </div>
-    </h:panelGroup>
+        <h:panelGroup rendered="#{athleteDetailController.athlete == null}">
+            <p style="color: #ff6b6b; text-align: center; margin-top: 50px;">Kein Athlet geladen.</p>
+        </h:panelGroup>
+    </div>
 
 </h:body>
 </html>

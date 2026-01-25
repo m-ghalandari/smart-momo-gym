@@ -13,27 +13,51 @@
             background-color: #0a0a0a; /* Deep Black */
             color: #e0e0e0;
             margin: 0;
-            padding: 20px;
+            padding: 0; /* Reset für Header-Positionierung */
         }
 
-        /* CONTAINER */
+        /* HEADER BAR (Identisch zu den anderen Seiten) */
+        .header-bar {
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            position: absolute; /* Fixiert oben links */
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        .back-link {
+            color: #888;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+            font-size: 1rem;
+        }
+        .back-link:hover { color: #fff; }
+
+        /* CONTAINER (Mit Abstand nach oben für den Header) */
         .content-container {
             max-width: 700px;
             margin: 0 auto;
             width: 100%;
+            padding-top: 80px; /* Platz für den Header schaffen */
+            padding-bottom: 40px;
+            padding-left: 20px;
+            padding-right: 20px;
+            box-sizing: border-box;
         }
 
-        /* HEADER */
-        .header-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #333;
+        /* TYPOGRAPHY */
+        h2 {
+            text-align: center; /* Zentriert im Content */
+            margin: 0 0 30px 0;
+            font-size: 1.8em;
+            color: white;
         }
-
-        h2 { margin: 0; font-size: 1.5em; color: white; }
 
         h3 {
             color: #888;
@@ -119,18 +143,6 @@
             box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
         }
 
-        .back-link {
-            color: #888;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: color 0.2s;
-            font-size: 0.9em;
-        }
-        .back-link:hover { color: #fff; }
-
         /* TABLE */
         .modern-table {
             width: 100%;
@@ -205,31 +217,25 @@
 
         .muscle-tag { color: #888; font-style: italic; font-size: 0.9em; }
 
-        /* --- TOAST NOTIFICATION (POPUP) --- */
+        /* --- TOAST NOTIFICATION --- */
         .toast-notification {
-            position: fixed; /* Schwebt über allem */
-            top: 20px;       /* Abstand von oben */
-            left: 50%;       /* Horizontal zentriert */
-            transform: translateX(-50%); /* Exakte Mitte */
-            z-index: 9999;   /* Immer ganz oben */
-
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
             background-color: #252525;
-            color: #4caf50; /* Standard Grün (wird oft durch JSF Info überschrieben) */
+            color: #4caf50;
             padding: 15px 30px;
-            border-radius: 50px; /* Pill Shape */
+            border-radius: 50px;
             border: 1px solid #4caf50;
             box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-
-            list-style: none; /* Keine Punkte */
+            list-style: none;
             font-weight: bold;
             font-size: 1rem;
-
-            /* Animation */
             opacity: 1;
             transition: opacity 0.5s ease-out;
         }
-
-        /* Falls es ein Fehler ist (JSF rendert Fehler oft gelb/rot in messages) */
         .toast-notification li { margin: 0; }
     </style>
 </h:head>
@@ -237,15 +243,13 @@
 <h:body>
     <h:messages globalOnly="true" styleClass="toast-notification" id="toastMsg"/>
 
+    <div class="header-bar">
+        <h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link"/>
+    </div>
+
     <div class="content-container">
 
-        <div class="header-bar">
-            <div>
-                <h:link value="← Zurück" outcome="index.xhtml" styleClass="back-link"/>
-            </div>
-            <h2>Übungen</h2>
-            <div style="width: 60px;"></div>
-        </div>
+        <h2>Übungen</h2>
 
         <div class="card">
             <h:form>
@@ -341,23 +345,15 @@
     </div>
 
     <script>
-        // Diese Funktion läuft, wenn die Seite geladen wird
         window.onload = function() {
             var toast = document.querySelector('.toast-notification');
-
-            // Wenn eine Nachricht existiert (JSF rendert die Liste nur bei Inhalt)
             if (toast) {
-                // Warte 1 Sekunde (1000 ms)
                 setTimeout(function() {
-                    // Starte Fade-Out
                     toast.style.opacity = '0';
-
-                    // Nach dem Fade (0.5s CSS Transition) das Element ganz entfernen
                     setTimeout(function() {
                         toast.style.display = 'none';
                     }, 500);
-
-                }, 1000); // 1 Sekunde sichtbar
+                }, 1000);
             }
         };
     </script>
