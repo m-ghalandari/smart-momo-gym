@@ -15,149 +15,150 @@
             color: #e0e0e0;
         }
 
+        /* Navigations-Leiste oben links */
+        .nav-header {
+            margin-bottom: 20px;
+        }
+
+        /* Überschriften zentriert */
         h2, h3 {
-            color: #ffffff; /* Überschriften Weiß */
+            color: #ffffff;
+            text-align: center;
+            margin-top: 0;
         }
 
-        small {
-            color: #b0b0b0; /* Sekundärtext dunkler */
-        }
-
-        /* HEADER */
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333; /* Dunkle Linie */
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
+        h2 { margin-bottom: 5px; font-size: 2em; }
+        h3 { color: #b0b0b0; font-weight: normal; margin-top: 0; margin-bottom: 30px;}
 
         /* BUTTONS */
         .btn-create {
-            background-color: #007bff;
+            background-color: #28a745;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 25px;
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
+            font-size: 1.1em;
             transition: background-color 0.2s;
+            display: inline-block;
         }
 
         .btn-create:hover {
-            background-color: #0056b3;
+            background-color: #34ce57;
         }
 
-        /* EDIT BUTTON (Gelb/Orange) */
-        .btn-edit {
-            color: #ffc107; /* Helles Bernstein-Gelb */
-            text-decoration: none;
-            font-weight: bold;
-            border: 1px solid #ffc107;
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-size: 0.9em;
-            transition: all 0.2s;
-            margin-right: 10px; /* Abstand zum Löschen Button */
-        }
-
-        .btn-edit:hover {
-            background-color: #ffc107;
-            color: black; /* Schwarzer Text auf gelbem Grund für Lesbarkeit */
-        }
-
-        /* Container für die Buttons rechts in der Karte */
-        .card-actions {
-            display: flex;
-            align-items: center;
-        }
-
-        /* PLAN CARDS (Dunkles Design) */
+        /* PLAN CARDS */
         .plan-card {
-            background-color: #1e1e1e; /* Dunkle Karte */
-            border: 1px solid #333;    /* Dunkler Rand */
+            width: 100%;
+            max-width: 600px;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
             padding: 20px;
             margin-bottom: 15px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Schatten für Tiefe */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-left: auto;
+            margin-right: auto;
+            transition: transform 0.2s ease;
+        }
+
+        /* Kleiner Hover-Effekt für die Karte */
+        .plan-card:hover {
+            border-color: #444;
+            transform: translateY(-2px);
         }
 
         /* STATUS INDIKATOREN */
-        .status-active {
-            color: #4caf50; /* Helles Grün für gute Lesbarkeit auf Dunkel */
+        .status-active { color: #4caf50; font-weight: bold; }
+        .status-inactive { color: #b0b0b0; }
+
+        /* NEU: KLICKBARER TITEL */
+        .plan-name-link {
+            font-size: 1.3em;
             font-weight: bold;
-        }
-
-        .status-inactive {
-            color: #b0b0b0; /* Grau */
-        }
-
-        /* LÖSCHEN BUTTON (Angepasst für Dark Mode) */
-        .btn-delete {
-            color: #ff6b6b; /* Hellrot (Pastell) für besseren Kontrast */
-            background: none;
-            border: 1px solid #ff6b6b;
-            padding: 5px 12px;
-            border-radius: 4px;
-            cursor: pointer;
+            color: #ffffff;
             text-decoration: none;
-            font-size: 0.9em;
-            transition: all 0.2s;
+            display: block;
+            margin-bottom: 5px;
         }
 
-        .btn-delete:hover {
-            background-color: #dc3545; /* Dunkleres Rot beim Hover */
+        .plan-name-link:hover {
+            color: #64b5f6; /* Blau beim Drüberfahren */
+            text-decoration: underline;
+        }
+
+        /* NEU: LÖSCHEN ICON BUTTON */
+        .btn-icon-delete {
+            color: #ff6b6b;
+            background: transparent;
+            border: 1px solid #ff6b6b;
+            padding: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 1.2em;
+            line-height: 1;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon-delete:hover {
+            background-color: #dc3545;
             border-color: #dc3545;
             color: white;
+            cursor: pointer;
         }
 
-        /* Link zurück zum Dashboard */
-        a {
-            color: #64b5f6; /* Hellblau für Links */
+        /* Link zurück */
+        .back-link {
+            color: #64b5f6;
             text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
         }
-        a:hover {
-            text-decoration: underline;
+        .back-link:hover { text-decoration: underline; }
+
+        /* Container für den Button unten */
+        .action-container {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 50px;
         }
     </style>
 </h:head>
 
 <h:body>
-    <h:messages showDetail="true" showSummary="true" style="color: #ff6b6b;"/>
+    <h:messages showDetail="true" showSummary="true" style="color: #ff6b6b; list-style:none; text-align:center;"/>
 
     <h:panelGroup rendered="#{athleteDetailController.athlete != null}">
 
-        <div class="header-container">
-            <div>
-                <h2 style="margin:0;">#{athleteDetailController.athlete.username}</h2>
-
-            </div>
-
-            <h:link value="+ Neuer Trainingsplan"
-                    outcome="/trainingPlan.xhtml"
-                    styleClass="btn-create">
-                <f:param name="athleteId" value="#{athleteDetailController.athlete.id}"/>
-            </h:link>
+        <div class="nav-header">
+            <h:link value="← Zurück zum Dashboard" outcome="index.xhtml" styleClass="back-link"/>
         </div>
 
+        <h2>#{athleteDetailController.athlete.username}</h2>
         <h3>Trainingspläne</h3>
 
         <h:panelGroup rendered="#{empty athleteDetailController.athlete.trainingPlans}">
-            <p style="color: #888;">Dieser Athlet hat noch keine Trainingspläne.</p>
+            <p style="color: #888; text-align: center;">Dieser Athlet hat noch keine Trainingspläne.</p>
         </h:panelGroup>
 
         <h:form>
             <ui:repeat value="#{athleteDetailController.athlete.trainingPlans}" var="plan">
 
                 <div class="plan-card">
+
                     <div>
-                        <div style="font-size: 1.2em; font-weight: bold; color: #fff; margin-bottom: 5px;">
+                        <h:link outcome="planEditor" styleClass="plan-name-link">
+                            <f:param name="planId" value="#{plan.id}" />
                             #{plan.name}
-                        </div>
+                        </h:link>
+
                         <div style="font-size: 0.9em;">
                             Status:
                             <span class="#{plan.active ? 'status-active' : 'status-inactive'}">
@@ -166,28 +167,34 @@
                         </div>
                     </div>
 
-                    <div class="card-actions">
-                        <h:link value="✏️ Bearbeiten" outcome="planEditor" styleClass="btn-edit">
-                            <f:param name="planId" value="#{plan.id}" />
-                        </h:link>
-
+                    <div>
                         <h:commandLink action="#{athleteDetailController.deletePlan(plan.id)}"
-                                       styleClass="btn-delete"
+                                       styleClass="btn-icon-delete"
+                                       title="Plan löschen"
                                        onclick="return confirm('Diesen Plan wirklich löschen?');">
-                            <h:outputText value="🗑 Löschen"/>
+                            🗑️
                         </h:commandLink>
                     </div>
-                </div>            </ui:repeat>
+                </div>
+            </ui:repeat>
         </h:form>
+
+        <div class="action-container">
+            <h:link value="+ Neuer Trainingsplan"
+                    outcome="/trainingPlan.xhtml"
+                    styleClass="btn-create">
+                <f:param name="athleteId" value="#{athleteDetailController.athlete.id}"/>
+            </h:link>
+        </div>
 
     </h:panelGroup>
 
     <h:panelGroup rendered="#{athleteDetailController.athlete == null}">
-        <p style="color: #ff6b6b;">Kein Athlet geladen.</p>
+        <p style="color: #ff6b6b; text-align: center;">Kein Athlet geladen.</p>
+        <div style="text-align: center; margin-top: 20px;">
+            <h:link value="Zurück zum Dashboard" outcome="index.xhtml" styleClass="back-link"/>
+        </div>
     </h:panelGroup>
-
-    <br/>
-    <h:link value="← Zurück zum Dashboard" outcome="index.xhtml"/>
 
 </h:body>
 </html>
