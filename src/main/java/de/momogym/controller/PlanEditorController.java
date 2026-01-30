@@ -108,6 +108,22 @@ public class PlanEditorController implements Serializable {
 		addMessage(FacesMessage.SEVERITY_INFO, "Status geändert", "Plan wurde " + statusText);
 	}
 
+	public void deleteTrainingDay(Long dayId){
+		trainingPlanService.deleteTrainingDay(dayId);
+
+		loadTrainingPlan();
+
+		if (dayId.equals(this.activeDayId)) {
+			if (!this.trainingPlan.getTrainingDays().isEmpty()) {
+				this.activeDayId = this.trainingPlan.getTrainingDays().get(0).getId();
+			} else {
+				this.activeDayId = null;
+			}
+		}
+
+		addMessage(FacesMessage.SEVERITY_INFO, "Gelöscht", "Tag wurde entfernt.");
+	}
+
 	private void addMessage(FacesMessage.Severity severity, String summary, String detail) {
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, summary, detail));
 	}

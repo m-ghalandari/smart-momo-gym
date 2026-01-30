@@ -108,10 +108,18 @@ public class TrainingPlanService {
 		EntityGraph<?> graph = entityManager.getEntityGraph("TrainingPlan.withDaysAndExercises");
 
 		Map<String, Object> properties = new HashMap<>();
-		// "fetchgraph" bedeutet: Lade alles im Graphen, der Rest ist LAZY.
 		properties.put("jakarta.persistence.fetchgraph", graph);
 
 		return entityManager.find(TrainingPlan.class, planId, properties);
+	}
+
+	public void deleteTrainingDay(Long dayId){
+		TrainingDay day = entityManager.find(TrainingDay.class, dayId);
+		if (day != null) {
+			TrainingPlan plan = day.getTrainingPlan();
+			plan.getTrainingDays().remove(day);
+			entityManager.remove(day);
+		}
 	}
 
 	public void updatePlanStatus(Long planId, boolean isActive){
