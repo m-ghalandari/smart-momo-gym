@@ -45,7 +45,7 @@ public class TrainingPlan {
             mappedBy = "trainingPlan",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @OrderBy("id ASC")
     private List<TrainingDay> trainingDays = new ArrayList<>();

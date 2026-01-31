@@ -142,6 +142,29 @@ public class TrainingPlanService {
 		plan.setActive(isActive);
 	}
 
+	public void updatePlanName(Long planId, String newName) throws Exception {
+		TrainingPlan plan = entityManager.find(TrainingPlan.class, planId);
+		if (plan != null){
+			if(!plan.getName().equals(newName) && planNameExistsForAthlete(newName, plan.getAthlete())){
+				throw new Exception("Name existiert bereits.");
+			}
+			plan.setName(newName);
+		}
+	}
+
+	public void addDaysToPlan(Long planId, List<String> daysToAdd){
+		TrainingPlan plan = entityManager.find(TrainingPlan.class, planId);
+		if (plan != null && daysToAdd != null && !daysToAdd.isEmpty()){
+			for(String dayToAdd : daysToAdd){
+				TrainingDay day = new TrainingDay();
+				day.setName(dayToAdd);
+				day.setTrainingPlan(plan);
+				entityManager.persist(day);
+				plan.getTrainingDays().add(day);
+			}
+		}
+	}
+
 	/**
 	 * Prüft, ob der Plan-Name FÜR EINEN SPEZIFISCHEN Athleten existiert.
 	 */
