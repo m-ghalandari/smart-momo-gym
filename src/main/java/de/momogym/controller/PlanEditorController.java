@@ -1,6 +1,7 @@
 package de.momogym.controller;
 
 import de.momogym.persistence.Exercise;
+import de.momogym.persistence.PlannedExercise;
 import de.momogym.persistence.TrainingPlan;
 import de.momogym.services.ExerciseService;
 import de.momogym.services.TrainingPlanService;
@@ -27,11 +28,12 @@ public class PlanEditorController implements Serializable {
 
 	private Long planId;
 	private TrainingPlan trainingPlan;
-	private List<Exercise> availableExercises; // Für das Dropdown
+	private List<Exercise> availableExercises;
 
-	// Der Trick: Für jede Day-ID speichern wir ein eigenes Eingabe-Objekt
 	private Map<Long, ExerciseInput> inputsPerDay = new HashMap<>();
 	private Long activeDayId;
+
+	private PlannedExercise exerciseToEdit;
 
 	@PostConstruct
 	public void init() {
@@ -54,6 +56,33 @@ public class PlanEditorController implements Serializable {
 		this.trainingPlan = trainingPlanService.findTrainingPlanByIdWithDaysAndExercises(planId);
 	}
 
+	public void prepareEdit(PlannedExercise exerciseToEdit) {
+		this.exerciseToEdit = exerciseToEdit;
+	}
+
+	public void saveEdit() {
+		if (exerciseToEdit != null) {
+			trainingPlanService.updatePlannedExercise(
+				exerciseToEdit.getId(),
+				exerciseToEdit.getSets(),
+				exerciseToEdit.getReps(),
+				exerciseToEdit.getWeight()
+			);
+
+			this.exerciseToEdit = null;
+			loadTrainingPlan();
+			addMessage(FacesMessage.SEVERITY_INFO, "Gespeichert", "Änderungen übernommen.");
+		}
+	}
+
+	public void cancelEdit() {
+		this.exerciseToEdit = null;
+		loadTrainingPlan();
+	}
+
+	public PlannedExercise getExerciseToEdit() {
+		return exerciseToEdit;
+	}
 	/**
 	 * Diese Methode wird von der View aufgerufen, um das Eingabe-Objekt für einen bestimmten Tag zu bekommen.
 	 * Wenn es noch keins gibt, erstellen wir eins.

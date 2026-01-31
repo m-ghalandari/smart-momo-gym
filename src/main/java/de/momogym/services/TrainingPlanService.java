@@ -102,6 +102,15 @@ public class TrainingPlanService {
 		entityManager.persist(plannedExercise);
 	}
 
+	public void updatePlannedExercise(Long id, int sets, String reps, Double weight){
+		PlannedExercise exercise = entityManager.find(PlannedExercise.class, id);
+		if( exercise != null){
+			exercise.setSets(sets);
+			exercise.setReps(reps);
+			exercise.setWeight(weight);
+		}
+	}
+
 	public TrainingPlan findTrainingPlanByIdWithDaysAndExercises(Long planId) {
 
 		// Wir aktivieren den oben definierten Graphen
