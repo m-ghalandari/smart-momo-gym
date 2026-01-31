@@ -54,6 +54,48 @@
             justify-content: flex-end;
         }
 
+        .media-links {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .media-badge {
+            font-size: 0.7em;
+            text-decoration: none;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .media-badge.video {
+            color: #28a745;
+            border-color: #28a745;
+            background-color: rgba(255, 107, 107, 0.1);
+        }
+
+        .media-badge.video:hover {
+            background-color: #28a745;
+            color: white;
+        }
+
+        /* GIF Style (Blau/Cyan) */
+        .media-badge.gif {
+            color: #4facfe;
+            border-color: #4facfe;
+            background-color: rgba(79, 172, 254, 0.1);
+        }
+
+        .media-badge.gif:hover {
+            background-color: #4facfe;
+            color: white;
+        }
+
         h2 {
             margin: 0;
             font-size: 1.8em;
@@ -114,9 +156,10 @@
             border: 1px solid #333;
             border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             animation: fadeIn 0.3s ease-out;
         }
+
         /* HEADER INNERHALB DER DAY-CARD */
         .day-card-header {
             display: flex;
@@ -156,8 +199,14 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* TABELLE */
@@ -185,8 +234,13 @@
             vertical-align: middle;
         }
 
-        .exercise-table tr:last-child td { border-bottom: none; }
-        .exercise-table tr:hover td { background-color: #1a1a1a; }
+        .exercise-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .exercise-table tr:hover td {
+            background-color: #1a1a1a;
+        }
 
         /* ADD FORM (Unten) */
         .add-form-container {
@@ -200,7 +254,10 @@
             flex-wrap: wrap;
         }
 
-        .input-group { display: flex; flex-direction: column; }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
 
         .input-group label {
             font-size: 0.75em;
@@ -218,7 +275,9 @@
             outline: none;
         }
 
-        .dark-input:focus { border-color: #4facfe; }
+        .dark-input:focus {
+            border-color: #4facfe;
+        }
 
         /* BUTTONS */
         .btn-add {
@@ -235,7 +294,11 @@
             justify-content: center;
             transition: transform 0.2s;
         }
-        .btn-add:hover { transform: scale(1.05); background-color: #34ce57; }
+
+        .btn-add:hover {
+            transform: scale(1.05);
+            background-color: #34ce57;
+        }
 
         .btn-delete-icon {
             color: #ff6b6b;
@@ -247,7 +310,11 @@
             border: none;
             cursor: pointer;
         }
-        .btn-delete-icon:hover { opacity: 1; transform: scale(1.1); }
+
+        .btn-delete-icon:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
 
         .back-link {
             color: #888;
@@ -258,7 +325,10 @@
             gap: 5px;
             transition: color 0.2s;
         }
-        .back-link:hover { color: #fff; }
+
+        .back-link:hover {
+            color: #fff;
+        }
 
         /* TOGGLE SWITCH CSS */
         .header-toggle {
@@ -278,12 +348,19 @@
             height: 24px;
         }
 
-        .switch input { opacity: 0; width: 0; height: 0; }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
         .slider {
             position: absolute;
             cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-color: #444;
             transition: .4s;
             border-radius: 34px;
@@ -292,22 +369,29 @@
         .slider:before {
             position: absolute;
             content: "";
-            height: 18px; width: 18px;
-            left: 3px; bottom: 3px;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
             background-color: white;
             transition: .4s;
             border-radius: 50%;
         }
 
-        input:checked + .slider { background-color: #28a745; }
-        input:checked + .slider:before { transform: translateX(22px); }
+        input:checked + .slider {
+            background-color: #28a745;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
 
     </style>
 </h:head>
 
 <h:body>
     <h:messages globalOnly="true"
-                style="background: #333; color: #4caf50; padding: 10px; border-radius: 5px; list-style:none; text-align:center; margin-bottom: 20px;" />
+                style="background: #333; color: #4caf50; padding: 10px; border-radius: 5px; list-style:none; text-align:center; margin-bottom: 20px;"/>
 
     <h:form id="mainForm">
 
@@ -330,7 +414,7 @@
                     <span style="color: #aaa; font-size: 0.85em; font-weight: 600;">Aktiv</span>
                     <label class="switch">
                         <h:selectBooleanCheckbox value="#{planEditorController.trainingPlan.active}">
-                            <f:ajax listener="#{planEditorController.toggleActiveStatus}" />
+                            <f:ajax listener="#{planEditorController.toggleActiveStatus}"/>
                         </h:selectBooleanCheckbox>
                         <span class="slider"></span>
                     </label>
@@ -346,7 +430,7 @@
                     <h:commandLink value="#{day.name}"
                                    action="#{planEditorController.switchDay(day.id)}"
                                    styleClass="tab-btn #{planEditorController.activeDayId == day.id ? 'active' : ''}">
-                        <f:ajax render="@form" />
+                        <f:ajax render="@form"/>
                     </h:commandLink>
                 </ui:repeat>
             </div>
@@ -365,7 +449,7 @@
                                                onclick="return confirm('Ganzen Tag #{day.name} und alle Übungen löschen?');">
                                     <span>Tag löschen</span>
                                     <span>🗑️</span>
-                                    <f:ajax render="@form" />
+                                    <f:ajax render="@form"/>
                                 </h:commandLink>
                             </div>
 
@@ -377,6 +461,21 @@
                                     <f:facet name="header">Übung</f:facet>
                                     <strong style="color: #fff;">#{pe.exercise.name}</strong>
                                     <div style="font-size: 0.8em; color: #666;">#{pe.exercise.targetMuscle}</div>
+
+                                    <div class="media-links">
+
+                                        <h:outputLink value="#{pe.exercise.videoLink}" target="_blank"
+                                                      styleClass="media-badge video"
+                                                      rendered="#{not empty pe.exercise.videoLink}">
+                                            <span>▶ Video</span>
+                                        </h:outputLink>
+
+                                        <h:outputLink value="#{pe.exercise.gifUrl}" target="_blank"
+                                                      styleClass="media-badge gif"
+                                                      rendered="#{not empty pe.exercise.gifUrl}">
+                                            <span>👾 GIF</span>
+                                        </h:outputLink>
+                                    </div>
                                 </h:column>
 
                                 <h:column>
@@ -402,7 +501,7 @@
                                                        title="Entfernen"
                                                        onclick="return confirm('Weg damit?');">
                                             🗑️
-                                            <f:ajax render="@form" />
+                                            <f:ajax render="@form"/>
                                         </h:commandLink>
                                     </div>
                                 </h:column>
@@ -423,7 +522,7 @@
                                         <f:selectItem itemLabel="Wählen..." itemValue="#{null}"/>
                                         <f:selectItems value="#{planEditorController.availableExercises}" var="ex"
                                                        itemValue="#{ex.id}"
-                                                       itemLabel="#{ex.name}" />
+                                                       itemLabel="#{ex.name}"/>
                                     </h:selectOneMenu>
                                 </div>
 
@@ -448,7 +547,7 @@
                                 <h:commandButton value="+"
                                                  action="#{planEditorController.addExercise(day.id)}"
                                                  styleClass="btn-add">
-                                    <f:ajax execute="@form" render="@form" />
+                                    <f:ajax execute="@form" render="@form"/>
                                 </h:commandButton>
                             </div>
 
