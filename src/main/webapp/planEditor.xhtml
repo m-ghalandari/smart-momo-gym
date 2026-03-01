@@ -454,6 +454,27 @@
         }
         .btn-edit-icon:hover { transform: scale(1.1); color: #ffca2c; }
 
+        /* WORKOUT STARTEN BUTTON */
+        .btn-start-workout {
+            display: block;
+            width: 100%;
+            background-color: #ff9800;
+            color: #000;
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        .btn-start-workout:hover {
+            background-color: #ffb300;
+            transform: scale(1.02);
+        }
+
     </style>
 </h:head>
 
@@ -669,6 +690,12 @@
                                     <f:ajax execute="@form" render="@form"/>
                                 </h:commandButton>
                             </div>
+
+							<h:link outcome="workoutSession" styleClass="btn-start-workout">
+								<f:param name="dayId" value="#{day.id}" />
+								<f:param name="planId" value="#{planEditorController.planId}" />
+								🚀 Workout starten
+							</h:link>
 
                         </div>
                     </h:panelGroup>

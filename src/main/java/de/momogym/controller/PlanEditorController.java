@@ -173,6 +173,8 @@ public class PlanEditorController implements Serializable {
 	public TrainingPlan getTrainingPlan() { return trainingPlan; }
 	public List<Exercise> getAvailableExercises() { return availableExercises; }
 
+	public Long getPlanId() { return planId; }
+
 	// --- Innere Klasse für die Formulardaten (DTO) ---
 	public static class ExerciseInput implements Serializable {
 		private Long exerciseId;

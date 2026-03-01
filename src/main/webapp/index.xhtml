@@ -176,6 +176,7 @@
                                title="Athlet löschen"
                                onclick="return confirm('Soll der Athlet #{athlete.username} wirklich gelöscht werden? Alle Pläne gehen verloren.');">
                     🗑️
+					<f:ajax render="@form"/>
                 </h:commandLink>
             </div>
             </h:column>
