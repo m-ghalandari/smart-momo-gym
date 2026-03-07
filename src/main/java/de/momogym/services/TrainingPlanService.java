@@ -166,6 +166,20 @@ public class TrainingPlanService {
 	}
 
 	/**
+	 * Lädt genau einen Tag inklusive seiner Übungen (Sortierung passiert automatisch durch @OrderBy in der Entity)
+	 */
+	public TrainingDay findTrainingDayWithExercises(Long dayId) {
+
+		EntityGraph<TrainingDay> graph = entityManager.createEntityGraph(TrainingDay.class);
+		graph.addSubgraph("plannedExercises").addAttributeNodes("exercise");
+
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("jakarta.persistence.fetchgraph", graph);
+
+		return entityManager.find(TrainingDay.class, dayId, properties);
+	}
+
+	/**
 	 * Prüft, ob der Plan-Name FÜR EINEN SPEZIFISCHEN Athleten existiert.
 	 */
 	private boolean planNameExistsForAthlete(String planName, Athlete athlete) {
