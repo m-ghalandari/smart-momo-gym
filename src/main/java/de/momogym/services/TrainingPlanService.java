@@ -2,6 +2,7 @@ package de.momogym.services;
 
 import de.momogym.persistence.Athlete;
 import de.momogym.persistence.Exercise;
+import de.momogym.persistence.ExerciseLog;
 import de.momogym.persistence.PlannedExercise;
 import de.momogym.persistence.TrainingDay;
 import de.momogym.persistence.TrainingPlan;
@@ -177,6 +178,22 @@ public class TrainingPlanService {
 		properties.put("jakarta.persistence.fetchgraph", graph);
 
 		return entityManager.find(TrainingDay.class, dayId, properties);
+	}
+
+	public void logWorkoutExercise(Long planId, Long exerciseId, int sets, String reps, Double weight){
+		TrainingPlan plan = entityManager.find(TrainingPlan.class, planId);
+		Exercise exercise = entityManager.find(Exercise.class, exerciseId);
+
+		ExerciseLog log = new ExerciseLog();
+		log.setAthlete(plan.getAthlete());
+		log.setTrainingPlan(plan);
+		log.setExercise(exercise);
+		log.setLogDate(java.time.LocalDate.now());
+		log.setSets(sets);
+		log.setReps(reps);
+		log.setWeight(weight);
+
+		entityManager.persist(log);
 	}
 
 	/**

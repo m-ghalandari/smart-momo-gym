@@ -47,7 +47,15 @@ public class WorkoutSessionController implements Serializable {
 
 	public void markAsDone(WorkoutExerciseDTO exercise) {
 		pendingExercises.remove(exercise);
-		// Später: Hier rufen wir den Service auf, um das Log in der DB zu speichern!
+		trainingPlanService.logWorkoutExercise(
+			this.planId,
+			exercise.getPlannedExercise().getExercise().getId(),
+			exercise.getActualSets(),
+			exercise.getActualReps(),
+			exercise.getActualWeight()
+		);
+
+		pendingExercises.remove(exercise);
 	}
 
 	public String finishWorkout(){

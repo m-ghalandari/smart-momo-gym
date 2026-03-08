@@ -39,12 +39,12 @@ public class ExerciseLog {
     private int sets; // z.B. 3
 
     @Column(name = "REPS")
-    private int reps; // z.B. 8 (ggf. als String "8, 8, 7" speichern, je nach Bedarf)
+    private String reps; // z.B. 8 (ggf. als String "8, 8, 7" speichern, je nach Bedarf)
 
     public ExerciseLog() {
     }
 
-    public ExerciseLog(Athlete athlete, TrainingPlan trainingPlan, Exercise exercise, LocalDate logDate, double weight, int sets, int reps) {
+    public ExerciseLog(Athlete athlete, TrainingPlan trainingPlan, Exercise exercise, LocalDate logDate, double weight, int sets, String reps) {
         this.athlete = athlete;
 		this.trainingPlan = trainingPlan;
         this.exercise = exercise;
@@ -98,11 +98,11 @@ public class ExerciseLog {
         this.sets = sets;
     }
 
-    public int getReps() {
+    public String getReps() {
         return reps;
     }
 
-    public void setReps(int reps) {
+    public void setReps(String reps) {
         this.reps = reps;
     }
 
