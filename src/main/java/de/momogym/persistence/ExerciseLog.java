@@ -18,6 +18,10 @@ public class ExerciseLog {
     @JoinColumn(name = "ATHLETE_ID", nullable = false)
     private Athlete athlete;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "PLAN_ID")
+	private TrainingPlan trainingPlan;
+
     // WELCHE Übung wurde gemacht?
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EXERCISE_ID", nullable = false)
@@ -40,8 +44,9 @@ public class ExerciseLog {
     public ExerciseLog() {
     }
 
-    public ExerciseLog(Athlete athlete, Exercise exercise, LocalDate logDate, double weight, int sets, int reps) {
+    public ExerciseLog(Athlete athlete, TrainingPlan trainingPlan, Exercise exercise, LocalDate logDate, double weight, int sets, int reps) {
         this.athlete = athlete;
+		this.trainingPlan = trainingPlan;
         this.exercise = exercise;
         this.logDate = logDate;
         this.weight = weight;
@@ -100,4 +105,11 @@ public class ExerciseLog {
     public void setReps(int reps) {
         this.reps = reps;
     }
+
+	public TrainingPlan getTrainingPlan() {
+		return trainingPlan;
+	}
+	public void setTrainingPlan(TrainingPlan trainingPlan) {
+		this.trainingPlan = trainingPlan;
+	}
 }

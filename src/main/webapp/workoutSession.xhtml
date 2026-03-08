@@ -124,13 +124,13 @@
 			<ui:repeat value="#{workoutSessionController.pendingExercises}" var="pe">
 				<div class="exercise-card">
 					<div class="exercise-info">
-						<h3>#{pe.exercise.name}</h3>
-						<div class="exercise-stats">Ziel: #{pe.sets} Sätze x #{pe.reps} Wdh.</div>
+						<h3>#{pe.plannedExercise.exercise.name}</h3>
+						<div class="exercise-stats">Ziel: #{pe.plannedExercise.sets} Sätze x #{pe.plannedExercise.reps} Wdh.</div>
 
 						<div class="input-row">
-							<h:inputText value="#{pe.sets}" styleClass="input-box" title="Sätze" />
-							<h:inputText value="#{pe.reps}" styleClass="input-box" title="Wdh." />
-							<h:inputText value="#{pe.weight}" styleClass="input-box" title="Kg" />
+							<h:inputText value="#{pe.actualSets}" styleClass="input-box" title="Sätze" />
+							<h:inputText value="#{pe.actualReps}" styleClass="input-box" title="Wdh." />
+							<h:inputText value="#{pe.actualWeight}" styleClass="input-box" title="Kg" />
 						</div>
 					</div>
 

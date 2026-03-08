@@ -1,5 +1,6 @@
 package de.momogym.controller;
 
+import de.momogym.dto.WorkoutExerciseDTO;
 import de.momogym.persistence.PlannedExercise;
 import de.momogym.persistence.TrainingDay;
 import de.momogym.services.TrainingPlanService;
@@ -24,7 +25,7 @@ public class WorkoutSessionController implements Serializable {
 	private TrainingDay trainingDay;
 	private Long planId; // Um beim "Abbrechen" zurück navigieren zu können
 
-	private List<PlannedExercise> pendingExercises;
+	private List<WorkoutExerciseDTO> pendingExercises;
 
 	@PostConstruct
 	public void init(){
@@ -34,14 +35,17 @@ public class WorkoutSessionController implements Serializable {
 
 		if(dayIdParam != null) {
 			this.trainingDay = trainingPlanService.findTrainingDayWithExercises(Long.valueOf(dayIdParam));
-			this.pendingExercises = new ArrayList<>(this.trainingDay.getPlannedExercises());
+			this.pendingExercises = new ArrayList<>();
+			for (PlannedExercise pe : trainingDay.getPlannedExercises()) {
+				pendingExercises.add(new WorkoutExerciseDTO(pe));
+			}
 		}
 		if(planIdParam != null) {
 			this.planId = Long.valueOf(planIdParam);
 		}
 	}
 
-	public void markAsDone(PlannedExercise exercise) {
+	public void markAsDone(WorkoutExerciseDTO exercise) {
 		pendingExercises.remove(exercise);
 		// Später: Hier rufen wir den Service auf, um das Log in der DB zu speichern!
 	}
@@ -58,7 +62,7 @@ public class WorkoutSessionController implements Serializable {
 		return planId;
 	}
 
-	public List<PlannedExercise> getPendingExercises() {
+	public List<WorkoutExerciseDTO> getPendingExercises() {
 		return pendingExercises;
 	}
 }
