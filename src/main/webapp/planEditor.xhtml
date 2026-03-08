@@ -52,6 +52,8 @@
             flex: 1;
             display: flex;
             justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
         }
 
         .media-links {
@@ -475,6 +477,27 @@
             transform: scale(1.02);
         }
 
+        .btn-stats {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: transparent;
+            border: 1px solid #4facfe;
+            color: #4facfe;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+
+        .btn-stats:hover {
+            background-color: #4facfe;
+            color: #000;
+            box-shadow: 0 0 12px rgba(79, 172, 254, 0.4);
+        }
+
     </style>
 </h:head>
 
@@ -541,17 +564,24 @@
                 <h2>#{planEditorController.trainingPlan.name}</h2>
             </div>
 
-            <div class="header-right">
-                <div class="header-toggle">
-                    <span style="color: #aaa; font-size: 0.85em; font-weight: 600;">Aktiv</span>
-                    <label class="switch">
-                        <h:selectBooleanCheckbox value="#{planEditorController.trainingPlan.active}">
-                            <f:ajax listener="#{planEditorController.toggleActiveStatus}"/>
-                        </h:selectBooleanCheckbox>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
+			<div class="header-right">
+
+				<h:link outcome="progress" styleClass="btn-stats" title="Fortschritt anzeigen">
+					<f:param name="planId" value="#{planEditorController.planId}" />
+					<span>Statistiken</span>
+				</h:link>
+
+				<div class="header-toggle">
+					<span style="color: #aaa; font-size: 0.85em; font-weight: 600;">Aktiv</span>
+					<label class="switch">
+						<h:selectBooleanCheckbox value="#{planEditorController.trainingPlan.active}">
+							<f:ajax listener="#{planEditorController.toggleActiveStatus}"/>
+						</h:selectBooleanCheckbox>
+						<span class="slider"></span>
+					</label>
+				</div>
+
+			</div>
 
         </div>
 

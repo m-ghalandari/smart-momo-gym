@@ -196,6 +196,17 @@ public class TrainingPlanService {
 		entityManager.persist(log);
 	}
 
+	public List<ExerciseLog> getLogsForExerciseInPlan(Long planId, Long exerciseId) {
+		return entityManager.createQuery(
+				"SELECT l FROM ExerciseLog l " +
+					"WHERE l.trainingPlan.id = :planId " +
+					"AND l.exercise.id = :exerciseId " +
+					"ORDER BY l.logDate ASC", ExerciseLog.class)
+			.setParameter("planId", planId)
+			.setParameter("exerciseId", exerciseId)
+			.getResultList();
+	}
+
 	/**
 	 * Prüft, ob der Plan-Name FÜR EINEN SPEZIFISCHEN Athleten existiert.
 	 */
