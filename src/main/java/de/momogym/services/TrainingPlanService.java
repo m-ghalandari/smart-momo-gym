@@ -2,6 +2,7 @@ package de.momogym.services;
 
 import de.momogym.persistence.Athlete;
 import de.momogym.persistence.Exercise;
+import de.momogym.persistence.ExerciseLog;
 import de.momogym.persistence.PlannedExercise;
 import de.momogym.persistence.TrainingDay;
 import de.momogym.persistence.TrainingPlan;
@@ -163,6 +164,47 @@ public class TrainingPlanService {
 				plan.getTrainingDays().add(day);
 			}
 		}
+	}
+
+	/**
+	 * Lädt genau einen Tag inklusive seiner Übungen (Sortierung passiert automatisch durch @OrderBy in der Entity)
+	 */
+	public TrainingDay findTrainingDayWithExercises(Long dayId) {
+
+		EntityGraph<TrainingDay> graph = entityManager.createEntityGraph(TrainingDay.class);
+		graph.addSubgraph("plannedExercises").addAttributeNodes("exercise");
+
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("jakarta.persistence.fetchgraph", graph);
+
+		return entityManager.find(TrainingDay.class, dayId, properties);
+	}
+
+	public void logWorkoutExercise(Long planId, Long exerciseId, int sets, String reps, Double weight){
+		TrainingPlan plan = entityManager.find(TrainingPlan.class, planId);
+		Exercise exercise = entityManager.find(Exercise.class, exerciseId);
+
+		ExerciseLog log = new ExerciseLog();
+		log.setAthlete(plan.getAthlete());
+		log.setTrainingPlan(plan);
+		log.setExercise(exercise);
+		log.setLogDate(java.time.LocalDate.now());
+		log.setSets(sets);
+		log.setReps(reps);
+		log.setWeight(weight);
+
+		entityManager.persist(log);
+	}
+
+	public List<ExerciseLog> getLogsForExerciseInPlan(Long planId, Long exerciseId) {
+		return entityManager.createQuery(
+				"SELECT l FROM ExerciseLog l " +
+					"WHERE l.trainingPlan.id = :planId " +
+					"AND l.exercise.id = :exerciseId " +
+					"ORDER BY l.logDate ASC", ExerciseLog.class)
+			.setParameter("planId", planId)
+			.setParameter("exerciseId", exerciseId)
+			.getResultList();
 	}
 
 	/**

@@ -37,18 +37,24 @@ public class PlanEditorController implements Serializable {
 
 	@PostConstruct
 	public void init() {
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		// 1. Plan ID laden
-		String idParam = FacesContext.getCurrentInstance().getExternalContext()
-			.getRequestParameterMap().get("planId");
-		if (idParam != null) {
-			this.planId = Long.valueOf(idParam);
+		String planIdParam = params.get("planId");
+		String dayIdParam = params.get("dayId");
+
+		if (planIdParam != null) {
+			this.planId = Long.valueOf(planIdParam);
 			loadTrainingPlan();
 		}
 
 		// 2. Alle Übungen laden (für Dropdown)
 		this.availableExercises = exerciseService.findAllExercises();
 		if (this.trainingPlan != null && !this.trainingPlan.getTrainingDays().isEmpty()) {
-			this.activeDayId = this.trainingPlan.getTrainingDays().get(0).getId();
+			if (dayIdParam != null) {
+				this.activeDayId = Long.valueOf(dayIdParam);
+			} else {
+				this.activeDayId = this.trainingPlan.getTrainingDays().get(0).getId();
+			}
 		}
 	}
 

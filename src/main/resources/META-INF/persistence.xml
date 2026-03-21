@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
-             version="3.0">
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
+			 version="3.0">
 
-    <persistence-unit name="trainingsverwaltung-pu" transaction-type="JTA">
+	<persistence-unit name="trainingsverwaltung-pu" transaction-type="JTA">
 
-        <jta-data-source>java:/jdbc/OracleDS</jta-data-source>
+		<jta-data-source>java:app/jdbc/NeonDS</jta-data-source>
 
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
-        <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-        </properties>
-    </persistence-unit>
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+
+			<property name="hibernate.hbm2ddl.auto" value="update"/>
+
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="hibernate.format_sql" value="true"/>
+		</properties>
+	</persistence-unit>
 </persistence>

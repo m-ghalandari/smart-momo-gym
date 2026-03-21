@@ -2,7 +2,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:h="jakarta.faces.html"
-	  xmlns:f="jakarta.faces.core">
+	  xmlns:f="jakarta.faces.core"
+	  xmlns:ui="jakarta.faces.facelets">
 
 <h:head>
 	<title>Live Workout</title>
@@ -112,46 +113,41 @@
 
 		<div class="header">
 			<h:link outcome="planEditor" value="← Abbrechen" style="color: #888; text-decoration: none; float: left; margin-top: 5px;">
-				<f:param name="planId" value="#{param.planId}" />
+				<f:param name="planId" value="#{workoutSessionController.planId}" />
+				<f:param name="dayId" value="#{workoutSessionController.trainingDay.id}" />
 			</h:link>
 			<h1>🔥 Live Workout</h1>
-			<div style="color: #aaa; margin-top: 5px;">Montag - Push Day (Beispiel)</div>
+			<div style="color: #aaa; margin-top: 5px;">#{workoutSessionController.trainingDay.name}</div>
 		</div>
 
-		<h:form>
-			<div class="exercise-card">
-				<div class="exercise-info">
-					<h3>Bankdrücken</h3>
-					<div class="exercise-stats">Ziel: 3 Sätze x 8-12 Wdh.</div>
+		<h:form id="workoutForm">
+			<ui:repeat value="#{workoutSessionController.pendingExercises}" var="pe">
+				<div class="exercise-card">
+					<div class="exercise-info">
+						<h3>#{pe.plannedExercise.exercise.name}</h3>
+						<div class="exercise-stats">Ziel: #{pe.plannedExercise.sets} Sätze x #{pe.plannedExercise.reps} Wdh.</div>
 
-					<div class="input-row">
-						<input type="text" class="input-box" value="3" title="Sätze" />
-						<input type="text" class="input-box" value="10" title="Wdh." />
-						<input type="text" class="input-box" value="80.0" title="Kg" />
+						<div class="input-row">
+							<h:inputText value="#{pe.actualSets}" styleClass="input-box" title="Sätze" />
+							<h:inputText value="#{pe.actualReps}" styleClass="input-box" title="Wdh." />
+							<h:inputText value="#{pe.actualWeight}" styleClass="input-box" title="Kg" />
+						</div>
 					</div>
+
+					<h:commandButton action="#{workoutSessionController.markAsDone(pe)}" value="✔️" styleClass="btn-done">
+						<f:ajax execute="@form" render="@form" />
+					</h:commandButton>
 				</div>
+			</ui:repeat>
 
-				<button type="button" class="btn-done">✔️</button>
-			</div>
-
-			<div class="exercise-card">
-				<div class="exercise-info">
-					<h3>Schulterdrücken</h3>
-					<div class="exercise-stats">Ziel: 3 Sätze x 10 Wdh.</div>
-
-					<div class="input-row">
-						<input type="text" class="input-box" value="3" />
-						<input type="text" class="input-box" value="10" />
-						<input type="text" class="input-box" value="40.0" />
-					</div>
+			<h:panelGroup rendered="#{empty workoutSessionController.pendingExercises}">
+				<div style="text-align: center; color: #28a745; font-size: 1.3em; font-weight: bold; margin-bottom: 20px;">
+					🎉 Alles erledigt! Starkes Workout!
 				</div>
+			</h:panelGroup>
 
-				<button type="button" class="btn-done">✔️</button>
-			</div>
-
-			<h:commandButton value="🏁 Workout beenden" styleClass="btn-finish-workout" />
+			<h:commandButton action="#{workoutSessionController.finishWorkout}" value="🏁 Workout beenden" styleClass="btn-finish-workout" />
 		</h:form>
-
 	</div>
 </h:body>
 </html>

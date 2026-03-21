@@ -1,5 +1,7 @@
 target/
 .mvn/wrapper/maven-wrapper.jar
+.env
+src/main/java/de/momogym/config/DatabaseConfig.java
 
 # IntelliJ IDE
 .idea/
