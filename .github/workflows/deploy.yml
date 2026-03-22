@@ -1,0 +1,40 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ] # Startet automatisch beim Push in diese Branches
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    # Wichtig: Gibt GitHub Actions die Erlaubnis, das Docker-Image zu speichern
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: 1. Code auschecken
+        uses: actions/checkout@v4
+
+      - name: 2. Java 21 einrichten
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven' # Beschleunigt zukünftige Builds
+
+      - name: 3. Maven Build (App kompilieren)
+        run: mvn clean package
+
+      - name: 4. Login in die GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: 5. Docker Image bauen und hochladen
+        run: |
+          # Docker verlangt Kleinbuchstaben für Repository-Namen
+          REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE_NAME=ghcr.io/$REPO/smart-momo-gym:latest
+          
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
