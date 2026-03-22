@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core">
+	  xmlns:h="jakarta.faces.html"
+	  xmlns:f="jakarta.faces.core">
 
 <h:head>
-    <title>Neuen Plan erstellen</title>
-    <style>
+	<title>Neuen Plan erstellen</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<style>
         /* --- CORE SETTINGS --- */
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -17,7 +19,8 @@
             align-items: center;
             min-height: 100vh; /* Volle Höhe */
             margin: 0;
-            padding: 10px; /* Weniger Padding außen */
+            padding: 15px; /* Etwas mehr Padding für Handys, damit die Box nicht am Rand klebt */
+            box-sizing: border-box;
         }
 
         /* CARD DESIGN (Kompakter) */
@@ -29,6 +32,7 @@
             border: 1px solid #333;
             width: 100%;
             max-width: 420px; /* Etwas schmaler */
+            box-sizing: border-box;
         }
 
         /* TYPOGRAPHY */
@@ -88,12 +92,12 @@
 
         .checkbox-table tbody {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr; /* JETZT 3 SPALTEN! */
+            grid-template-columns: 1fr 1fr 1fr; /* 3 SPALTEN für Desktop */
             gap: 6px; /* Engerer Abstand */
             width: 100%;
         }
 
-        .checkbox-table tr { display: flex; }
+        .checkbox-table tr { display: flex; width: 100%; }
 
         .checkbox-table td {
             display: flex;
@@ -102,10 +106,11 @@
             background-color: #212121;
             border: 1px solid #333;
             border-radius: 5px;
-            padding: 6px; /* Viel weniger Padding */
+            padding: 8px 6px; /* Ein minimal höheres Padding für besseres Tippen */
             width: 100%;
             cursor: pointer;
             transition: all 0.2s ease;
+            box-sizing: border-box;
         }
 
         .checkbox-table td:hover {
@@ -174,7 +179,7 @@
         /* BUTTONS */
         .btn-submit {
             width: 100%;
-            padding: 12px; /* Etwas flacher */
+            padding: 14px; /* Etwas höher für Handys */
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: #000;
             border: none;
@@ -183,9 +188,10 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-top: 10px;
+            margin-top: 15px;
             cursor: pointer;
             transition: transform 0.2s;
+            box-sizing: border-box;
         }
 
         .btn-submit:hover { transform: translateY(-1px); }
@@ -211,63 +217,74 @@
             list-style: none;
             font-size: 0.9em;
         }
-    </style>
+
+        /* --- MOBILE OPTIMIERUNG --- */
+        @media (max-width: 400px) {
+            .checkbox-table tbody {
+                /* Wenn der Bildschirm sehr schmal wird, wechseln wir auf 2 Spalten, damit die Wörter (Donnerstag etc.) nicht gequetscht werden */
+                grid-template-columns: 1fr 1fr;
+            }
+            .card {
+                padding: 20px;
+            }
+        }
+	</style>
 </h:head>
 
 <h:body>
-    <div class="card">
-        <h2>Neuer Plan</h2>
+	<div class="card">
+		<h2>Neuer Plan</h2>
 
-        <div class="subtitle">
-            <h:panelGroup rendered="#{planController.athlete != null}">
-                für <span class="highlight">#{planController.athlete.username}</span>
-            </h:panelGroup>
-        </div>
+		<div class="subtitle">
+			<h:panelGroup rendered="#{planController.athlete != null}">
+				für <span class="highlight">#{planController.athlete.username}</span>
+			</h:panelGroup>
+		</div>
 
-        <h:form>
-            <h:messages globalOnly="true" styleClass="error-box" style="padding:0; margin:0;" />
+		<h:form>
+			<h:messages globalOnly="true" styleClass="error-box" style="padding:0; margin:0;" />
 
-            <div class="form-group">
-                <h:outputLabel value="Bezeichnung" styleClass="form-label"/>
-                <h:inputText value="#{planController.planName}"
-                             required="true"
-                             requiredMessage="Name fehlt."
-                             styleClass="form-input"
-                             f:passThroughAttribute="placeholder"
-                             f:passThroughValue="z.B. Push Pull Legs"/>
-            </div>
+			<div class="form-group">
+				<h:outputLabel value="Bezeichnung" styleClass="form-label"/>
+				<h:inputText value="#{planController.planName}"
+							 required="true"
+							 requiredMessage="Name fehlt."
+							 styleClass="form-input"
+							 f:passThroughAttribute="placeholder"
+							 f:passThroughValue="z.B. Push Pull Legs"/>
+			</div>
 
-            <div class="form-group">
-                <h:outputLabel value="Tage auswählen" styleClass="form-label"/>
+			<div class="form-group">
+				<h:outputLabel value="Tage auswählen" styleClass="form-label"/>
 
-                <h:selectManyCheckbox value="#{planController.selectedDays}"
-                                      layout="pageDirection"
-                                      styleClass="checkbox-table">
-                    <f:selectItems value="#{planController.availableDays}"/>
-                </h:selectManyCheckbox>
-            </div>
+				<h:selectManyCheckbox value="#{planController.selectedDays}"
+									  layout="pageDirection"
+									  styleClass="checkbox-table">
+					<f:selectItems value="#{planController.availableDays}"/>
+				</h:selectManyCheckbox>
+			</div>
 
-            <div class="form-group">
-                <h:outputLabel value="Optionen" styleClass="form-label"/>
+			<div class="form-group">
+				<h:outputLabel value="Optionen" styleClass="form-label"/>
 
-                <div class="toggle-container">
-                    <span style="font-weight: 500; color: #ccc; font-size: 0.9em;">Sofort aktivieren</span>
-                    <label class="switch">
-                        <h:selectBooleanCheckbox value="#{planController.active}" />
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
+				<div class="toggle-container">
+					<span style="font-weight: 500; color: #ccc; font-size: 0.9em;">Sofort aktivieren</span>
+					<label class="switch">
+						<h:selectBooleanCheckbox value="#{planController.active}" />
+						<span class="slider"></span>
+					</label>
+				</div>
+			</div>
 
-            <h:commandButton value="Speichern"
-                             action="#{planController.save}"
-                             styleClass="btn-submit"/>
+			<h:commandButton value="Speichern"
+							 action="#{planController.save}"
+							 styleClass="btn-submit"/>
 
-            <h:link value="Abbrechen" outcome="athleteDetail" styleClass="back-link">
-                <f:param name="athleteId" value="#{planController.athleteId}"/>
-            </h:link>
+			<h:link value="Abbrechen" outcome="athleteDetail" styleClass="back-link">
+				<f:param name="athleteId" value="#{planController.athleteId}"/>
+			</h:link>
 
-        </h:form>
-    </div>
+		</h:form>
+	</div>
 </h:body>
 </html>

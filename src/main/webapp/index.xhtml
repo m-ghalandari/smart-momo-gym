@@ -126,9 +126,26 @@
             border-color: #dc3545;
             cursor: pointer;
         }
-
+        /* Spezielle Regeln für Bildschirme kleiner als 600px (Handys) */
+        @media (max-width: 600px) {
+            .header-container {
+                flex-direction: column; /* Überschrift und Buttons untereinander anordnen */
+                gap: 15px;
+            }
+            .header-actions {
+                flex-direction: column; /* Buttons ebenfalls untereinander */
+                width: 100%;
+            }
+            .btn-register, .btn-exercises {
+                width: 100%; /* Buttons nehmen die volle Breite ein */
+                text-align: center;
+                box-sizing: border-box;
+            }
+        }
     </style>
 </h:head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <h:body>
 

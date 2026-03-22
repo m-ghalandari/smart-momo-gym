@@ -7,6 +7,8 @@
 
 <h:head>
 	<title>Live Workout</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 	<style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -21,16 +23,29 @@
             margin: 0 auto;
         }
 
+        /* HEADER OPTIMIERT */
         .header {
+            position: relative;
             text-align: center;
             margin-bottom: 30px;
             border-bottom: 1px solid #333;
             padding-bottom: 20px;
         }
 
+        .btn-back {
+            position: absolute;
+            left: 0;
+            top: 5px;
+            color: #888;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
         .header h1 {
             color: #ff9800; /* Auffälliges Orange für den Workout-Modus */
             margin: 0;
+            font-size: 2em;
         }
 
         .exercise-card {
@@ -44,6 +59,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 15px; /* Abstand zwischen Text und Button */
+            box-sizing: border-box;
         }
 
         .exercise-info h3 {
@@ -71,6 +88,7 @@
             width: 60px;
             text-align: center;
             font-size: 1.1em;
+            box-sizing: border-box;
         }
 
         .btn-done {
@@ -83,6 +101,9 @@
             font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-done:hover {
@@ -104,6 +125,37 @@
             margin-top: 40px;
             border: none;
             cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        /* --- MOBILE OPTIMIERUNG --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            .header {
+                padding-top: 40px; /* Platz machen, damit Titel und Zurück-Button nicht überlappen */
+            }
+            .btn-back {
+                top: 0;
+            }
+            .exercise-card {
+                flex-direction: column; /* Alles untereinander auf dem Handy */
+                align-items: stretch;
+                text-align: center;
+            }
+            .input-row {
+                justify-content: center; /* Inputs mittig zentrieren */
+                margin-bottom: 15px;
+            }
+            .input-box {
+                flex: 1; /* Inputs nehmen gleichmäßig Platz ein */
+                max-width: 80px;
+            }
+            .btn-done {
+                width: 100%; /* Großer Button über die volle Breite */
+                padding: 15px;
+            }
         }
 	</style>
 </h:head>
@@ -112,7 +164,7 @@
 	<div class="container">
 
 		<div class="header">
-			<h:link outcome="planEditor" value="← Abbrechen" style="color: #888; text-decoration: none; float: left; margin-top: 5px;">
+			<h:link outcome="planEditor" value="← Zurück" styleClass="btn-back">
 				<f:param name="planId" value="#{workoutSessionController.planId}" />
 				<f:param name="dayId" value="#{workoutSessionController.trainingDay.id}" />
 			</h:link>
@@ -134,7 +186,7 @@
 						</div>
 					</div>
 
-					<h:commandButton action="#{workoutSessionController.markAsDone(pe)}" value="✔️" styleClass="btn-done">
+					<h:commandButton action="#{workoutSessionController.markAsDone(pe)}" value="✔️ Erledigt" styleClass="btn-done">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton>
 				</div>

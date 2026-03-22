@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets">
+	  xmlns:h="jakarta.faces.html"
+	  xmlns:f="jakarta.faces.core"
+	  xmlns:ui="jakarta.faces.facelets">
 
 <h:head>
-    <title>Athleten Details</title>
-    <style>
+	<title>Athleten Details</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<style>
         /* --- GLOBAL THEME --- */
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -81,6 +83,7 @@
             margin-left: auto;
             margin-right: auto;
             transition: transform 0.2s ease;
+            box-sizing: border-box; /* Verhindert, dass Padding die Box zu breit macht */
         }
         .plan-card:hover { border-color: #444; transform: translateY(-2px); }
 
@@ -133,7 +136,7 @@
         .modal-box {
             background-color: #1e1e1e; padding: 30px; border-radius: 12px;
             border: 1px solid #444; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            width: 90%; max-width: 400px;
+            width: 90%; max-width: 400px; box-sizing: border-box;
         }
         .modal-title { font-size: 1.2em; color: #4facfe; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .modal-input { width: 100%; padding: 10px; background: #2b2b2b; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; }
@@ -149,117 +152,140 @@
         .checkbox-list input { accent-color: #007bff; }
 
         .action-container { text-align: center; margin-top: 30px; margin-bottom: 50px; }
-    </style>
+
+        /* --- MOBILE OPTIMIERUNG --- */
+        @media (max-width: 600px) {
+            .plan-card {
+                flex-direction: column; /* Text und Buttons untereinander */
+                align-items: flex-start; /* Linksbündig */
+                gap: 15px; /* Abstand zwischen Text und Buttons */
+            }
+            .card-actions {
+                width: 100%;
+                justify-content: flex-end; /* Buttons nach rechts anordnen */
+            }
+            .main-container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            .header-bar {
+                padding: 15px;
+            }
+            .modal-box {
+                padding: 20px; /* Auf ganz kleinen Displays etwas Platz sparen */
+            }
+        }
+	</style>
 </h:head>
 
 <h:body>
-    <div class="header-bar">
-        <h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link"/>
-    </div>
+	<div class="header-bar">
+		<h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link"/>
+	</div>
 
-    <div class="main-container">
-        <h:messages showDetail="true" showSummary="true" style="color: #ff6b6b; list-style:none; text-align:center;"/>
+	<div class="main-container">
+		<h:messages showDetail="true" showSummary="true" style="color: #ff6b6b; list-style:none; text-align:center;"/>
 
-        <h:form id="mainForm">
-            <h:panelGroup rendered="#{athleteDetailController.athlete != null}">
+		<h:form id="mainForm">
+			<h:panelGroup rendered="#{athleteDetailController.athlete != null}">
 
-                <h2>#{athleteDetailController.athlete.username}</h2>
-                <h3>Trainingspläne</h3>
+				<h2>#{athleteDetailController.athlete.username}</h2>
+				<h3>Trainingspläne</h3>
 
-                <h:panelGroup rendered="#{empty athleteDetailController.athlete.trainingPlans}">
-                    <p style="color: #888; text-align: center;">Dieser Athlet hat noch keine Trainingspläne.</p>
-                </h:panelGroup>
+				<h:panelGroup rendered="#{empty athleteDetailController.athlete.trainingPlans}">
+					<p style="color: #888; text-align: center;">Dieser Athlet hat noch keine Trainingspläne.</p>
+				</h:panelGroup>
 
-                <ui:repeat value="#{athleteDetailController.athlete.trainingPlans}" var="plan">
-                    <div class="plan-card">
-                        <div>
-                            <h:link outcome="planEditor" styleClass="plan-name-link">
-                                <f:param name="planId" value="#{plan.id}" />
-                                #{plan.name}
-                            </h:link>
+				<ui:repeat value="#{athleteDetailController.athlete.trainingPlans}" var="plan">
+					<div class="plan-card">
+						<div>
+							<h:link outcome="planEditor" styleClass="plan-name-link">
+								<f:param name="planId" value="#{plan.id}" />
+								#{plan.name}
+							</h:link>
 
-                            <div style="font-size: 0.9em;">
-                                Status:
-                                <span class="#{plan.active ? 'status-active' : 'status-inactive'}">
+							<div style="font-size: 0.9em;">
+								Status:
+								<span class="#{plan.active ? 'status-active' : 'status-inactive'}">
                                     #{plan.active ? 'AKTIV' : 'Inaktiv'}
                                 </span>
-                            </div>
-                        </div>
+							</div>
+						</div>
 
-                        <div class="card-actions">
-                            <h:commandLink action="#{athleteDetailController.prepareEditPlan(plan)}"
-                                           styleClass="btn-icon btn-edit"
-                                           title="Plan bearbeiten">
-                                ✏️
-                                <f:ajax render=":editPlanModal" />
-                            </h:commandLink>
+						<div class="card-actions">
+							<h:commandLink action="#{athleteDetailController.prepareEditPlan(plan)}"
+										   styleClass="btn-icon btn-edit"
+										   title="Plan bearbeiten">
+								✏️
+								<f:ajax render=":editPlanModal" />
+							</h:commandLink>
 
-                            <h:commandLink action="#{athleteDetailController.deletePlan(plan.id)}"
-                                           styleClass="btn-icon btn-delete"
-                                           title="Plan löschen"
-                                           onclick="return confirm('Diesen Plan wirklich löschen?');">
-                                🗑️
+							<h:commandLink action="#{athleteDetailController.deletePlan(plan.id)}"
+										   styleClass="btn-icon btn-delete"
+										   title="Plan löschen"
+										   onclick="return confirm('Diesen Plan wirklich löschen?');">
+								🗑️
 								<f:ajax render="@form" />
-                            </h:commandLink>
-                        </div>
-                    </div>
-                </ui:repeat>
+							</h:commandLink>
+						</div>
+					</div>
+				</ui:repeat>
 
-                <div class="action-container">
-                    <h:link value="+ Neuer Trainingsplan"
-                            outcome="/trainingPlan.xhtml"
-                            styleClass="btn-create">
-                        <f:param name="athleteId" value="#{athleteDetailController.athlete.id}"/>
-                    </h:link>
-                </div>
+				<div class="action-container">
+					<h:link value="+ Neuer Trainingsplan"
+							outcome="/trainingPlan.xhtml"
+							styleClass="btn-create">
+						<f:param name="athleteId" value="#{athleteDetailController.athlete.id}"/>
+					</h:link>
+				</div>
 
-            </h:panelGroup>
-        </h:form>
+			</h:panelGroup>
+		</h:form>
 
-        <h:panelGroup rendered="#{athleteDetailController.athlete == null}">
-            <p style="color: #ff6b6b; text-align: center; margin-top: 50px;">Kein Athlet geladen.</p>
-        </h:panelGroup>
-    </div>
+		<h:panelGroup rendered="#{athleteDetailController.athlete == null}">
+			<p style="color: #ff6b6b; text-align: center; margin-top: 50px;">Kein Athlet geladen.</p>
+		</h:panelGroup>
+	</div>
 
-    <h:panelGroup id="editPlanModal">
-        <h:panelGroup rendered="#{athleteDetailController.planToEdit != null}" layout="block" styleClass="modal-overlay">
-            <h:form>
-                <div class="modal-box">
-                    <div class="modal-title">Plan bearbeiten</div>
+	<h:panelGroup id="editPlanModal">
+		<h:panelGroup rendered="#{athleteDetailController.planToEdit != null}" layout="block" styleClass="modal-overlay">
+			<h:form>
+				<div class="modal-box">
+					<div class="modal-title">Plan bearbeiten</div>
 
-                    <div style="margin-bottom: 15px;">
-                        <label style="color:#aaa; font-size:0.8em; font-weight:bold; display:block; margin-bottom:5px;">Name des Plans</label>
-                        <h:inputText value="#{athleteDetailController.newPlanName}" styleClass="modal-input" required="true" />
-                    </div>
+					<div style="margin-bottom: 15px;">
+						<label style="color:#aaa; font-size:0.8em; font-weight:bold; display:block; margin-bottom:5px;">Name des Plans</label>
+						<h:inputText value="#{athleteDetailController.newPlanName}" styleClass="modal-input" required="true" />
+					</div>
 
-                    <div style="margin-bottom: 15px;">
-                        <label style="color:#aaa; font-size:0.8em; font-weight:bold; display:block; margin-bottom:5px;">Neue Tage hinzufügen</label>
+					<div style="margin-bottom: 15px;">
+						<label style="color:#aaa; font-size:0.8em; font-weight:bold; display:block; margin-bottom:5px;">Neue Tage hinzufügen</label>
 
-                        <h:panelGroup rendered="#{empty athleteDetailController.missingDays}">
-                            <div style="color:#666; font-style:italic; font-size:0.9em;">Alle Wochentage bereits vorhanden.</div>
-                        </h:panelGroup>
+						<h:panelGroup rendered="#{empty athleteDetailController.missingDays}">
+							<div style="color:#666; font-style:italic; font-size:0.9em;">Alle Wochentage bereits vorhanden.</div>
+						</h:panelGroup>
 
-                        <h:selectManyCheckbox value="#{athleteDetailController.selectedNewDays}"
-                                              layout="pageDirection"
-                                              styleClass="checkbox-list"
-                                              rendered="#{not empty athleteDetailController.missingDays}">
-                            <f:selectItems value="#{athleteDetailController.missingDays}" />
-                        </h:selectManyCheckbox>
-                    </div>
+						<h:selectManyCheckbox value="#{athleteDetailController.selectedNewDays}"
+											  layout="pageDirection"
+											  styleClass="checkbox-list"
+											  rendered="#{not empty athleteDetailController.missingDays}">
+							<f:selectItems value="#{athleteDetailController.missingDays}" />
+						</h:selectManyCheckbox>
+					</div>
 
-                    <div class="modal-actions">
-                        <h:commandButton value="Abbrechen" action="#{athleteDetailController.cancelEdit()}" styleClass="btn-modal-cancel">
-                            <f:ajax render=":editPlanModal" />
-                        </h:commandButton>
+					<div class="modal-actions">
+						<h:commandButton value="Abbrechen" action="#{athleteDetailController.cancelEdit()}" styleClass="btn-modal-cancel">
+							<f:ajax render=":editPlanModal" />
+						</h:commandButton>
 
-                        <h:commandButton value="Speichern" action="#{athleteDetailController.savePlanChanges}" styleClass="btn-modal-save">
-                            <f:ajax execute="@form" render=":editPlanModal :mainForm" />
-                        </h:commandButton>
-                    </div>
-                </div>
-            </h:form>
-        </h:panelGroup>
-    </h:panelGroup>
+						<h:commandButton value="Speichern" action="#{athleteDetailController.savePlanChanges}" styleClass="btn-modal-save">
+							<f:ajax execute="@form" render=":editPlanModal :mainForm" />
+						</h:commandButton>
+					</div>
+				</div>
+			</h:form>
+		</h:panelGroup>
+	</h:panelGroup>
 
 </h:body>
 </html>

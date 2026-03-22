@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core">
+	  xmlns:h="jakarta.faces.html"
+	  xmlns:f="jakarta.faces.core">
 
 <h:head>
-    <title>Athlet Registrieren</title>
-    <style>
+	<title>Athlet Registrieren</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<style>
         /* --- GLOBAL THEME --- */
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -48,6 +50,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            box-sizing: border-box;
         }
 
         /* CARD STYLE */
@@ -60,6 +63,7 @@
             width: 100%;
             max-width: 400px;
             animation: fadeInUp 0.5s ease-out;
+            box-sizing: border-box;
         }
 
         @keyframes fadeInUp {
@@ -125,6 +129,7 @@
             letter-spacing: 1px;
             transition: transform 0.2s, box-shadow 0.2s;
             margin-top: 10px;
+            box-sizing: border-box;
         }
 
         .btn-submit:hover {
@@ -155,42 +160,63 @@
             margin-top: 5px;
             display: block;
         }
-    </style>
+
+        /* --- MOBILE OPTIMIERUNG --- */
+        @media (max-width: 600px) {
+            .header-bar {
+                padding: 15px; /* Zurück-Link näher an den Rand */
+            }
+            .register-card {
+                padding: 25px; /* Weniger Abstand innen, damit das Eingabefeld breiter wird */
+                border-radius: 12px;
+            }
+            h2 {
+                font-size: 1.5em; /* Überschrift leicht anpassen */
+                margin-bottom: 20px;
+            }
+            .form-input {
+                padding: 12px; /* Input-Feld leicht anpassen für Daumen */
+            }
+            .btn-submit {
+                padding: 15px; /* Button groß genug lassen zum Tippen */
+            }
+        }
+	</style>
 </h:head>
 
 <h:body>
 
-    <div class="header-bar">
-        <h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link" />
-    </div>
+	<div class="header-bar">
+		<h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link" />
+	</div>
 
-    <div class="main-content">
-        <div class="register-card">
-            <h2>Neuer Athlet</h2>
+	<div class="main-content">
+		<div class="register-card">
+			<h2>Neuer Athlet</h2>
 
-            <h:form>
-                <h:messages globalOnly="true" styleClass="global-messages" />
+			<h:form>
+				<h:messages globalOnly="true" styleClass="global-messages" />
 
-                <div class="form-group">
-                    <h:outputLabel for="usernameInput" value="Benutzername" styleClass="form-label" />
+				<div class="form-group">
+					<h:outputLabel for="usernameInput" value="Benutzername" styleClass="form-label" />
 
-                    <h:inputText id="usernameInput"
-                                 value="#{athleteController.username}"
-                                 required="true"
-                                 requiredMessage="Bitte Namen eingeben."
-                                 styleClass="form-input"
-                                 f:passThroughAttribute="placeholder"
-                                 f:passThroughValue="Dein Name..." />
+					<h:inputText id="usernameInput"
+								 value="#{athleteController.username}"
+								 required="true"
+								 requiredMessage="Bitte Namen eingeben."
+								 styleClass="form-input"
+								 f:passThroughAttribute="placeholder"
+								 f:passThroughValue="Dein Name..." />
 
-                    <h:message for="usernameInput" styleClass="error-msg" />
-                </div>
+					<h:message for="usernameInput" styleClass="error-msg" />
+				</div>
 
-                <h:commandButton value="Konto erstellen"
-                                 action="#{athleteController.register}"
-                                 styleClass="btn-submit" />
-            </h:form>
-        </div>
-    </div>
+				<h:commandButton value="Konto erstellen"
+								 action="#{athleteController.register}"
+								 styleClass="btn-submit" />
+			</h:form>
+		</div>
+	</div>
 
 </h:body>
 </html>

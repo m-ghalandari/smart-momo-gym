@@ -7,22 +7,107 @@
 
 <h:head>
 	<title>Fortschritt</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 	<style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #0a0a0a; color: #e0e0e0; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 20px; }
-        .header h1 { color: #4facfe; margin: 0; }
-        .card { background-color: #161616; border: 1px solid #333; border-radius: 12px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .dark-input { background-color: #2b2b2b; border: 1px solid #444; color: white; padding: 12px; border-radius: 6px; outline: none; width: 100%; font-size: 1.1em; margin-bottom: 20px;}
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* HEADER OPTIMIERT */
+        .header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+        }
+
+        .btn-back {
+            position: absolute;
+            left: 0;
+            top: 5px;
+            color: #888;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        .btn-back:hover { color: #fff; }
+
+        .header h1 {
+            color: #4facfe;
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .card {
+            background-color: #161616;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+        }
+
+        .dark-input {
+            background-color: #2b2b2b;
+            border: 1px solid #444;
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            outline: none;
+            width: 100%;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            box-sizing: border-box; /* Verhindert, dass 100% Breite + Padding das Layout sprengen */
+        }
         .dark-input:focus { border-color: #4facfe; }
+
+        /* WICHTIG FÜR CHART.JS AUF HANDYS */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 50vh; /* Nimmt 50% der Bildschirmhöhe ein */
+            min-height: 300px; /* Wird aber nie kleiner als 300px */
+            margin-top: 20px;
+        }
+
+        /* --- MOBILE OPTIMIERUNG --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            .header {
+                padding-top: 40px; /* Verhindert Überlappung von Titel und Button */
+            }
+            .btn-back {
+                top: 0;
+            }
+            .card {
+                padding: 15px;
+            }
+            .chart-container {
+                height: 40vh; /* Auf kleinen Displays etwas flacher machen */
+                min-height: 250px;
+            }
+        }
 	</style>
 </h:head>
 
 <h:body>
 	<div class="container">
 		<div class="header">
-			<h:link outcome="planEditor" value="← Zurück zum Plan" style="color: #888; text-decoration: none; float: left; margin-top: 5px;">
+			<h:link outcome="planEditor" value="← Zurück" styleClass="btn-back">
 				<f:param name="planId" value="#{progressController.planId}" />
 			</h:link>
 			<h1>📈 Fortschritt</h1>
@@ -40,14 +125,16 @@
 					<f:ajax listener="#{progressController.loadChartData}" render="chartWrapper" />
 				</h:selectOneMenu>
 
-				<h:panelGroup id="chartWrapper" layout="block" style="margin-top: 30px;">
+				<h:panelGroup id="chartWrapper" layout="block" style="margin-top: 10px;">
 
 					<h:panelGroup rendered="#{not progressController.hasData and progressController.selectedExerciseId != null}">
 						<div style="text-align: center; color: #888; padding: 40px;">Noch keine Trainingsdaten für diese Übung vorhanden. Mach ein Workout!</div>
 					</h:panelGroup>
 
 					<h:panelGroup rendered="#{progressController.hasData}">
-						<canvas id="progressChart"></canvas>
+						<div class="chart-container">
+							<canvas id="progressChart"></canvas>
+						</div>
 
 						<script>
                             // Alten Graphen zerstören, falls vorhanden (wichtig bei AJAX!)
@@ -72,6 +159,7 @@
                             },
                             options: {
                                 responsive: true,
+                                    maintainAspectRatio: false, // WICHTIG: Damit sich das Diagramm an den .chart-container anpasst
                                     plugins: { legend: { labels: { color: '#ddd' } } },
                                 scales: {
                                     x: { ticks: { color: '#aaa' }, grid: { color: '#333' } },

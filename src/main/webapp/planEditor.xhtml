@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets">
+	  xmlns:h="jakarta.faces.html"
+	  xmlns:f="jakarta.faces.core"
+	  xmlns:ui="jakarta.faces.facelets">
 
 <h:head>
-    <title>Plan Editor</title>
-    <style>
+	<title>Plan Editor</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<style>
         /* --- GLOBAL THEME --- */
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -24,7 +26,7 @@
             width: 100%;
         }
 
-        /* HEADER (3-Spalten Layout für exakte Zentrierung) */
+        /* HEADER */
         .header-bar {
             display: flex;
             align-items: center;
@@ -36,7 +38,6 @@
             margin-right: auto;
         }
 
-        /* Flex-Aufteilung: Links und Rechts nehmen Platz, Mitte den Rest */
         .header-left {
             flex: 1;
             display: flex;
@@ -44,7 +45,7 @@
         }
 
         .header-center {
-            flex: 2; /* Nimmt doppelt so viel Platz, damit es sicher mittig ist */
+            flex: 2;
             text-align: center;
         }
 
@@ -86,7 +87,6 @@
             color: white;
         }
 
-        /* GIF Style (Blau/Cyan) */
         .media-badge.gif {
             color: #4facfe;
             border-color: #4facfe;
@@ -102,7 +102,7 @@
             margin: 0;
             font-size: 1.8em;
             color: white;
-            white-space: nowrap; /* Kein Umbruch im Titel */
+            white-space: nowrap;
         }
 
         .subtitle {
@@ -114,16 +114,25 @@
             margin-bottom: 5px;
         }
 
-        /* TAB NAVIGATION (ZENTRIERT) */
+        /* TAB NAVIGATION */
         .tabs-container {
             display: flex;
-            justify-content: center; /* ZENTRIERT DIE TABS */
+            /* Wir entfernen das harte "center" und lösen es dynamischer */
+            justify-content: flex-start;
             gap: 10px;
             margin-bottom: 20px;
             overflow-x: auto;
-            padding-bottom: 5px;
+            padding-bottom: 10px; /* Etwas mehr Platz unten für den Scrollbalken */
             scrollbar-width: thin;
-            scrollbar-color: #333 #0a0a0a;
+            scrollbar-color: #444 #1e1e1e;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Damit die Tabs auf Desktop trotzdem mittig aussehen, wenn sie reinpassen */
+        @media (min-width: 601px) {
+            .tabs-container {
+                justify-content: center;
+            }
         }
 
         .tab-btn {
@@ -138,6 +147,7 @@
             white-space: nowrap;
             text-decoration: none;
             display: inline-block;
+            flex-shrink: 0; /* WICHTIG: Verhindert, dass die Buttons gequetscht werden */
         }
 
         .tab-btn:hover {
@@ -162,7 +172,6 @@
             animation: fadeIn 0.3s ease-out;
         }
 
-        /* HEADER INNERHALB DER DAY-CARD */
         .day-card-header {
             display: flex;
             justify-content: space-between;
@@ -174,11 +183,10 @@
 
         .day-card-title {
             margin: 0;
-            color: #4facfe; /* Blau wie im Tab */
+            color: #4facfe;
             font-size: 1.4em;
         }
 
-        /* Schöner roter Löschen-Button mit Hover-Effekt */
         .btn-delete-day {
             background-color: transparent;
             border: 1px solid #dc3545;
@@ -192,6 +200,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            text-decoration: none;
         }
 
         .btn-delete-day:hover {
@@ -201,22 +210,23 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* TABELLE */
+        /* TABELLEN-WRAPPER */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .exercise-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
             margin-bottom: 25px;
+            min-width: 500px;
         }
 
         .exercise-table th {
@@ -244,7 +254,7 @@
             background-color: #1a1a1a;
         }
 
-        /* ADD FORM (Unten) */
+        /* ADD FORM */
         .add-form-container {
             background-color: #1f1f1f;
             padding: 15px;
@@ -275,13 +285,13 @@
             padding: 10px;
             border-radius: 6px;
             outline: none;
+            box-sizing: border-box;
         }
 
         .dark-input:focus {
             border-color: #4facfe;
         }
 
-        /* BUTTONS */
         .btn-add {
             background-color: #28a745;
             color: white;
@@ -332,7 +342,7 @@
             color: #fff;
         }
 
-        /* TOGGLE SWITCH CSS */
+        /* TOGGLE SWITCH */
         .header-toggle {
             display: flex;
             align-items: center;
@@ -350,19 +360,12 @@
             height: 24px;
         }
 
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+        .switch input { opacity: 0; width: 0; height: 0; }
 
         .slider {
             position: absolute;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background-color: #444;
             transition: .4s;
             border-radius: 34px;
@@ -371,28 +374,21 @@
         .slider:before {
             position: absolute;
             content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
             background-color: white;
             transition: .4s;
             border-radius: 50%;
         }
 
-        input:checked + .slider {
-            background-color: #28a745;
-        }
+        input:checked + .slider { background-color: #28a745; }
+        input:checked + .slider:before { transform: translateX(22px); }
 
-        input:checked + .slider:before {
-            transform: translateX(22px);
-        }
-
-        /* MODAL (POP-UP) STYLES */
+        /* MODAL */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Halbtransparenter Hintergrund */
+            background-color: rgba(0, 0, 0, 0.7);
             z-index: 1000;
             display: flex;
             justify-content: center;
@@ -408,6 +404,7 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             width: 90%;
             max-width: 400px;
+            box-sizing: border-box;
         }
 
         .modal-header {
@@ -446,17 +443,17 @@
         }
         .btn-save-modal:hover { background-color: #0056b3; }
 
-        /* Edit Button Style */
         .btn-edit-icon {
-            color: #ffc107; /* Gelb/Orange */
+            color: #ffc107;
             background: none; border: none; cursor: pointer;
             font-size: 1.1em;
             margin-right: 10px;
             transition: transform 0.2s;
+            text-decoration: none;
         }
         .btn-edit-icon:hover { transform: scale(1.1); color: #ffca2c; }
 
-        /* WORKOUT STARTEN BUTTON */
+        /* WORKOUT BUTTON */
         .btn-start-workout {
             display: block;
             width: 100%;
@@ -491,78 +488,115 @@
             font-size: 0.85em;
             transition: all 0.2s;
         }
-
         .btn-stats:hover {
             background-color: #4facfe;
             color: #000;
             box-shadow: 0 0 12px rgba(79, 172, 254, 0.4);
         }
 
-    </style>
-</h:head>
+        /* --- MOBILE OPTIMIERUNG --- */
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header-bar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .header-left, .header-center, .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+            .header-right { flex-wrap: wrap; }
+            .day-card { padding: 15px; }
+            .day-card-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .add-form-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .input-group { width: 100% !important; }
+
+            /* Damit Dropdowns auf dem Handy gut aussehen */
+            select.dark-input {
+                width: 100%;
+                appearance: none;
+                -webkit-appearance: none;
+                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+                background-repeat: no-repeat;
+                background-position: right 10px center;
+                background-size: 15px;
+                padding-right: 30px;
+            }
+
+            .btn-add { width: 100%; margin-top: 10px; }
+            .media-links { flex-wrap: wrap; }
+        }
+	</style></h:head>
 
 <h:body>
-    <h:messages globalOnly="true"
-                style="background: #333; color: #4caf50; padding: 10px; border-radius: 5px; list-style:none; text-align:center; margin-bottom: 20px;"/>
+	<h:messages globalOnly="true"
+				style="background: #333; color: #4caf50; padding: 10px; border-radius: 5px; list-style:none; text-align:center; margin-bottom: 20px;"/>
+
+	<h:form id="mainForm">
+
+		<h:panelGroup id="editModal">
+			<h:panelGroup rendered="#{planEditorController.exerciseToEdit != null}" layout="block" styleClass="modal-overlay">
+
+				<div class="modal-box">
+					<div class="modal-header">
+						Übung bearbeiten
+					</div>
+
+					<div style="margin-bottom: 10px; color: #888; font-size: 0.9em;">
+						#{planEditorController.exerciseToEdit.exercise.name}
+					</div>
+
+					<div class="input-group" style="margin-bottom: 15px;">
+						<label>Sätze</label>
+						<h:inputText value="#{planEditorController.exerciseToEdit.sets}" styleClass="dark-input" />
+					</div>
+
+					<div class="input-group" style="margin-bottom: 15px;">
+						<label>Wiederholungen</label>
+						<h:inputText value="#{planEditorController.exerciseToEdit.reps}" styleClass="dark-input" />
+					</div>
+
+					<div class="input-group" style="margin-bottom: 15px;">
+						<label>Gewicht (kg)</label>
+						<h:inputText value="#{planEditorController.exerciseToEdit.weight}" styleClass="dark-input" />
+					</div>
+
+					<div class="modal-actions">
+						<h:commandButton value="Abbrechen" action="#{planEditorController.cancelEdit}" styleClass="btn-cancel">
+							<f:ajax render=":mainForm:editModal" />
+						</h:commandButton>
+
+						<h:commandButton value="Speichern" action="#{planEditorController.saveEdit}" styleClass="btn-save-modal">
+							<f:ajax execute="editModal" render="@form" />
+						</h:commandButton>
+					</div>
+				</div>
+
+			</h:panelGroup>
+		</h:panelGroup>
 
 
-    <h:form id="mainForm">
+		<div class="header-bar">
 
-        <h:panelGroup id="editModal">
-            <h:panelGroup rendered="#{planEditorController.exerciseToEdit != null}" layout="block" styleClass="modal-overlay">
+			<div class="header-left">
+				<h:link outcome="athleteDetail" styleClass="back-link">
+					<f:param name="athleteId" value="#{planEditorController.trainingPlan.athlete.id}"/>
+					<span>← Zurück</span>
+				</h:link>
+			</div>
 
-                <div class="modal-box">
-                    <div class="modal-header">
-                        Übung bearbeiten
-                    </div>
-
-                    <div style="margin-bottom: 10px; color: #888; font-size: 0.9em;">
-                        #{planEditorController.exerciseToEdit.exercise.name}
-                    </div>
-
-                    <div class="input-group" style="margin-bottom: 15px;">
-                        <label>Sätze</label>
-                        <h:inputText value="#{planEditorController.exerciseToEdit.sets}" styleClass="dark-input" />
-                    </div>
-
-                    <div class="input-group" style="margin-bottom: 15px;">
-                        <label>Wiederholungen</label>
-                        <h:inputText value="#{planEditorController.exerciseToEdit.reps}" styleClass="dark-input" />
-                    </div>
-
-                    <div class="input-group" style="margin-bottom: 15px;">
-                        <label>Gewicht (kg)</label>
-                        <h:inputText value="#{planEditorController.exerciseToEdit.weight}" styleClass="dark-input" />
-                    </div>
-
-                    <div class="modal-actions">
-                        <h:commandButton value="Abbrechen" action="#{planEditorController.cancelEdit}" styleClass="btn-cancel">
-                            <f:ajax render=":mainForm:editModal" />
-                        </h:commandButton>
-
-                        <h:commandButton value="Speichern" action="#{planEditorController.saveEdit}" styleClass="btn-save-modal">
-                            <f:ajax execute="editModal" render="@form" />
-                        </h:commandButton>
-                    </div>
-                </div>
-
-            </h:panelGroup>
-        </h:panelGroup>
-
-
-        <div class="header-bar">
-
-            <div class="header-left">
-                <h:link outcome="athleteDetail" styleClass="back-link">
-                    <f:param name="athleteId" value="#{planEditorController.trainingPlan.athlete.id}"/>
-                    <span>← Zurück</span>
-                </h:link>
-            </div>
-
-            <div class="header-center">
-                <span class="subtitle">Plan Editor</span>
-                <h2>#{planEditorController.trainingPlan.name}</h2>
-            </div>
+			<div class="header-center">
+				<span class="subtitle">Plan Editor</span>
+				<h2>#{planEditorController.trainingPlan.name}</h2>
+			</div>
 
 			<div class="header-right">
 
@@ -583,143 +617,144 @@
 
 			</div>
 
-        </div>
+		</div>
 
-        <div class="content-container">
+		<div class="content-container">
 
-            <div class="tabs-container">
-                <ui:repeat value="#{planEditorController.trainingPlan.trainingDays}" var="day">
-                    <h:commandLink value="#{day.name}"
-                                   action="#{planEditorController.switchDay(day.id)}"
-                                   styleClass="tab-btn #{planEditorController.activeDayId == day.id ? 'active' : ''}">
-                        <f:ajax render="@form"/>
-                    </h:commandLink>
-                </ui:repeat>
-            </div>
+			<div class="tabs-container">
+				<ui:repeat value="#{planEditorController.trainingPlan.trainingDays}" var="day">
+					<h:commandLink value="#{day.name}"
+								   action="#{planEditorController.switchDay(day.id)}"
+								   styleClass="tab-btn #{planEditorController.activeDayId == day.id ? 'active' : ''}">
+						<f:ajax render="@form"/>
+					</h:commandLink>
+				</ui:repeat>
+			</div>
 
-            <h:panelGroup id="dayContent">
+			<h:panelGroup id="dayContent">
 
-                <ui:repeat value="#{planEditorController.trainingPlan.trainingDays}" var="day">
-                    <h:panelGroup rendered="#{planEditorController.activeDayId == day.id}">
+				<ui:repeat value="#{planEditorController.trainingPlan.trainingDays}" var="day">
+					<h:panelGroup rendered="#{planEditorController.activeDayId == day.id}">
 
-                        <div class="day-card">
-                            <div class="day-card-header">
-                                <h3 class="day-card-title">#{day.name}</h3>
+						<div class="day-card">
+							<div class="day-card-header">
+								<h3 class="day-card-title">#{day.name}</h3>
 
-                                <h:commandLink action="#{planEditorController.deleteTrainingDay(day.id)}"
-                                               styleClass="btn-delete-day"
-                                               onclick="return confirm('Ganzen Tag #{day.name} und alle Übungen löschen?');">
-                                    <span>Tag löschen</span>
-                                    <span>🗑️</span>
-                                    <f:ajax render="@form"/>
-                                </h:commandLink>
-                            </div>
+								<h:commandLink action="#{planEditorController.deleteTrainingDay(day.id)}"
+											   styleClass="btn-delete-day"
+											   onclick="return confirm('Ganzen Tag #{day.name} und alle Übungen löschen?');">
+									<span>Tag löschen</span>
+									<span>🗑️</span>
+									<f:ajax render="@form"/>
+								</h:commandLink>
+							</div>
 
-                            <h:dataTable value="#{day.plannedExercises}" var="pe"
-                                         styleClass="exercise-table"
-                                         rendered="#{not empty day.plannedExercises}">
+							<div class="table-responsive">
+								<h:dataTable value="#{day.plannedExercises}" var="pe"
+											 styleClass="exercise-table"
+											 rendered="#{not empty day.plannedExercises}">
 
-                                <h:column>
-                                    <f:facet name="header">Übung</f:facet>
-                                    <strong style="color: #fff;">#{pe.exercise.name}</strong>
-                                    <div style="font-size: 0.8em; color: #666;">#{pe.exercise.targetMuscle}</div>
+									<h:column>
+										<f:facet name="header">Übung</f:facet>
+										<strong style="color: #fff;">#{pe.exercise.name}</strong>
+										<div style="font-size: 0.8em; color: #666;">#{pe.exercise.targetMuscle}</div>
 
-                                    <div class="media-links">
+										<div class="media-links">
 
-                                        <h:outputLink value="#{pe.exercise.videoLink}" target="_blank"
-                                                      styleClass="media-badge video"
-                                                      rendered="#{not empty pe.exercise.videoLink}">
-                                            <span>▶ Video</span>
-                                        </h:outputLink>
+											<h:outputLink value="#{pe.exercise.videoLink}" target="_blank"
+														  styleClass="media-badge video"
+														  rendered="#{not empty pe.exercise.videoLink}">
+												<span>▶ Video</span>
+											</h:outputLink>
 
-                                        <h:outputLink value="#{pe.exercise.gifUrl}" target="_blank"
-                                                      styleClass="media-badge gif"
-                                                      rendered="#{not empty pe.exercise.gifUrl}">
-                                            <span>👾 GIF</span>
-                                        </h:outputLink>
-                                    </div>
-                                </h:column>
+											<h:outputLink value="#{pe.exercise.gifUrl}" target="_blank"
+														  styleClass="media-badge gif"
+														  rendered="#{not empty pe.exercise.gifUrl}">
+												<span>👾 GIF</span>
+											</h:outputLink>
+										</div>
+									</h:column>
 
-                                <h:column>
-                                    <f:facet name="header">Sätze</f:facet>
-                                    #{pe.sets}
-                                </h:column>
+									<h:column>
+										<f:facet name="header">Sätze</f:facet>
+										#{pe.sets}
+									</h:column>
 
-                                <h:column>
-                                    <f:facet name="header">Wdh.</f:facet>
-                                    #{pe.reps}
-                                </h:column>
+									<h:column>
+										<f:facet name="header">Wdh.</f:facet>
+										#{pe.reps}
+									</h:column>
 
-                                <h:column>
-                                    <f:facet name="header">Gewicht</f:facet>
-                                    <span style="color: #4facfe;">#{pe.weight} kg</span>
-                                </h:column>
+									<h:column>
+										<f:facet name="header">Gewicht</f:facet>
+										<span style="color: #4facfe;">#{pe.weight} kg</span>
+									</h:column>
 
-                                <h:column>
-                                    <f:facet name="header"></f:facet>
-                                    <div style="text-align: right;">
+									<h:column>
+										<f:facet name="header"></f:facet>
+										<div style="text-align: right; min-width: 60px;">
+											<h:commandLink action="#{planEditorController.prepareEdit(pe)}"
+														   styleClass="btn-edit-icon"
+														   title="Bearbeiten">
+												✏️
+												<f:ajax render=":mainForm:editModal" />
+											</h:commandLink>
 
-                                        <h:commandLink action="#{planEditorController.prepareEdit(pe)}"
-                                                       styleClass="btn-edit-icon"
-                                                       title="Bearbeiten">
-                                            ✏️
-                                            <f:ajax render=":mainForm:editModal" />
-                                        </h:commandLink>
+											<h:commandLink action="#{planEditorController.removeExercise(pe.id)}"
+														   styleClass="btn-delete-icon"
+														   title="Entfernen"
+														   onclick="return confirm('Weg damit?');">
+												🗑️
+												<f:ajax render="@form" />
+											</h:commandLink>
+										</div>
+									</h:column>
+								</h:dataTable>
+							</div>
 
-                                        <h:commandLink action="#{planEditorController.removeExercise(pe.id)}"
-                                                       styleClass="btn-delete-icon"
-                                                       title="Entfernen"
-                                                       onclick="return confirm('Weg damit?');">
-                                            🗑️
-                                            <f:ajax render="@form" />
-                                        </h:commandLink>
-                                    </div>
-                                </h:column>
-                            </h:dataTable>
+							<h:panelGroup rendered="#{empty day.plannedExercises}">
+								<div style="text-align: center; padding: 30px; color: #555; border: 2px dashed #333; border-radius: 8px; margin-bottom: 20px;">
+									Keine Übungen für #{day.name} geplant.
+								</div>
+							</h:panelGroup>
 
-                            <h:panelGroup rendered="#{empty day.plannedExercises}">
-                                <div style="text-align: center; padding: 30px; color: #555; border: 2px dashed #333; border-radius: 8px; margin-bottom: 20px;">
-                                    Keine Übungen für #{day.name} geplant.
-                                </div>
-                            </h:panelGroup>
+							<div class="add-form-container">
 
-                            <div class="add-form-container">
+								<div class="input-group" style="flex-grow: 2; min-width: 150px;">
+									<label>Übung hinzufügen</label>
+									<h:selectOneMenu value="#{planEditorController.getInputForDay(day.id).exerciseId}"
+													 styleClass="dark-input">
+										<f:selectItem itemLabel="Wählen..." itemValue="#{null}"/>
+										<f:selectItems value="#{planEditorController.availableExercises}" var="ex"
+													   itemValue="#{ex.id}"
+													   itemLabel="#{ex.name}"/>
+									</h:selectOneMenu>
+								</div>
 
-                                <div class="input-group" style="flex-grow: 2; min-width: 150px;">
-                                    <label>Übung hinzufügen</label>
-                                    <h:selectOneMenu value="#{planEditorController.getInputForDay(day.id).exerciseId}"
-                                                     styleClass="dark-input">
-                                        <f:selectItem itemLabel="Wählen..." itemValue="#{null}"/>
-                                        <f:selectItems value="#{planEditorController.availableExercises}" var="ex"
-                                                       itemValue="#{ex.id}"
-                                                       itemLabel="#{ex.name}"/>
-                                    </h:selectOneMenu>
-                                </div>
+								<div class="input-group" style="width: 60px;">
+									<label>Sätze</label>
+									<h:inputText value="#{planEditorController.getInputForDay(day.id).sets}"
+												 styleClass="dark-input" style="text-align: center;"/>
+								</div>
 
-                                <div class="input-group" style="width: 60px;">
-                                    <label>Sätze</label>
-                                    <h:inputText value="#{planEditorController.getInputForDay(day.id).sets}"
-                                                 styleClass="dark-input" style="text-align: center;"/>
-                                </div>
+								<div class="input-group" style="width: 70px;">
+									<label>Wdh.</label>
+									<h:inputText value="#{planEditorController.getInputForDay(day.id).reps}"
+												 styleClass="dark-input" style="text-align: center;"/>
+								</div>
 
-                                <div class="input-group" style="width: 70px;">
-                                    <label>Wdh.</label>
-                                    <h:inputText value="#{planEditorController.getInputForDay(day.id).reps}"
-                                                 styleClass="dark-input" style="text-align: center;"/>
-                                </div>
+								<div class="input-group" style="width: 70px;">
+									<label>Kg</label>
+									<h:inputText value="#{planEditorController.getInputForDay(day.id).weight}"
+												 styleClass="dark-input" style="text-align: center;"/>
+								</div>
 
-                                <div class="input-group" style="width: 70px;">
-                                    <label>Kg</label>
-                                    <h:inputText value="#{planEditorController.getInputForDay(day.id).weight}"
-                                                 styleClass="dark-input" style="text-align: center;"/>
-                                </div>
-
-                                <h:commandButton value="+"
-                                                 action="#{planEditorController.addExercise(day.id)}"
-                                                 styleClass="btn-add">
-                                    <f:ajax execute="@form" render="@form"/>
-                                </h:commandButton>
-                            </div>
+								<h:commandButton value="+"
+												 action="#{planEditorController.addExercise(day.id)}"
+												 styleClass="btn-add">
+									<f:ajax execute="@form" render="@form"/>
+								</h:commandButton>
+							</div>
 
 							<h:link outcome="workoutSession" styleClass="btn-start-workout">
 								<f:param name="dayId" value="#{day.id}" />
@@ -727,13 +762,13 @@
 								🚀 Workout starten
 							</h:link>
 
-                        </div>
-                    </h:panelGroup>
-                </ui:repeat>
+						</div>
+					</h:panelGroup>
+				</ui:repeat>
 
-            </h:panelGroup>
-        </div>
-    </h:form>
+			</h:panelGroup>
+		</div>
+	</h:form>
 
 </h:body>
 </html>

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core">
+	  xmlns:h="jakarta.faces.html"
+	  xmlns:f="jakarta.faces.core">
 
 <h:head>
-    <title>Übungskatalog</title>
-    <style>
+	<title>Übungskatalog</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<style>
         /* --- GLOBAL THEME --- */
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -78,6 +80,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             border: 1px solid #333;
             animation: fadeIn 0.4s ease-out;
+            box-sizing: border-box;
         }
 
         @keyframes fadeIn {
@@ -91,10 +94,6 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin-bottom: 15px;
-        }
-
-        @media (max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
         }
 
         .input-wrapper { display: flex; flex-direction: column; }
@@ -115,6 +114,7 @@
             border-radius: 6px;
             outline: none;
             transition: border-color 0.2s;
+            box-sizing: border-box;
         }
 
         .dark-input:focus { border-color: #4facfe; }
@@ -136,6 +136,7 @@
             letter-spacing: 1px;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
         }
 
         .btn-submit:hover {
@@ -143,11 +144,20 @@
             box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
         }
 
+        /* TABELLEN-WRAPPER FÜR HANDYS */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 10px; /* Platz für den Scrollbalken */
+        }
+
         /* TABLE */
         .modern-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0 8px;
+            min-width: 550px; /* Sichert die Mindestbreite, damit nichts gequetscht wird */
         }
 
         .modern-table th {
@@ -157,6 +167,7 @@
             font-size: 0.7em;
             letter-spacing: 1px;
             padding: 0 15px 5px 15px;
+            white-space: nowrap;
         }
 
         .modern-table td {
@@ -181,6 +192,7 @@
             border-top-right-radius: 8px;
             border-bottom-right-radius: 8px;
             text-align: right;
+            white-space: nowrap; /* Verhindert das Umbrechen der Buttons */
         }
 
         .modern-table tr:hover td {
@@ -200,6 +212,7 @@
             font-size: 0.75em;
             font-weight: 600;
             transition: background 0.2s;
+            margin-bottom: 4px; /* Abstand falls sie untereinander rutschen */
         }
         .link-badge:hover { background-color: #4facfe; color: black; }
 
@@ -235,117 +248,142 @@
             font-size: 1rem;
             opacity: 1;
             transition: opacity 0.5s ease-out;
+            max-width: 90%; /* Verhindert, dass der Text auf Handys aus dem Rand läuft */
+            text-align: center;
+            box-sizing: border-box;
         }
         .toast-notification li { margin: 0; }
-    </style>
+
+        /* --- MOBILE OPTIMIERUNG --- */
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr; /* Eingabefelder untereinander */
+            }
+            .content-container {
+                padding-left: 15px;
+                padding-right: 15px;
+                padding-top: 60px; /* Header etwas enger rücken */
+            }
+            .card {
+                padding: 15px; /* Karte nimmt weniger Platz am Rand weg */
+            }
+            .btn-submit {
+                width: 100%; /* Button über die volle Breite für leichtes Tippen */
+            }
+            h2 {
+                font-size: 1.5em; /* Etwas kleinere Überschrift */
+            }
+        }
+	</style>
 </h:head>
 
 <h:body>
-    <h:messages globalOnly="true" styleClass="toast-notification" id="toastMsg"/>
+	<h:messages globalOnly="true" styleClass="toast-notification" id="toastMsg"/>
 
-    <div class="header-bar">
-        <h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link"/>
-    </div>
+	<div class="header-bar">
+		<h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link"/>
+	</div>
 
-    <div class="content-container">
+	<div class="content-container">
 
-        <h2>Übungen</h2>
+		<h2>Übungen</h2>
 
-        <div class="card">
-            <h:form>
-                <div class="form-grid">
-                    <div class="input-wrapper">
-                        <h:outputLabel value="Name der Übung" styleClass="form-label"/>
-                        <h:inputText value="#{exerciseController.newExercise.name}"
-                                     required="true"
-                                     requiredMessage="Name fehlt"
-                                     styleClass="dark-input"/>
-                    </div>
-                    <div class="input-wrapper">
-                        <h:outputLabel value="Zielmuskel" styleClass="form-label"/>
-                        <h:inputText value="#{exerciseController.newExercise.targetMuscle}"
-                                     styleClass="dark-input"/>
-                    </div>
-                </div>
+		<div class="card">
+			<h:form>
+				<div class="form-grid">
+					<div class="input-wrapper">
+						<h:outputLabel value="Name der Übung" styleClass="form-label"/>
+						<h:inputText value="#{exerciseController.newExercise.name}"
+									 required="true"
+									 requiredMessage="Name fehlt"
+									 styleClass="dark-input"/>
+					</div>
+					<div class="input-wrapper">
+						<h:outputLabel value="Zielmuskel" styleClass="form-label"/>
+						<h:inputText value="#{exerciseController.newExercise.targetMuscle}"
+									 styleClass="dark-input"/>
+					</div>
+				</div>
 
-                <div class="form-grid">
-                    <div class="input-wrapper">
-                        <h:outputLabel value="Video Link" styleClass="form-label"/>
-                        <h:inputText value="#{exerciseController.newExercise.videoLink}"
-                                     styleClass="dark-input"
-                                     f:passThroughAttribute="placeholder" f:passThroughValue="YouTube URL..."/>
-                    </div>
-                    <div class="input-wrapper">
-                        <h:outputLabel value="Gif Link" styleClass="form-label"/>
-                        <h:inputText value="#{exerciseController.newExercise.gifUrl}"
-                                     styleClass="dark-input"
-                                     f:passThroughAttribute="placeholder" f:passThroughValue=".gif URL..."/>
-                    </div>
-                </div>
+				<div class="form-grid">
+					<div class="input-wrapper">
+						<h:outputLabel value="Video Link" styleClass="form-label"/>
+						<h:inputText value="#{exerciseController.newExercise.videoLink}"
+									 styleClass="dark-input"
+									 f:passThroughAttribute="placeholder" f:passThroughValue="YouTube URL..."/>
+					</div>
+					<div class="input-wrapper">
+						<h:outputLabel value="Gif Link" styleClass="form-label"/>
+						<h:inputText value="#{exerciseController.newExercise.gifUrl}"
+									 styleClass="dark-input"
+									 f:passThroughAttribute="placeholder" f:passThroughValue=".gif URL..."/>
+					</div>
+				</div>
 
-                <h:commandButton value="Speichern"
-                                 action="#{exerciseController.createExercise}"
-                                 styleClass="btn-submit"/>
-            </h:form>
-        </div>
+				<h:commandButton value="Speichern"
+								 action="#{exerciseController.createExercise}"
+								 styleClass="btn-submit"/>
+			</h:form>
+		</div>
 
-        <h3>Katalog (#{exerciseController.allExercises.size()} Einträge)</h3>
+		<h3>Katalog (#{exerciseController.allExercises.size()} Einträge)</h3>
 
-        <h:form id="exerciseListForm">
+		<h:form id="exerciseListForm">
+			<div class="table-responsive">
+				<h:dataTable value="#{exerciseController.allExercises}" var="ex"
+							 styleClass="modern-table"
+							 rendered="#{not empty exerciseController.allExercises}">
 
-            <h:dataTable value="#{exerciseController.allExercises}" var="ex"
-                         styleClass="modern-table"
-                         rendered="#{not empty exerciseController.allExercises}">
+					<h:column>
+						<f:facet name="header">Name</f:facet>
+						#{ex.name}
+					</h:column>
 
-                <h:column>
-                    <f:facet name="header">Name</f:facet>
-                    #{ex.name}
-                </h:column>
+					<h:column>
+						<f:facet name="header">Muskel</f:facet>
+						<span class="muscle-tag">#{ex.targetMuscle}</span>
+					</h:column>
 
-                <h:column>
-                    <f:facet name="header">Muskel</f:facet>
-                    <span class="muscle-tag">#{ex.targetMuscle}</span>
-                </h:column>
+					<h:column>
+						<f:facet name="header">Medien</f:facet>
+						<h:panelGroup rendered="#{not empty ex.videoLink}">
+							<h:outputLink value="#{ex.videoLink}" target="_blank" styleClass="link-badge" style="margin-right: 5px;">
+								Video
+							</h:outputLink>
+						</h:panelGroup>
 
-                <h:column>
-                    <f:facet name="header">Medien</f:facet>
-                    <h:panelGroup rendered="#{not empty ex.videoLink}">
-                        <h:outputLink value="#{ex.videoLink}" target="_blank" styleClass="link-badge" style="margin-right: 5px;">
-                            Video
-                        </h:outputLink>
-                    </h:panelGroup>
+						<h:panelGroup rendered="#{not empty ex.gifUrl}">
+							<h:outputLink value="#{ex.gifUrl}" target="_blank" styleClass="link-badge">
+								Gif
+							</h:outputLink>
+						</h:panelGroup>
+					</h:column>
 
-                    <h:panelGroup rendered="#{not empty ex.gifUrl}">
-                        <h:outputLink value="#{ex.gifUrl}" target="_blank" styleClass="link-badge">
-                            Gif
-                        </h:outputLink>
-                    </h:panelGroup>
-                </h:column>
+					<h:column>
+						<f:facet name="header"></f:facet>
+						<h:commandLink
+								action="#{exerciseController.deleteExercise(ex.id)}"
+								styleClass="btn-delete-icon"
+								title="Löschen"
+								onclick="return confirm('Übung wirklich löschen?');">
+							🗑️
+							<f:ajax render="@form"/>
+						</h:commandLink>
+					</h:column>
 
-                <h:column>
-                    <f:facet name="header"></f:facet>
-                    <h:commandLink
-                            action="#{exerciseController.deleteExercise(ex.id)}"
-                            styleClass="btn-delete-icon"
-                            title="Löschen"
-                            onclick="return confirm('Übung wirklich löschen?');">
-                        🗑️
-						<f:ajax render="@form"/>
-                    </h:commandLink>
-                </h:column>
+				</h:dataTable>
+			</div>
+		</h:form>
 
-            </h:dataTable>
-        </h:form>
+		<h:panelGroup rendered="#{empty exerciseController.allExercises}">
+			<div style="text-align: center; padding: 40px; color: #555;">
+				Noch keine Übungen. Leg los und erstell die Erste!
+			</div>
+		</h:panelGroup>
 
-        <h:panelGroup rendered="#{empty exerciseController.allExercises}">
-            <div style="text-align: center; padding: 40px; color: #555;">
-                Noch keine Übungen. Leg los und erstell die Erste!
-            </div>
-        </h:panelGroup>
+	</div>
 
-    </div>
-
-    <script>
+	<script>
         window.onload = function() {
             var toast = document.querySelector('.toast-notification');
             if (toast) {
@@ -357,7 +395,7 @@
                 }, 1000);
             }
         };
-    </script>
+	</script>
 
 </h:body>
 </html>
