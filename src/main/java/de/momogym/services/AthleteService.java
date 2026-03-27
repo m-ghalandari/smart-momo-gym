@@ -34,7 +34,7 @@ public class AthleteService {
 	}
 
 	public List<Athlete> findAllAthletes(){
-		return entityManager.createQuery("SELECT a FROM Athlete a", Athlete.class).getResultList();
+		return entityManager.createQuery("SELECT a FROM Athlete a ORDER BY UPPER(a.username) ASC", Athlete.class).getResultList();
 	}
 
     /**
