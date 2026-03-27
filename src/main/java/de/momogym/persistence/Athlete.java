@@ -22,6 +22,9 @@ public class Athlete {
     @Column(name = "USERNAME", nullable = false, unique = true)
     private String username;
 
+	@Column(name = "PASSWORD", nullable = false)
+	private String password;
+
     // Ein Athlet hat VIELE Pläne
     @OneToMany(
             mappedBy = "athlete",
@@ -42,13 +45,15 @@ public class Athlete {
 
     public Athlete() {
     }
-    public Athlete(String username) {
+    public Athlete(String username, String password) {
         this.username = username;
+		this.password = password;
     }
 
 
-    public Athlete(String username, List<TrainingPlan> trainingPlans, List<ExerciseLog> logs) {
+    public Athlete(String username, String password, List<TrainingPlan> trainingPlans, List<ExerciseLog> logs) {
         this.username = username;
+		this.password = password;
         this.trainingPlans = trainingPlans;
         this.logs = logs;
     }
@@ -64,6 +69,14 @@ public class Athlete {
     public void setUsername(String username) {
         this.username = username;
     }
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
     public List<TrainingPlan> getTrainingPlans() {
         return trainingPlans;

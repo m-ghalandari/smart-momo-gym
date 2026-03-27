@@ -16,11 +16,11 @@ public class AthleteService {
     @PersistenceContext(unitName = "trainingsverwaltung-pu")
     private EntityManager entityManager;
 
-    public Athlete createAthlete(String username) throws Exception{
+    public Athlete createAthlete(String username, String password) throws Exception{
         if (usernameExists(username)){
             throw new Exception("Benutzername '" + username + "' ist bereits vergeben.");
         }
-        Athlete athlete = new Athlete(username);
+        Athlete athlete = new Athlete(username, password);
         entityManager.persist(athlete);
         return athlete;
     }

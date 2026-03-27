@@ -16,10 +16,12 @@ public class AthleteController {
 
     private String username;
 
+	private String password;
+
     public String register() {
         try {
             // Ruft die Logik im Service auf
-            athleteService.createAthlete(username);
+            athleteService.createAthlete(username, password);
 
             // Erfolg an den Benutzer melden
             addMessage(FacesMessage.SEVERITY_INFO, "Erfolg", "Athlet '" + username + "' wurde erstellt.");
