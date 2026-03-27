@@ -1,6 +1,7 @@
 package de.momogym.controller;
 
 import de.momogym.services.AthleteService;
+import de.momogym.services.LoginService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -20,23 +21,18 @@ public class AthleteController {
 
     public String register() {
         try {
-            // Ruft die Logik im Service auf
-            athleteService.createAthlete(username, password);
+            String hashPassword = LoginService.hashPassword(password);
+            athleteService.createAthlete(username, hashPassword);
 
-            // Erfolg an den Benutzer melden
             addMessage(FacesMessage.SEVERITY_INFO, "Erfolg", "Athlet '" + username + "' wurde erstellt.");
 
-            // Leert das Feld nach Erfolg
             this.username = null;
 
-            // Bleibe auf derselben Seite (oder navigiere zu "login.xhtml")
-            return "index.xhtml?faces-redirect=true"; // Redirect, um Formular-Neusenden zu verhindern
+            return "index.xhtml?faces-redirect=true";
 
         } catch (Exception e) {
-            // Fehler an den Benutzer melden
             addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", e.getMessage());
 
-            // Bleibe auf der Registrierungsseite, um den Fehler anzuzeigen
             return null;
         }
     }
@@ -56,4 +52,12 @@ public class AthleteController {
     public void setUsername(String username) {
         this.username = username;
     }
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }
