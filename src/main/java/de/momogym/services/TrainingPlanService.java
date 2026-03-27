@@ -38,30 +38,21 @@ public class TrainingPlanService {
 			throw new Exception("Der Plan-Name '" + planName + "' ist für DIESEN Athleten bereits vergeben."); // ANPASSUNG
 		}
 
-		// Schritt 3: (WICHTIG) ... (Logik bleibt gleich)
-		if (makeActive) {
-			entityManager.createQuery("UPDATE TrainingPlan p SET p.isActive = false WHERE p.athlete = :athlete")
-				.setParameter("athlete", athlete)
-				.executeUpdate();
-		}
-
-		// Schritt 4: Neuen Plan erstellen
+		// Schritt 3: Neuen Plan erstellen
 		TrainingPlan newPlan = new TrainingPlan();
-		newPlan.setAthlete(athlete); // Wir nutzen das geladene Objekt
+		newPlan.setAthlete(athlete);
 		newPlan.setName(planName);
 		newPlan.setActive(makeActive);
 		newPlan.setCurrentDaySequence(1);
 		entityManager.persist(newPlan);
-		// --- NEU: Trainings-Tage erstellen ---
-		// Wir gehen die Liste der Strings durch (z.B. "Montag", "Mittwoch")
+
+		// Schritt 4: Trainings-Tage erstellen
 		if (selectedDays != null && !selectedDays.isEmpty()) {
 			int sequence = 1;
 			for (String dayName : selectedDays) {
 				TrainingDay day = new TrainingDay();
-				day.setName(dayName);           // Name z.B. "Montag"
-				day.setTrainingPlan(newPlan);   // Verknüpfung zum Plan
-				// Optional: Falls du eine Reihenfolge in der DB hast
-				// day.setSequence(sequence++);
+				day.setName(dayName);
+				day.setTrainingPlan(newPlan);
 
 				entityManager.persist(day);
 			}
@@ -134,13 +125,7 @@ public class TrainingPlanService {
 
 	public void updatePlanStatus(Long planId, boolean isActive){
 		TrainingPlan plan = entityManager.find(TrainingPlan.class, planId);
-		if(isActive){
-			entityManager.createQuery("UPDATE TrainingPlan p SET p.isActive = false WHERE p.athlete = :athlete")
-				.setParameter("athlete", plan.getAthlete())
-				.executeUpdate();
-			entityManager.refresh(plan);
-		}
-		plan.setActive(isActive);
+		if (plan != null) plan.setActive(isActive);
 	}
 
 	public void updatePlanName(Long planId, String newName) throws Exception {
