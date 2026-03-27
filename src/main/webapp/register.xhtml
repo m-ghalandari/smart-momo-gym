@@ -209,6 +209,14 @@
 								 f:passThroughValue="Dein Name..." />
 
 					<h:message for="usernameInput" styleClass="error-msg" />
+
+					<h:outputLabel for="passwordInput" value="Passwort" styleClass="form-label" />
+					<h:inputSecret id="passwordInput"
+								   value="#{athleteController.password}"
+								   required="true"
+								   requiredMessage="Bitte Passwort eingeben."
+								   styleClass="form-input" />
+					<h:message for="passwordInput" styleClass="error-msg" />
 				</div>
 
 				<h:commandButton value="Konto erstellen"

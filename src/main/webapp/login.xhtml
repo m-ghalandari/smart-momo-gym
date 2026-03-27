@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="jakarta.faces.html"
+	  xmlns:f="jakarta.faces.core">
+
+<h:head>
+	<title>Login - Smart Momo Gym</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #0a0a0a; color: #e0e0e0; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; }
+        .main-content { flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .register-card { background-color: #161616; padding: 40px; border-radius: 16px; border: 1px solid #333; box-shadow: 0 20px 50px rgba(0,0,0,0.7); width: 100%; max-width: 400px; box-sizing: border-box; }
+        h2 { text-align: center; color: #ffffff; margin-top: 0; margin-bottom: 30px; font-size: 1.8em; }
+        .form-group { margin-bottom: 25px; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.85em; color: #b0b0b0; text-transform: uppercase; }
+        .form-input { width: 100%; padding: 14px; background-color: #212121; border: 1px solid #333; border-radius: 8px; font-size: 16px; color: white; box-sizing: border-box; }
+        .form-input:focus { border-color: #4facfe; outline: none; }
+        .btn-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #000; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .global-messages { list-style: none; padding: 0; margin-bottom: 20px; text-align: center; }
+        .global-messages li { color: #ff6b6b; background: rgba(255, 107, 107, 0.1); padding: 10px; border-radius: 6px; border: 1px solid rgba(255, 107, 107, 0.3); }
+        .link-text { display: block; text-align: center; margin-top: 20px; color: #888; text-decoration: none; font-size: 0.9em; }
+        .link-text:hover { color: #4facfe; }
+        @media (max-width: 600px) { .register-card { padding: 25px; } }
+	</style>
+</h:head>
+
+<h:body>
+	<div class="main-content">
+		<div class="register-card">
+			<h2>Login</h2>
+
+			<h:form>
+				<h:messages globalOnly="true" styleClass="global-messages" />
+
+				<div class="form-group">
+					<h:outputLabel for="usernameInput" value="Benutzername" styleClass="form-label" />
+					<h:inputText id="usernameInput" value="#{loginController.username}" required="true" styleClass="form-input" />
+				</div>
+
+				<div class="form-group">
+					<h:outputLabel for="passwordInput" value="Passwort" styleClass="form-label" />
+					<h:inputSecret id="passwordInput" value="#{loginController.password}" required="true" styleClass="form-input" />
+				</div>
+
+				<h:commandButton value="Einloggen" action="#{loginController.login}" styleClass="btn-submit" />
+
+				<h:link value="Noch kein Konto? Hier registrieren" outcome="register.xhtml" styleClass="link-text" />
+			</h:form>
+		</div>
+	</div>
+</h:body>
+</html>
