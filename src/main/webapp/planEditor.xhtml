@@ -117,18 +117,16 @@
         /* TAB NAVIGATION */
         .tabs-container {
             display: flex;
-            /* Wir entfernen das harte "center" und lösen es dynamischer */
             justify-content: flex-start;
             gap: 10px;
             margin-bottom: 20px;
             overflow-x: auto;
-            padding-bottom: 10px; /* Etwas mehr Platz unten für den Scrollbalken */
+            padding-bottom: 10px;
             scrollbar-width: thin;
             scrollbar-color: #444 #1e1e1e;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Damit die Tabs auf Desktop trotzdem mittig aussehen, wenn sie reinpassen */
         @media (min-width: 601px) {
             .tabs-container {
                 justify-content: center;
@@ -147,7 +145,7 @@
             white-space: nowrap;
             text-decoration: none;
             display: inline-block;
-            flex-shrink: 0; /* WICHTIG: Verhindert, dass die Buttons gequetscht werden */
+            flex-shrink: 0;
         }
 
         .tab-btn:hover {
@@ -605,7 +603,7 @@
 					<span>Statistiken</span>
 				</h:link>
 
-				<div class="header-toggle">
+				<h:panelGroup rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="header-toggle">
 					<span style="color: #aaa; font-size: 0.85em; font-weight: 600;">Aktiv</span>
 					<label class="switch">
 						<h:selectBooleanCheckbox value="#{planEditorController.trainingPlan.active}">
@@ -613,7 +611,13 @@
 						</h:selectBooleanCheckbox>
 						<span class="slider"></span>
 					</label>
-				</div>
+				</h:panelGroup>
+
+				<h:panelGroup rendered="#{planEditorController.trainingPlan.athlete.id != userSession.loggedInAthlete.id}" layout="block" style="padding: 8px 15px; border: 1px solid #333; border-radius: 30px; background: #1a1a1a;">
+					<span style="font-weight: 600; font-size: 0.85em; color: #{planEditorController.trainingPlan.active ? '#28a745' : '#888'};">
+						#{planEditorController.trainingPlan.active ? 'AKTIV' : 'INAKTIV'}
+					</span>
+				</h:panelGroup>
 
 			</div>
 
@@ -641,6 +645,7 @@
 								<h3 class="day-card-title">#{day.name}</h3>
 
 								<h:commandLink action="#{planEditorController.deleteTrainingDay(day.id)}"
+											   rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}"
 											   styleClass="btn-delete-day"
 											   onclick="return confirm('Ganzen Tag #{day.name} und alle Übungen löschen?');">
 									<span>Tag löschen</span>
@@ -692,7 +697,7 @@
 
 									<h:column>
 										<f:facet name="header"></f:facet>
-										<div style="text-align: right; min-width: 60px;">
+										<h:panelGroup layout="block" style="text-align: right; min-width: 60px;" rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}">
 											<h:commandLink action="#{planEditorController.prepareEdit(pe)}"
 														   styleClass="btn-edit-icon"
 														   title="Bearbeiten">
@@ -707,7 +712,7 @@
 												🗑️
 												<f:ajax render="@form" />
 											</h:commandLink>
-										</div>
+										</h:panelGroup>
 									</h:column>
 								</h:dataTable>
 							</div>
@@ -718,45 +723,49 @@
 								</div>
 							</h:panelGroup>
 
-							<div class="add-form-container">
+							<h:panelGroup rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}">
+								<div class="add-form-container">
 
-								<div class="input-group" style="flex-grow: 2; min-width: 150px;">
-									<label>Übung hinzufügen</label>
-									<h:selectOneMenu value="#{planEditorController.getInputForDay(day.id).exerciseId}"
-													 styleClass="dark-input">
-										<f:selectItem itemLabel="Wählen..." itemValue="#{null}"/>
-										<f:selectItems value="#{planEditorController.availableExercises}" var="ex"
-													   itemValue="#{ex.id}"
-													   itemLabel="#{ex.name}"/>
-									</h:selectOneMenu>
+									<div class="input-group" style="flex-grow: 2; min-width: 150px;">
+										<label>Übung hinzufügen</label>
+										<h:selectOneMenu value="#{planEditorController.getInputForDay(day.id).exerciseId}"
+														 styleClass="dark-input">
+											<f:selectItem itemLabel="Wählen..." itemValue="#{null}"/>
+											<f:selectItems value="#{planEditorController.availableExercises}" var="ex"
+														   itemValue="#{ex.id}"
+														   itemLabel="#{ex.name}"/>
+										</h:selectOneMenu>
+									</div>
+
+									<div class="input-group" style="width: 60px;">
+										<label>Sätze</label>
+										<h:inputText value="#{planEditorController.getInputForDay(day.id).sets}"
+													 styleClass="dark-input" style="text-align: center;"/>
+									</div>
+
+									<div class="input-group" style="width: 70px;">
+										<label>Wdh.</label>
+										<h:inputText value="#{planEditorController.getInputForDay(day.id).reps}"
+													 styleClass="dark-input" style="text-align: center;"/>
+									</div>
+
+									<div class="input-group" style="width: 70px;">
+										<label>Kg</label>
+										<h:inputText value="#{planEditorController.getInputForDay(day.id).weight}"
+													 styleClass="dark-input" style="text-align: center;"/>
+									</div>
+
+									<h:commandButton value="+"
+													 action="#{planEditorController.addExercise(day.id)}"
+													 styleClass="btn-add">
+										<f:ajax execute="@form" render="@form"/>
+									</h:commandButton>
 								</div>
+							</h:panelGroup>
 
-								<div class="input-group" style="width: 60px;">
-									<label>Sätze</label>
-									<h:inputText value="#{planEditorController.getInputForDay(day.id).sets}"
-												 styleClass="dark-input" style="text-align: center;"/>
-								</div>
-
-								<div class="input-group" style="width: 70px;">
-									<label>Wdh.</label>
-									<h:inputText value="#{planEditorController.getInputForDay(day.id).reps}"
-												 styleClass="dark-input" style="text-align: center;"/>
-								</div>
-
-								<div class="input-group" style="width: 70px;">
-									<label>Kg</label>
-									<h:inputText value="#{planEditorController.getInputForDay(day.id).weight}"
-												 styleClass="dark-input" style="text-align: center;"/>
-								</div>
-
-								<h:commandButton value="+"
-												 action="#{planEditorController.addExercise(day.id)}"
-												 styleClass="btn-add">
-									<f:ajax execute="@form" render="@form"/>
-								</h:commandButton>
-							</div>
-
-							<h:link outcome="workoutSession" styleClass="btn-start-workout">
+							<h:link outcome="workoutSession"
+									styleClass="btn-start-workout"
+									rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}">
 								<f:param name="dayId" value="#{day.id}" />
 								<f:param name="planId" value="#{planEditorController.planId}" />
 								🚀 Workout starten

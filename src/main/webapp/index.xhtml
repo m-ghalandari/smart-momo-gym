@@ -41,17 +41,6 @@
         }
 
         /* HEADER BUTTONS */
-        .btn-register {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: background-color 0.2s;
-        }
-        .btn-register:hover { background-color: #34ce57; }
-
         .btn-exercises {
             background-color: #17a2b8;
             color: white;
@@ -63,7 +52,7 @@
         }
         .btn-exercises:hover { background-color: #20c9e2; }
 
-        /* NEU: LOGOUT BUTTON */
+        /* LOGOUT BUTTON */
         .btn-logout {
             background-color: transparent;
             color: #ff6b6b;
@@ -82,13 +71,13 @@
         }
 
         .logout-form {
-            margin: 0; /* Form-Abstände entfernen */
+            margin: 0;
         }
 
         /* TABELLE */
         .athlete-table {
             width: 100%;
-            max-width: 600px; /* Schön schmal */
+            max-width: 600px;
             border-collapse: collapse;
             margin-top: 10px;
             background-color: #1e1e1e;
@@ -111,27 +100,27 @@
             padding: 15px;
             border-bottom: 1px solid #333;
             color: #cfcfcf;
-            vertical-align: middle; /* Vertikal zentrieren */
+            vertical-align: middle;
         }
 
         .athlete-table tr:hover {
             background-color: #333333;
         }
 
-        /* KLICKBARER NAME (Link Style) */
+        /* KLICKBARER NAME */
         .athlete-name-link {
-            color: #e0e0e0; /* Fast Weiß */
+            color: #e0e0e0;
             text-decoration: none;
             font-weight: bold;
             font-size: 1.1em;
-            display: block; /* Damit man die ganze Breite klicken kann */
+            display: block;
         }
         .athlete-name-link:hover {
-            color: #64b5f6; /* Blau beim Drüberfahren */
+            color: #64b5f6;
             text-decoration: none;
         }
 
-        /* LÖSCHEN BUTTON (Icon Style) */
+        /* LÖSCHEN BUTTON */
         .btn-icon-delete {
             color: #ff6b6b;
             background-color: transparent;
@@ -146,13 +135,13 @@
         }
 
         .btn-icon-delete:hover {
-            background-color: #dc3545; /* Hintergrund rot füllen */
-            color: white;              /* Icon weiß */
+            background-color: #dc3545;
+            color: white;
             border-color: #dc3545;
             cursor: pointer;
         }
 
-        /* Spezielle Regeln für Bildschirme kleiner als 600px (Handys) */
+        /* MOBILE REGELN */
         @media (max-width: 600px) {
             .header-container {
                 flex-direction: column;
@@ -162,7 +151,7 @@
                 flex-direction: column;
                 width: 100%;
             }
-            .btn-register, .btn-exercises, .btn-logout {
+            .btn-exercises, .btn-logout {
                 width: 100%;
                 text-align: center;
                 box-sizing: border-box;
@@ -185,10 +174,6 @@
 			<h:link value="🏋️ Übungskatalog"
 					outcome="exercises.xhtml"
 					styleClass="btn-exercises" />
-
-			<h:link value="+ Neuer Athlet"
-					outcome="register.xhtml"
-					styleClass="btn-register" />
 
 			<h:form styleClass="logout-form">
 				<h:commandLink action="#{userSession.logout}"
@@ -223,9 +208,10 @@
 				<f:facet name="header"></f:facet>
 				<div style="text-align: right;">
 					<h:commandLink action="#{dashboardController.deleteAthlete(athlete.id)}"
+								   rendered="#{athlete.id == userSession.loggedInAthlete.id}"
 								   styleClass="btn-icon-delete"
-								   title="Athlet löschen"
-								   onclick="return confirm('Soll der Athlet #{athlete.username} wirklich gelöscht werden? Alle Pläne gehen verloren.');">
+								   title="Eigenen Account löschen"
+								   onclick="return confirm('Willst du deinen Account wirklich löschen? Alle Pläne gehen verloren.');">
 						🗑️
 						<f:ajax render="@form"/>
 					</h:commandLink>

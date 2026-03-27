@@ -214,6 +214,7 @@
 
 						<div class="card-actions">
 							<h:commandLink action="#{athleteDetailController.prepareEditPlan(plan)}"
+										   rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}"
 										   styleClass="btn-icon btn-edit"
 										   title="Plan bearbeiten">
 								✏️
@@ -221,6 +222,7 @@
 							</h:commandLink>
 
 							<h:commandLink action="#{athleteDetailController.deletePlan(plan.id)}"
+										   rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}"
 										   styleClass="btn-icon btn-delete"
 										   title="Plan löschen"
 										   onclick="return confirm('Diesen Plan wirklich löschen?');">
@@ -231,13 +233,13 @@
 					</div>
 				</ui:repeat>
 
-				<div class="action-container">
+				<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="action-container">
 					<h:link value="+ Neuer Trainingsplan"
 							outcome="/trainingPlan.xhtml"
 							styleClass="btn-create">
 						<f:param name="athleteId" value="#{athleteDetailController.athlete.id}"/>
 					</h:link>
-				</div>
+				</h:panelGroup>
 
 			</h:panelGroup>
 		</h:form>
