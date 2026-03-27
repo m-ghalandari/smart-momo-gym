@@ -12,54 +12,42 @@
         /* --- GLOBAL THEME --- */
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #0a0a0a; /* Deep Black */
+            background-color: #0a0a0a;
             color: #e0e0e0;
             margin: 0;
             padding: 0;
-            height: 100vh; /* Volle Höhe */
+            height: 100vh;
             display: flex;
-            flex-direction: column; /* Header oben, Rest darunter */
+            flex-direction: column;
         }
 
-        /* HEADER BAR (Nur für den Zurück-Link) */
-        .header-bar {
-            padding: 20px;
-            width: 100%;
-            box-sizing: border-box;
-            position: absolute; /* Fixiert oben links */
-            top: 0;
-            left: 0;
-        }
-
-        .back-link {
-            color: #888;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: color 0.2s;
-            font-size: 1rem;
-        }
-        .back-link:hover { color: #fff; }
-
-        /* MAIN CONTENT (Zentriert die Karte) */
+        /* MAIN CONTENT */
         .main-content {
-            flex: 1; /* Nimmt den restlichen Platz ein */
+            flex: 1;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
             box-sizing: border-box;
         }
 
-        /* CARD STYLE */
+        /* LOGO STYLE: Groß, Prominent und Responsive */
+        .gym-logo {
+            max-width: 500px; /* Groß für Laptops, wie das Kästchen */
+            width: 100%;
+            height: auto;
+            margin-bottom: 40px; /* Großzügiger Abstand zur Karte */
+            border-radius: 8px; /* Leicht abgerundete Ecken */
+        }
+
+        /* CARD STYLE: Rein funktionaler Bereich */
         .register-card {
             background-color: #161616;
             padding: 40px;
-            border-radius: 16px; /* Etwas runder */
+            border-radius: 16px;
             border: 1px solid #333;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7); /* Tiefer, edler Schatten */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
             width: 100%;
             max-width: 400px;
             animation: fadeInUp 0.5s ease-out;
@@ -72,12 +60,12 @@
         }
 
         h2 {
-            text-align: center;
             color: #ffffff;
             margin-top: 0;
             margin-bottom: 30px;
             font-size: 1.8em;
             letter-spacing: -0.5px;
+            text-align: center;
         }
 
         /* FORMULAR ELEMENTE */
@@ -109,17 +97,16 @@
 
         .form-input:focus {
             border-color: #4facfe;
-            background-color: #262626;
             outline: none;
-            box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.1); /* Glow Effekt */
+            box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.1);
         }
 
-        /* BUTTON (Modern Gradient) */
+        /* BUTTON */
         .btn-submit {
             width: 100%;
             padding: 14px;
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: #000; /* Schwarz auf Hellblau = Top Kontrast */
+            color: #000;
             border: none;
             border-radius: 8px;
             font-size: 16px;
@@ -137,6 +124,9 @@
             box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
         }
 
+        .link-text { display: block; text-align: center; margin-top: 20px; color: #888; text-decoration: none; font-size: 0.9em; }
+        .link-text:hover { color: #4facfe; }
+
         /* MESSAGES */
         .global-messages {
             list-style: none;
@@ -145,7 +135,6 @@
             text-align: center;
         }
 
-        /* Fehlermeldungen schön rot */
         .global-messages li {
             color: #ff6b6b;
             background: rgba(255, 107, 107, 0.1);
@@ -163,36 +152,25 @@
 
         /* --- MOBILE OPTIMIERUNG --- */
         @media (max-width: 600px) {
-            .header-bar {
-                padding: 15px; /* Zurück-Link näher an den Rand */
+            .register-card { padding: 25px; border-radius: 12px; }
+            .gym-logo {
+                max-width: 100%; /* Nimmt die volle Breite ein */
+                margin-bottom: 25px; /* Etwas weniger Abstand */
             }
-            .register-card {
-                padding: 25px; /* Weniger Abstand innen, damit das Eingabefeld breiter wird */
-                border-radius: 12px;
-            }
-            h2 {
-                font-size: 1.5em; /* Überschrift leicht anpassen */
-                margin-bottom: 20px;
-            }
-            .form-input {
-                padding: 12px; /* Input-Feld leicht anpassen für Daumen */
-            }
-            .btn-submit {
-                padding: 15px; /* Button groß genug lassen zum Tippen */
-            }
+            h2 { font-size: 1.5em; margin-bottom: 20px; }
+            .form-input { padding: 12px; }
+            .btn-submit { padding: 15px; }
         }
 	</style>
 </h:head>
 
 <h:body>
-
-	<div class="header-bar">
-		<h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link" />
-	</div>
-
 	<div class="main-content">
+
+		<h:graphicImage name="images/logo.png" styleClass="gym-logo" alt="Smart Momo Gym Logo" />
+
 		<div class="register-card">
-			<h2>Neuer Athlet</h2>
+			<h2>Registrieren</h2>
 
 			<h:form>
 				<h:messages globalOnly="true" styleClass="global-messages" />
@@ -209,7 +187,9 @@
 								 f:passThroughValue="Dein Name..." />
 
 					<h:message for="usernameInput" styleClass="error-msg" />
+				</div>
 
+				<div class="form-group">
 					<h:outputLabel for="passwordInput" value="Passwort" styleClass="form-label" />
 					<h:inputSecret id="passwordInput"
 								   value="#{athleteController.password}"
@@ -222,9 +202,10 @@
 				<h:commandButton value="Konto erstellen"
 								 action="#{athleteController.register}"
 								 styleClass="btn-submit" />
+
+				<h:link value="Bereits ein Konto? Hier einloggen" outcome="login.xhtml" styleClass="link-text" />
 			</h:form>
 		</div>
 	</div>
-
 </h:body>
 </html>
