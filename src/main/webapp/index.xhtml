@@ -96,15 +96,22 @@
             border-bottom: 2px solid #444;
         }
 
+
+
+        .athlete-table tr:hover {
+            background-color: #333333;
+        }
+
+        /* TABELLEN ZELLEN */
         .athlete-table td {
-            padding: 15px;
+            padding: 0;
             border-bottom: 1px solid #333;
             color: #cfcfcf;
             vertical-align: middle;
         }
 
-        .athlete-table tr:hover {
-            background-color: #333333;
+        .athlete-table td:last-child {
+            padding: 15px;
         }
 
         /* KLICKBARER NAME */
@@ -114,6 +121,9 @@
             font-weight: bold;
             font-size: 1.1em;
             display: block;
+            padding: 15px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .athlete-name-link:hover {
             color: #64b5f6;

@@ -38,6 +38,8 @@
             gap: 8px;
             transition: color 0.2s;
             font-size: 1rem;
+            position: relative;
+            z-index: 10;
         }
         .back-link:hover { color: #fff; }
 
@@ -82,10 +84,20 @@
             align-items: center;
             margin-left: auto;
             margin-right: auto;
-            transition: transform 0.2s ease;
-            box-sizing: border-box; /* Verhindert, dass Padding die Box zu breit macht */
+            transition: transform 0.2s ease, background-color 0.2s, border-color 0.2s;
+            box-sizing: border-box;
+
+            /* NEU: WICHTIG FÜR STRETCHED LINK */
+            position: relative;
+            cursor: pointer;
         }
-        .plan-card:hover { border-color: #444; transform: translateY(-2px); }
+
+        /* NEU: Karten Hover-Effekt */
+        .plan-card:hover {
+            background-color: #252525;
+            border-color: #4facfe;
+            transform: translateY(-2px);
+        }
 
         .status-active { color: #4caf50; font-weight: bold; }
         .status-inactive { color: #b0b0b0; }
@@ -98,12 +110,26 @@
             display: block;
             margin-bottom: 5px;
         }
-        .plan-name-link:hover { color: #64b5f6; text-decoration: underline; }
+        .plan-name-link:hover { color: #64b5f6; }
+
+        /* NEU: Unsichtbare Decke über die gesamte Karte */
+        .plan-name-link::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+        }
 
         /* ACTION BUTTONS IN CARD */
         .card-actions {
             display: flex;
             gap: 10px;
+            /* NEU: Schützt die Buttons vor der unsichtbaren Decke */
+            position: relative;
+            z-index: 2;
         }
 
         .btn-icon {
@@ -137,6 +163,8 @@
             background-color: #1e1e1e; padding: 30px; border-radius: 12px;
             border: 1px solid #444; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             width: 90%; max-width: 400px; box-sizing: border-box;
+            position: relative;
+            z-index: 1001;
         }
         .modal-title { font-size: 1.2em; color: #4facfe; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .modal-input { width: 100%; padding: 10px; background: #2b2b2b; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; }
@@ -156,13 +184,13 @@
         /* --- MOBILE OPTIMIERUNG --- */
         @media (max-width: 600px) {
             .plan-card {
-                flex-direction: column; /* Text und Buttons untereinander */
-                align-items: flex-start; /* Linksbündig */
-                gap: 15px; /* Abstand zwischen Text und Buttons */
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
             }
             .card-actions {
                 width: 100%;
-                justify-content: flex-end; /* Buttons nach rechts anordnen */
+                justify-content: flex-end;
             }
             .main-container {
                 padding-left: 15px;
@@ -172,7 +200,7 @@
                 padding: 15px;
             }
             .modal-box {
-                padding: 20px; /* Auf ganz kleinen Displays etwas Platz sparen */
+                padding: 20px;
             }
         }
 	</style>
