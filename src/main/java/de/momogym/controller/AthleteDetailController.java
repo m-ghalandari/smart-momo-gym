@@ -1,5 +1,6 @@
 package de.momogym.controller;
 
+import de.momogym.auth.UserSession;
 import de.momogym.persistence.Athlete;
 import de.momogym.persistence.TrainingDay;
 import de.momogym.persistence.TrainingPlan;
@@ -18,7 +19,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.application.FacesMessage;
 
 @Named("athleteDetailController")
-@ViewScoped // Hält den 'athlete', solange die Detailseite offen ist
+@ViewScoped
 public class AthleteDetailController implements Serializable {
 
 	@Inject
@@ -27,7 +28,10 @@ public class AthleteDetailController implements Serializable {
 	@Inject
 	private TrainingPlanService trainingPlanService;
 
-	private Athlete athlete; // Der Athlet, den wir anzeigen
+	private Athlete athlete;
+
+	@Inject
+	private UserSession userSession;
 
 	private TrainingPlan planToEdit;
 	private String newPlanName;
@@ -53,6 +57,12 @@ public class AthleteDetailController implements Serializable {
 			} catch (NumberFormatException e) {
 				addErrorMessage("Ungültige Athleten-ID in der URL.");
 			}
+		}
+	}
+
+	public void toggleVisibility() {
+		if (athlete != null && userSession.isLoggedIn() && athlete.getId().equals(userSession.getLoggedInAthlete().getId())) {
+			athleteService.updateVisibility(athlete.getId(), athlete.isProfilePublic());
 		}
 	}
 

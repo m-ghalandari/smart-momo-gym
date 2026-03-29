@@ -55,6 +55,67 @@
         h2 { color: #ffffff; text-align: center; margin-top: 0; margin-bottom: 5px; font-size: 2em; }
         h3 { color: #b0b0b0; font-weight: normal; margin-top: 0; margin-bottom: 30px; text-align: center;}
 
+        /* --- SETTINGS CARD (Privatsphäre) --- */
+        .settings-card {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin: 0 auto 30px auto;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .settings-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+            padding-right: 15px;
+        }
+        .settings-title {
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .settings-desc {
+            color: #888;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        /* TOGGLE SWITCH */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #444;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px; width: 20px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #4facfe; }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+
         /* BUTTONS */
         .btn-create {
             background-color: #28a745;
@@ -86,13 +147,9 @@
             margin-right: auto;
             transition: transform 0.2s ease, background-color 0.2s, border-color 0.2s;
             box-sizing: border-box;
-
-            /* NEU: WICHTIG FÜR STRETCHED LINK */
             position: relative;
             cursor: pointer;
         }
-
-        /* NEU: Karten Hover-Effekt */
         .plan-card:hover {
             background-color: #252525;
             border-color: #4facfe;
@@ -111,47 +168,23 @@
             margin-bottom: 5px;
         }
         .plan-name-link:hover { color: #64b5f6; }
-
-        /* NEU: Unsichtbare Decke über die gesamte Karte */
         .plan-name-link::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 1;
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;
         }
 
         /* ACTION BUTTONS IN CARD */
         .card-actions {
-            display: flex;
-            gap: 10px;
-            /* NEU: Schützt die Buttons vor der unsichtbaren Decke */
-            position: relative;
-            z-index: 2;
+            display: flex; gap: 10px; position: relative; z-index: 2;
         }
-
         .btn-icon {
-            padding: 10px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 1.2em;
-            line-height: 1;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            cursor: pointer;
+            padding: 10px; border-radius: 6px; text-decoration: none; font-size: 1.2em;
+            line-height: 1; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+            background: transparent; cursor: pointer;
         }
-
         .btn-delete { border: 1px solid #ff6b6b; color: #ff6b6b; }
         .btn-delete:hover { background-color: #dc3545; border-color: #dc3545; color: white; }
-
         .btn-edit { border: 1px solid #ffc107; color: #ffc107; }
         .btn-edit:hover { background-color: #ffc107; color: black; }
-
 
         /* MODAL STYLES */
         .modal-overlay {
@@ -163,8 +196,7 @@
             background-color: #1e1e1e; padding: 30px; border-radius: 12px;
             border: 1px solid #444; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             width: 90%; max-width: 400px; box-sizing: border-box;
-            position: relative;
-            z-index: 1001;
+            position: relative; z-index: 1001;
         }
         .modal-title { font-size: 1.2em; color: #4facfe; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .modal-input { width: 100%; padding: 10px; background: #2b2b2b; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; }
@@ -178,30 +210,16 @@
         .checkbox-list td { padding: 5px 0; }
         .checkbox-list label { margin-left: 8px; color: #ddd; cursor: pointer;}
         .checkbox-list input { accent-color: #007bff; }
-
         .action-container { text-align: center; margin-top: 30px; margin-bottom: 50px; }
 
         /* --- MOBILE OPTIMIERUNG --- */
         @media (max-width: 600px) {
-            .plan-card {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            .card-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-            .main-container {
-                padding-left: 15px;
-                padding-right: 15px;
-            }
-            .header-bar {
-                padding: 15px;
-            }
-            .modal-box {
-                padding: 20px;
-            }
+            .plan-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .card-actions { width: 100%; justify-content: flex-end; }
+            .main-container { padding-left: 15px; padding-right: 15px; }
+            .header-bar { padding: 15px; }
+            .modal-box { padding: 20px; }
+            .settings-card { flex-direction: row; } /* Schalter bleibt rechts neben dem Text */
         }
 	</style>
 </h:head>
@@ -218,6 +236,29 @@
 			<h:panelGroup rendered="#{athleteDetailController.athlete != null}">
 
 				<h2>#{athleteDetailController.athlete.username}</h2>
+
+				<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="settings-card">
+
+					<h:panelGroup id="privacyStatusInfo" layout="block" styleClass="settings-info">
+						<div class="settings-title">
+							#{athleteDetailController.athlete.profilePublic ? '🌍 Öffentliches Profil' : '🕵️ Privates Profil'}
+						</div>
+						<div class="settings-desc">
+							#{athleteDetailController.athlete.profilePublic ? 'Dein Name und deine Pläne sind auf dem Dashboard sichtbar.' : 'Ghost-Modus: Du bist für andere auf dem Dashboard unsichtbar.'}
+						</div>
+					</h:panelGroup>
+
+					<div class="settings-action">
+						<label class="switch">
+							<h:selectBooleanCheckbox value="#{athleteDetailController.athlete.profilePublic}">
+								<f:ajax listener="#{athleteDetailController.toggleVisibility}" render="privacyStatusInfo" />
+							</h:selectBooleanCheckbox>
+							<span class="slider"></span>
+						</label>
+					</div>
+
+				</h:panelGroup>
+
 				<h3>Trainingspläne</h3>
 
 				<h:panelGroup rendered="#{empty athleteDetailController.athlete.trainingPlans}">

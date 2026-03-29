@@ -24,9 +24,10 @@ public class DashboardController {
 
 	@PostConstruct
 	public void init(){
-		this.allAthletes = athleteService.findAllAthletes();
+		Long loggedInId = userSession.isLoggedIn() ? userSession.getLoggedInAthlete().getId() : -1L;
+		this.allAthletes = athleteService.findAllAthletes(loggedInId);
 		if (userSession.isLoggedIn()) {
-			Long loggedInId = userSession.getLoggedInAthlete().getId();
+			//Long loggedInId = userSession.getLoggedInAthlete().getId();
 			Athlete loggedInAthlete = null;
 
 			for (int i = 0; i < allAthletes.size(); i++) {

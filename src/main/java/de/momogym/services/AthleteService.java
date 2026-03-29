@@ -33,8 +33,14 @@ public class AthleteService {
 		}
 	}
 
-	public List<Athlete> findAllAthletes(){
-		return entityManager.createQuery("SELECT a FROM Athlete a ORDER BY UPPER(a.username) ASC", Athlete.class).getResultList();
+	public List<Athlete> findAllAthletes(Long loggedInAthleteId){
+		// Wenn niemand eingeloggt ist (z.B. Gast), setze ID auf -1, damit die DB nicht abstürzt
+		Long safeId = (loggedInAthleteId != null) ? loggedInAthleteId : -1L;
+
+		return entityManager.createQuery(
+				"SELECT a FROM Athlete a WHERE a.profilePublic = true OR a.id = :loggedInId ORDER BY UPPER(a.username) ASC", Athlete.class)
+			.setParameter("loggedInId", safeId)
+			.getResultList();
 	}
 
     /**
@@ -93,6 +99,12 @@ public class AthleteService {
 		}
 	}
 
-
+	public void updateVisibility(Long athleteId, boolean isPublic) {
+		Athlete athlete = entityManager.find(Athlete.class, athleteId);
+		if (athlete != null) {
+			athlete.setProfilePublic(isPublic);
+			entityManager.merge(athlete);
+		}
+	}
 
 }

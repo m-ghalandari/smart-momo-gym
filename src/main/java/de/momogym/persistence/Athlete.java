@@ -43,6 +43,9 @@ public class Athlete {
     )
     private List<ExerciseLog> logs = new ArrayList<>();
 
+	@Column(name = "PROFILE_PUBLIC")
+	private boolean profilePublic = true;
+
     public Athlete() {
     }
     public Athlete(String username, String password) {
@@ -85,6 +88,14 @@ public class Athlete {
     public void setTrainingPlans(List<TrainingPlan> trainingPlans) {
         this.trainingPlans = trainingPlans;
     }
+
+	public boolean isProfilePublic() {
+		return profilePublic;
+	}
+
+	public void setProfilePublic(boolean profilePublic) {
+		this.profilePublic = profilePublic;
+	}
 
     public List<ExerciseLog> getLogs() {
         return logs;
