@@ -125,6 +125,16 @@ public class AthleteDetailController implements Serializable {
 		return null; // Bleibt auf der gleichen Seite
 	}
 
+	public String deleteAccount() {
+		if (athlete != null && userSession.isLoggedIn() && athlete.getId().equals(userSession.getLoggedInAthlete().getId())) {
+
+			athleteService.deleteAthlete(athlete.getId());
+
+			return userSession.logout();
+		}
+		return null;
+	}
+
 	private void addErrorMessage(String detail) {
 		FacesContext.getCurrentInstance()
 			.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler", detail));

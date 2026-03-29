@@ -19,6 +19,7 @@
             padding: 0;
         }
 
+
         .header-bar {
             padding: 20px;
             width: 100%;
@@ -27,6 +28,9 @@
             top: 0;
             left: 0;
             z-index: 10;
+            display: flex;
+            justify-content: space-between; /* Links Zurück, Rechts Löschen */
+            align-items: center;
         }
 
         .back-link {
@@ -38,10 +42,31 @@
             gap: 8px;
             transition: color 0.2s;
             font-size: 1rem;
-            position: relative;
-            z-index: 10;
         }
         .back-link:hover { color: #fff; }
+
+        /* HEADER DELETE BUTTON */
+        .header-delete-form {
+            margin: 0;
+        }
+        .btn-header-delete {
+            background: transparent;
+            color: #ff6b6b;
+            border: 1px solid transparent;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-header-delete:hover {
+            background-color: rgba(255, 107, 107, 0.1);
+            border-color: #ff6b6b;
+        }
 
         .main-container {
             padding-top: 80px;
@@ -186,6 +211,7 @@
         .btn-edit { border: 1px solid #ffc107; color: #ffc107; }
         .btn-edit:hover { background-color: #ffc107; color: black; }
 
+
         /* MODAL STYLES */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -219,7 +245,7 @@
             .main-container { padding-left: 15px; padding-right: 15px; }
             .header-bar { padding: 15px; }
             .modal-box { padding: 20px; }
-            .settings-card { flex-direction: row; } /* Schalter bleibt rechts neben dem Text */
+            .settings-card { flex-direction: row; }
         }
 	</style>
 </h:head>
@@ -227,6 +253,15 @@
 <h:body>
 	<div class="header-bar">
 		<h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link"/>
+
+		<h:form styleClass="header-delete-form" rendered="#{athleteDetailController.athlete != null and athleteDetailController.athlete.id == userSession.loggedInAthlete.id}">
+			<h:commandLink action="#{athleteDetailController.deleteAccount}"
+						   styleClass="btn-header-delete"
+						   title="Account löschen"
+						   onclick="return confirm('Bist du dir GANZ sicher? Alle deine Pläne und Fortschritte gehen für immer verloren!');">
+				🗑️
+			</h:commandLink>
+		</h:form>
 	</div>
 
 	<div class="main-container">
@@ -238,7 +273,6 @@
 				<h2>#{athleteDetailController.athlete.username}</h2>
 
 				<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="settings-card">
-
 					<h:panelGroup id="privacyStatusInfo" layout="block" styleClass="settings-info">
 						<div class="settings-title">
 							#{athleteDetailController.athlete.profilePublic ? '🌍 Öffentliches Profil' : '🕵️ Privates Profil'}
@@ -256,7 +290,6 @@
 							<span class="slider"></span>
 						</label>
 					</div>
-
 				</h:panelGroup>
 
 				<h3>Trainingspläne</h3>

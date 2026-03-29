@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:h="jakarta.faces.html"
 	  xmlns:f="jakarta.faces.core"
+	  xmlns:ui="jakarta.faces.facelets"
 	  lang="de">
 <h:head>
 	<title>Dashboard - Smart Momo Gym</title>
@@ -14,6 +15,7 @@
             padding: 20px;
             background-color: #121212;
             color: #e0e0e0;
+            margin: 0;
         }
 
         h2, h3 {
@@ -22,7 +24,13 @@
         }
 
         /* Zentrierte Überschriften */
-        h3 { text-align: center; }
+        h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+            color: #b0b0b0;
+            font-weight: normal;
+        }
 
         /* HEADER LAYOUT */
         .header-container {
@@ -31,7 +39,10 @@
             align-items: center;
             border-bottom: 1px solid #333;
             padding-bottom: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .header-actions {
@@ -74,81 +85,93 @@
             margin: 0;
         }
 
-        /* TABELLE */
-        .athlete-table {
-            width: 100%;
-            max-width: 600px;
-            border-collapse: collapse;
-            margin-top: 10px;
-            background-color: #1e1e1e;
-            border-radius: 8px;
+        /* NEU: MODERNE ATHLETEN-LISTE */
+        .athlete-list {
+            max-width: 450px; /* Schön schmal und elegant */
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .athlete-card {
+            background: linear-gradient(145deg, #1e1e1e, #222);
+            border: 1px solid #333;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        .athlete-table th {
-            background-color: #2c2c2c;
-            color: #ffffff;
-            text-align: left;
-            padding: 15px;
-            border-bottom: 2px solid #444;
+        .athlete-card:hover {
+            transform: translateY(-3px);
+            border-color: #4facfe;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+            background: linear-gradient(145deg, #222, #2a2a2a);
         }
 
-
-
-        .athlete-table tr:hover {
-            background-color: #333333;
-        }
-
-        /* TABELLEN ZELLEN */
-        .athlete-table td {
-            padding: 0;
-            border-bottom: 1px solid #333;
-            color: #cfcfcf;
-            vertical-align: middle;
-        }
-
-        .athlete-table td:last-child {
-            padding: 15px;
-        }
-
-        /* KLICKBARER NAME */
-        .athlete-name-link {
-            color: #e0e0e0;
+        .athlete-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
             text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1em;
-            display: block;
-            padding: 15px;
+            color: #e0e0e0;
             width: 100%;
             box-sizing: border-box;
         }
-        .athlete-name-link:hover {
-            color: #64b5f6;
-            text-decoration: none;
+
+        .athlete-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        /* LÖSCHEN BUTTON */
-        .btn-icon-delete {
-            color: #ff6b6b;
-            background-color: transparent;
-            border: 1px solid #ff6b6b;
-            padding: 6px 10px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 1.2em;
-            line-height: 1;
-            transition: all 0.2s ease;
-            display: inline-block;
+        .athlete-avatar {
+            font-size: 1.4em;
+            background-color: #121212;
+            border: 1px solid #444;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
         }
 
-        .btn-icon-delete:hover {
-            background-color: #dc3545;
-            color: white;
-            border-color: #dc3545;
-            cursor: pointer;
+        .athlete-card:hover .athlete-avatar {
+            border-color: #4facfe;
+            color: #4facfe;
+        }
+
+        .athlete-name {
+            font-weight: bold;
+            font-size: 1.15em;
+        }
+
+        .badge-you {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #000;
+            font-size: 0.65em;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 5px rgba(79, 172, 254, 0.3);
+        }
+
+        .arrow-icon {
+            color: #555;
+            font-size: 1.5em;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .athlete-card:hover .arrow-icon {
+            color: #4facfe;
+            transform: translateX(4px); /* Pfeil bewegt sich leicht nach rechts */
         }
 
         /* MOBILE REGELN */
@@ -156,6 +179,7 @@
             .header-container {
                 flex-direction: column;
                 gap: 15px;
+                border-bottom: none;
             }
             .header-actions {
                 flex-direction: column;
@@ -169,6 +193,9 @@
             .logout-form {
                 width: 100%;
             }
+            .athlete-list {
+                padding: 0 10px;
+            }
         }
 	</style>
 </h:head>
@@ -177,7 +204,7 @@
 
 	<div class="header-container">
 		<div>
-			<h2 style="margin:0;">Smart Momo Gym</h2>
+			<h2 style="margin:0; text-align: center;">Smart Momo Gym</h2>
 		</div>
 
 		<div class="header-actions">
@@ -193,43 +220,36 @@
 		</div>
 	</div>
 
-	<h3>Alle Athleten</h3>
+	<h3>Athleten</h3>
 
 	<h:panelGroup rendered="#{empty dashboardController.allAthletes}">
-		<p style="text-align: center; color: #888;">Noch keine Athleten registriert.</p>
+		<p style="text-align: center; color: #888; font-style: italic;">Noch keine Athleten sichtbar.</p>
 	</h:panelGroup>
 
-	<h:form id="dashboardForm" rendered="#{not empty dashboardController.allAthletes}">
+	<h:panelGroup rendered="#{not empty dashboardController.allAthletes}" layout="block" styleClass="athlete-list">
 
-		<h:dataTable value="#{dashboardController.allAthletes}" var="athlete"
-					 styleClass="athlete-table">
-
-			<h:column>
-				<f:facet name="header">Name</f:facet>
-
-				<h:link value="#{athlete.username}"
-						outcome="athleteDetail"
-						styleClass="athlete-name-link">
+		<ui:repeat value="#{dashboardController.allAthletes}" var="athlete">
+			<div class="athlete-card">
+				<h:link outcome="athleteDetail" styleClass="athlete-link">
 					<f:param name="athleteId" value="#{athlete.id}" />
+
+					<div class="athlete-info">
+						<div class="athlete-avatar">👤</div>
+						<div class="athlete-name">
+							#{athlete.username}
+
+							<h:panelGroup rendered="#{athlete.id == userSession.loggedInAthlete.id}">
+								<span class="badge-you">Du</span>
+							</h:panelGroup>
+						</div>
+					</div>
+
+					<div class="arrow-icon">›</div>
 				</h:link>
-			</h:column>
+			</div>
+		</ui:repeat>
 
-			<h:column>
-				<f:facet name="header"></f:facet>
-				<div style="text-align: right;">
-					<h:commandLink action="#{dashboardController.deleteAthlete(athlete.id)}"
-								   rendered="#{athlete.id == userSession.loggedInAthlete.id}"
-								   styleClass="btn-icon-delete"
-								   title="Eigenen Account löschen"
-								   onclick="return confirm('Willst du deinen Account wirklich löschen? Alle Pläne gehen verloren.');">
-						🗑️
-						<f:ajax render="@form"/>
-					</h:commandLink>
-				</div>
-			</h:column>
-
-		</h:dataTable>
-	</h:form>
+	</h:panelGroup>
 
 </h:body>
 </html>
