@@ -38,505 +38,166 @@
             margin-right: auto;
         }
 
-        .header-left {
-            flex: 1;
-            display: flex;
-            justify-content: flex-start;
-        }
+        .header-left { flex: 1; display: flex; justify-content: flex-start; }
+        .header-center { flex: 2; text-align: center; }
+        .header-right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 15px; }
 
-        .header-center {
-            flex: 2;
-            text-align: center;
-        }
-
-        .header-right {
-            flex: 1;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .media-links {
-            display: flex;
-            gap: 8px;
-            margin-top: 6px;
-        }
-
+        .media-links { display: flex; gap: 8px; margin-top: 6px; }
         .media-badge {
-            font-size: 0.7em;
-            text-decoration: none;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            transition: all 0.2s;
-            border: 1px solid transparent;
+            font-size: 0.7em; text-decoration: none; padding: 3px 8px; border-radius: 4px;
+            font-weight: 600; display: inline-flex; align-items: center; gap: 4px;
+            transition: all 0.2s; border: 1px solid transparent;
         }
+        .media-badge.video { color: #28a745; border-color: #28a745; background-color: rgba(255, 107, 107, 0.1); }
+        .media-badge.video:hover { background-color: #28a745; color: white; }
+        .media-badge.gif { color: #4facfe; border-color: #4facfe; background-color: rgba(79, 172, 254, 0.1); }
+        .media-badge.gif:hover { background-color: #4facfe; color: white; }
 
-        .media-badge.video {
-            color: #28a745;
-            border-color: #28a745;
-            background-color: rgba(255, 107, 107, 0.1);
-        }
-
-        .media-badge.video:hover {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .media-badge.gif {
-            color: #4facfe;
-            border-color: #4facfe;
-            background-color: rgba(79, 172, 254, 0.1);
-        }
-
-        .media-badge.gif:hover {
-            background-color: #4facfe;
-            color: white;
-        }
-
-        h2 {
-            margin: 0;
-            font-size: 1.8em;
-            color: white;
-            white-space: nowrap;
-        }
-
-        .subtitle {
-            display: block;
-            font-size: 0.6em;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-        }
+        h2 { margin: 0; font-size: 1.8em; color: white; white-space: nowrap; }
+        .subtitle { display: block; font-size: 0.6em; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
 
         /* TAB NAVIGATION */
         .tabs-container {
-            display: flex;
-            justify-content: flex-start;
-            gap: 10px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            scrollbar-width: thin;
-            scrollbar-color: #444 #1e1e1e;
+            display: flex; justify-content: flex-start; gap: 10px; margin-bottom: 20px;
+            overflow-x: auto; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: #444 #1e1e1e;
             -webkit-overflow-scrolling: touch;
         }
-
-        @media (min-width: 601px) {
-            .tabs-container {
-                justify-content: center;
-            }
-        }
+        @media (min-width: 601px) { .tabs-container { justify-content: center; } }
 
         .tab-btn {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-            color: #aaa;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-            white-space: nowrap;
-            text-decoration: none;
-            display: inline-block;
-            flex-shrink: 0;
+            background-color: #1e1e1e; border: 1px solid #333; color: #aaa; padding: 12px 20px;
+            border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s;
+            white-space: nowrap; text-decoration: none; display: inline-block; flex-shrink: 0;
         }
-
-        .tab-btn:hover {
-            background-color: #2a2a2a;
-            color: white;
-        }
-
-        .tab-btn.active {
-            background-color: #4facfe;
-            color: #000;
-            border-color: #4facfe;
-            box-shadow: 0 0 15px rgba(79, 172, 254, 0.4);
-        }
+        .tab-btn:hover { background-color: #2a2a2a; color: white; }
+        .tab-btn.active { background-color: #4facfe; color: #000; border-color: #4facfe; box-shadow: 0 0 15px rgba(79, 172, 254, 0.4); }
 
         /* CONTENT CARD */
         .day-card {
-            background-color: #161616;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.3s ease-out;
+            background-color: #161616; border: 1px solid #333; border-radius: 12px;
+            padding: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 0.3s ease-out;
         }
-
         .day-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px;
         }
-
-        .day-card-title {
-            margin: 0;
-            color: #4facfe;
-            font-size: 1.4em;
-        }
+        .day-card-title { margin: 0; color: #4facfe; font-size: 1.4em; }
 
         .btn-delete-day {
+            background-color: transparent; border: 1px solid #dc3545; color: #dc3545;
+            padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85em;
+            font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 5px; text-decoration: none;
+        }
+        .btn-delete-day:hover { background-color: #dc3545; color: white; box-shadow: 0 0 10px rgba(220, 53, 69, 0.4); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* TABELLEN-WRAPPER */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .exercise-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 25px; min-width: 500px; }
+        .exercise-table th { text-align: left; color: #666; text-transform: uppercase; font-size: 0.75em; letter-spacing: 1px; padding: 10px; border-bottom: 1px solid #333; }
+        .exercise-table td { padding: 15px 10px; border-bottom: 1px solid #222; color: #ddd; vertical-align: middle; }
+        .exercise-table tr:last-child td { border-bottom: none; }
+        .exercise-table tr:hover td { background-color: #1a1a1a; }
+
+        /* --- NEU: TOGGLE ADD FORM --- */
+        .btn-toggle-add {
             background-color: transparent;
-            border: 1px solid #dc3545;
-            color: #dc3545;
-            padding: 5px 12px;
-            border-radius: 6px;
+            border: 2px dashed #4facfe;
+            color: #4facfe;
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 0.85em;
-            font-weight: 600;
+            margin-bottom: 20px;
             transition: all 0.2s;
             display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 5px;
-            text-decoration: none;
+            gap: 10px;
+        }
+        .btn-toggle-add:hover {
+            background-color: rgba(79, 172, 254, 0.1);
+            color: #fff;
+            border-color: #fff;
         }
 
-        .btn-delete-day:hover {
-            background-color: #dc3545;
-            color: white;
-            box-shadow: 0 0 10px rgba(220, 53, 69, 0.4);
+        .add-form-wrapper {
+            display: none; /* Standardmäßig versteckt */
+            margin-bottom: 20px;
+        }
+        .add-form-wrapper.open {
+            display: block; /* Wird per JS geschaltet */
+            animation: slideDown 0.3s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* TABELLEN-WRAPPER */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .exercise-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-bottom: 25px;
-            min-width: 500px;
-        }
-
-        .exercise-table th {
-            text-align: left;
-            color: #666;
-            text-transform: uppercase;
-            font-size: 0.75em;
-            letter-spacing: 1px;
-            padding: 10px;
-            border-bottom: 1px solid #333;
-        }
-
-        .exercise-table td {
-            padding: 15px 10px;
-            border-bottom: 1px solid #222;
-            color: #ddd;
-            vertical-align: middle;
-        }
-
-        .exercise-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .exercise-table tr:hover td {
-            background-color: #1a1a1a;
-        }
-
-        /* ADD FORM */
+        /* ADD FORM (bestehend) */
         .add-form-container {
-            background-color: #1f1f1f;
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-            border: 1px solid #333;
-            flex-wrap: wrap;
+            background-color: #1f1f1f; padding: 15px; border-radius: 8px;
+            display: flex; gap: 10px; align-items: flex-end; border: 1px solid #333; flex-wrap: wrap;
         }
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 0.75em; color: #888; margin-bottom: 5px; font-weight: bold; }
+        .dark-input { background-color: #2b2b2b; border: 1px solid #444; color: white; padding: 10px; border-radius: 6px; outline: none; box-sizing: border-box; }
+        .dark-input:focus { border-color: #4facfe; }
+        .btn-add { background-color: #28a745; color: white; border: none; border-radius: 6px; width: 40px; height: 40px; font-size: 1.5em; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+        .btn-add:hover { transform: scale(1.05); background-color: #34ce57; }
+        .btn-delete-icon { color: #ff6b6b; text-decoration: none; font-size: 1.1em; opacity: 0.7; transition: opacity 0.2s; background: transparent; border: none; cursor: pointer; }
+        .btn-delete-icon:hover { opacity: 1; transform: scale(1.1); }
+        .back-link { color: #888; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: color 0.2s; }
+        .back-link:hover { color: #fff; }
 
-        .input-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .input-group label {
-            font-size: 0.75em;
-            color: #888;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .dark-input {
-            background-color: #2b2b2b;
-            border: 1px solid #444;
-            color: white;
-            padding: 10px;
-            border-radius: 6px;
-            outline: none;
-            box-sizing: border-box;
-        }
-
-        .dark-input:focus {
-            border-color: #4facfe;
-        }
-
-        .btn-add {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            width: 40px;
-            height: 40px;
-            font-size: 1.5em;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-        }
-
-        .btn-add:hover {
-            transform: scale(1.05);
-            background-color: #34ce57;
-        }
-
-        .btn-delete-icon {
-            color: #ff6b6b;
-            text-decoration: none;
-            font-size: 1.1em;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-delete-icon:hover {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        .back-link {
-            color: #888;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: color 0.2s;
-        }
-
-        .back-link:hover {
-            color: #fff;
-        }
-
-        /* TOGGLE SWITCH */
-        .header-toggle {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #1a1a1a;
-            padding: 8px 15px;
-            border-radius: 30px;
-            border: 1px solid #333;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 46px;
-            height: 24px;
-        }
-
+        /* TOGGLE SWITCH (Aktiv/Inaktiv) */
+        .header-toggle { display: flex; align-items: center; gap: 12px; background: #1a1a1a; padding: 8px 15px; border-radius: 30px; border: 1px solid #333; }
+        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #444;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px; width: 18px;
-            left: 3px; bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: #28a745; }
         input:checked + .slider:before { transform: translateX(22px); }
 
         /* MODAL */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.2s;
-        }
-
-        .modal-box {
-            background-color: #1e1e1e;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid #444;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            width: 90%;
-            max-width: 400px;
-            box-sizing: border-box;
-        }
-
-        .modal-header {
-            font-size: 1.2em;
-            color: #4facfe;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn-cancel {
-            background: transparent;
-            border: 1px solid #666;
-            color: #aaa;
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 1000; display: flex; justify-content: center; align-items: center; animation: fadeIn 0.2s; }
+        .modal-box { background-color: #1e1e1e; padding: 30px; border-radius: 12px; border: 1px solid #444; box-shadow: 0 20px 50px rgba(0,0,0,0.8); width: 90%; max-width: 400px; box-sizing: border-box; }
+        .modal-header { font-size: 1.2em; color: #4facfe; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .btn-cancel { background: transparent; border: 1px solid #666; color: #aaa; padding: 8px 15px; border-radius: 6px; cursor: pointer; }
         .btn-cancel:hover { border-color: #bbb; color: #fff; }
-
-        .btn-save-modal {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+        .btn-save-modal { background-color: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .btn-save-modal:hover { background-color: #0056b3; }
-
-        .btn-edit-icon {
-            color: #ffc107;
-            background: none; border: none; cursor: pointer;
-            font-size: 1.1em;
-            margin-right: 10px;
-            transition: transform 0.2s;
-            text-decoration: none;
-        }
+        .btn-edit-icon { color: #ffc107; background: none; border: none; cursor: pointer; font-size: 1.1em; margin-right: 10px; transition: transform 0.2s; text-decoration: none; }
         .btn-edit-icon:hover { transform: scale(1.1); color: #ffca2c; }
 
         /* WORKOUT BUTTON */
-        .btn-start-workout {
-            display: block;
-            width: 100%;
-            background-color: #ff9800;
-            color: #000;
-            text-align: center;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 1.3em;
-            font-weight: bold;
-            text-decoration: none;
-            margin-top: 20px;
-            transition: all 0.2s;
-            box-sizing: border-box;
-        }
-        .btn-start-workout:hover {
-            background-color: #ffb300;
-            transform: scale(1.02);
-        }
-
-        .btn-stats {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background-color: transparent;
-            border: 1px solid #4facfe;
-            color: #4facfe;
-            padding: 8px 16px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.85em;
-            transition: all 0.2s;
-        }
-        .btn-stats:hover {
-            background-color: #4facfe;
-            color: #000;
-            box-shadow: 0 0 12px rgba(79, 172, 254, 0.4);
-        }
+        .btn-start-workout { display: block; width: 100%; background-color: #ff9800; color: #000; text-align: center; padding: 15px; border-radius: 8px; font-size: 1.3em; font-weight: bold; text-decoration: none; margin-top: 20px; transition: all 0.2s; box-sizing: border-box; }
+        .btn-start-workout:hover { background-color: #ffb300; transform: scale(1.02); }
+        .btn-stats { display: inline-flex; align-items: center; gap: 6px; background-color: transparent; border: 1px solid #4facfe; color: #4facfe; padding: 8px 16px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 0.85em; transition: all 0.2s; }
+        .btn-stats:hover { background-color: #4facfe; color: #000; box-shadow: 0 0 12px rgba(79, 172, 254, 0.4); }
 
         /* --- MOBILE OPTIMIERUNG --- */
         @media (max-width: 600px) {
             body { padding: 10px; }
-            .header-bar {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            .header-left {
-                width: 100%;
-                justify-content: flex-start; /* Zwingt den Zurück-Button nach links */
-            }
-            .header-center, .header-right {
-                width: 100%;
-                justify-content: center;
-            }
+            .header-bar { flex-direction: column; gap: 15px; text-align: center; }
+            .header-left { width: 100%; justify-content: flex-start; }
+            .header-center, .header-right { width: 100%; justify-content: center; }
             .header-right { flex-wrap: wrap; }
             .day-card { padding: 15px; }
-            .day-card-header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            .add-form-container {
-                flex-direction: column;
-                align-items: stretch;
-            }
+            .day-card-header { flex-direction: column; gap: 15px; text-align: center; }
+            .add-form-container { flex-direction: column; align-items: stretch; }
             .input-group { width: 100% !important; }
-
-            /* Damit Dropdowns auf dem Handy gut aussehen */
-            select.dark-input {
-                width: 100%;
-                appearance: none;
-                -webkit-appearance: none;
-                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-                background-repeat: no-repeat;
-                background-position: right 10px center;
-                background-size: 15px;
-                padding-right: 30px;
-            }
-
+            select.dark-input { width: 100%; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 10px center; background-size: 15px; padding-right: 30px; }
             .btn-add { width: 100%; margin-top: 10px; }
             .media-links { flex-wrap: wrap; }
         }
-	</style></h:head>
+	</style>
+</h:head>
 
 <h:body>
 	<h:messages globalOnly="true"
@@ -546,67 +207,37 @@
 
 		<h:panelGroup id="editModal">
 			<h:panelGroup rendered="#{planEditorController.exerciseToEdit != null}" layout="block" styleClass="modal-overlay">
-
 				<div class="modal-box">
-					<div class="modal-header">
-						Übung bearbeiten
-					</div>
-
-					<div style="margin-bottom: 10px; color: #888; font-size: 0.9em;">
-						#{planEditorController.exerciseToEdit.exercise.name}
-					</div>
-
-					<div class="input-group" style="margin-bottom: 15px;">
-						<label>Sätze</label>
-						<h:inputText value="#{planEditorController.exerciseToEdit.sets}" styleClass="dark-input" />
-					</div>
-
-					<div class="input-group" style="margin-bottom: 15px;">
-						<label>Wiederholungen</label>
-						<h:inputText value="#{planEditorController.exerciseToEdit.reps}" styleClass="dark-input" />
-					</div>
-
-					<div class="input-group" style="margin-bottom: 15px;">
-						<label>Gewicht (kg)</label>
-						<h:inputText value="#{planEditorController.exerciseToEdit.weight}" styleClass="dark-input" />
-					</div>
-
+					<div class="modal-header">Übung bearbeiten</div>
+					<div style="margin-bottom: 10px; color: #888; font-size: 0.9em;">#{planEditorController.exerciseToEdit.exercise.name}</div>
+					<div class="input-group" style="margin-bottom: 15px;"><label>Sätze</label><h:inputText value="#{planEditorController.exerciseToEdit.sets}" styleClass="dark-input" /></div>
+					<div class="input-group" style="margin-bottom: 15px;"><label>Wiederholungen</label><h:inputText value="#{planEditorController.exerciseToEdit.reps}" styleClass="dark-input" /></div>
+					<div class="input-group" style="margin-bottom: 15px;"><label>Gewicht (kg)</label><h:inputText value="#{planEditorController.exerciseToEdit.weight}" styleClass="dark-input" /></div>
 					<div class="modal-actions">
-						<h:commandButton value="Abbrechen" action="#{planEditorController.cancelEdit}" styleClass="btn-cancel">
-							<f:ajax render=":mainForm:editModal" />
-						</h:commandButton>
-
-						<h:commandButton value="Speichern" action="#{planEditorController.saveEdit}" styleClass="btn-save-modal">
-							<f:ajax execute="editModal" render="@form" />
-						</h:commandButton>
+						<h:commandButton value="Abbrechen" action="#{planEditorController.cancelEdit}" styleClass="btn-cancel"><f:ajax render=":mainForm:editModal" /></h:commandButton>
+						<h:commandButton value="Speichern" action="#{planEditorController.saveEdit}" styleClass="btn-save-modal"><f:ajax execute="editModal" render="@form" /></h:commandButton>
 					</div>
 				</div>
-
 			</h:panelGroup>
 		</h:panelGroup>
 
 
 		<div class="header-bar">
-
 			<div class="header-left">
 				<h:link outcome="athleteDetail" styleClass="back-link">
 					<f:param name="athleteId" value="#{planEditorController.trainingPlan.athlete.id}"/>
 					<span>← Zurück</span>
 				</h:link>
 			</div>
-
 			<div class="header-center">
 				<span class="subtitle">Plan Editor</span>
 				<h2>#{planEditorController.trainingPlan.name}</h2>
 			</div>
-
 			<div class="header-right">
-
 				<h:link outcome="progress" styleClass="btn-stats" title="Fortschritt anzeigen">
 					<f:param name="planId" value="#{planEditorController.planId}" />
 					<span>Statistiken</span>
 				</h:link>
-
 				<h:panelGroup rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="header-toggle">
 					<span style="color: #aaa; font-size: 0.85em; font-weight: 600;">Aktiv</span>
 					<label class="switch">
@@ -616,19 +247,15 @@
 						<span class="slider"></span>
 					</label>
 				</h:panelGroup>
-
 				<h:panelGroup rendered="#{planEditorController.trainingPlan.athlete.id != userSession.loggedInAthlete.id}" layout="block" style="padding: 8px 15px; border: 1px solid #333; border-radius: 30px; background: #1a1a1a;">
-					<span style="font-weight: 600; font-size: 0.85em; color: #{planEditorController.trainingPlan.active ? '#28a745' : '#888'};">
-						#{planEditorController.trainingPlan.active ? 'AKTIV' : 'INAKTIV'}
-					</span>
+                <span style="font-weight: 600; font-size: 0.85em; color: #{planEditorController.trainingPlan.active ? '#28a745' : '#888'};">
+                   #{planEditorController.trainingPlan.active ? 'AKTIV' : 'INAKTIV'}
+                </span>
 				</h:panelGroup>
-
 			</div>
-
 		</div>
 
 		<div class="content-container">
-
 			<div class="tabs-container">
 				<ui:repeat value="#{planEditorController.trainingPlan.trainingDays}" var="day">
 					<h:commandLink value="#{day.name}"
@@ -640,7 +267,6 @@
 			</div>
 
 			<h:panelGroup id="dayContent">
-
 				<ui:repeat value="#{planEditorController.trainingPlan.trainingDays}" var="day">
 					<h:panelGroup rendered="#{planEditorController.activeDayId == day.id}">
 
@@ -652,70 +278,30 @@
 											   rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}"
 											   styleClass="btn-delete-day"
 											   onclick="return confirm('Ganzen Tag #{day.name} und alle Übungen löschen?');">
-									<span>Tag löschen</span>
-									<span>🗑️</span>
+									<span>Tag löschen</span><span>🗑️</span>
 									<f:ajax render="@form"/>
 								</h:commandLink>
 							</div>
 
 							<div class="table-responsive">
-								<h:dataTable value="#{day.plannedExercises}" var="pe"
-											 styleClass="exercise-table"
-											 rendered="#{not empty day.plannedExercises}">
-
+								<h:dataTable value="#{day.plannedExercises}" var="pe" styleClass="exercise-table" rendered="#{not empty day.plannedExercises}">
 									<h:column>
 										<f:facet name="header">Übung</f:facet>
 										<strong style="color: #fff;">#{pe.exercise.name}</strong>
 										<div style="font-size: 0.8em; color: #666;">#{pe.exercise.targetMuscle}</div>
-
 										<div class="media-links">
-
-											<h:outputLink value="#{pe.exercise.videoLink}" target="_blank"
-														  styleClass="media-badge video"
-														  rendered="#{not empty pe.exercise.videoLink}">
-												<span>▶ Video</span>
-											</h:outputLink>
-
-											<h:outputLink value="#{pe.exercise.gifUrl}" target="_blank"
-														  styleClass="media-badge gif"
-														  rendered="#{not empty pe.exercise.gifUrl}">
-												<span>👾 GIF</span>
-											</h:outputLink>
+											<h:outputLink value="#{pe.exercise.videoLink}" target="_blank" styleClass="media-badge video" rendered="#{not empty pe.exercise.videoLink}"><span>▶ Video</span></h:outputLink>
+											<h:outputLink value="#{pe.exercise.gifUrl}" target="_blank" styleClass="media-badge gif" rendered="#{not empty pe.exercise.gifUrl}"><span>👾 GIF</span></h:outputLink>
 										</div>
 									</h:column>
-
-									<h:column>
-										<f:facet name="header">Sätze</f:facet>
-										#{pe.sets}
-									</h:column>
-
-									<h:column>
-										<f:facet name="header">Wdh.</f:facet>
-										#{pe.reps}
-									</h:column>
-
-									<h:column>
-										<f:facet name="header">Gewicht</f:facet>
-										<span style="color: #4facfe;">#{pe.weight} kg</span>
-									</h:column>
-
+									<h:column><f:facet name="header">Sätze</f:facet>#{pe.sets}</h:column>
+									<h:column><f:facet name="header">Wdh.</f:facet>#{pe.reps}</h:column>
+									<h:column><f:facet name="header">Gewicht</f:facet><span style="color: #4facfe;">#{pe.weight} kg</span></h:column>
 									<h:column>
 										<f:facet name="header"></f:facet>
 										<h:panelGroup layout="block" style="text-align: right; min-width: 60px;" rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}">
-											<h:commandLink action="#{planEditorController.prepareEdit(pe)}"
-														   styleClass="btn-edit-icon"
-														   title="Bearbeiten">
-												✏️
-												<f:ajax render=":mainForm:editModal" />
-											</h:commandLink>
-
-											<h:commandLink action="#{planEditorController.removeExercise(pe.id)}"
-														   styleClass="btn-delete-icon"
-														   title="Entfernen"
-														   onclick="return confirm('Weg damit?');">
-												🗑️
-												<f:ajax render="@form" />
-											</h:commandLink>
+											<h:commandLink action="#{planEditorController.prepareEdit(pe)}" styleClass="btn-edit-icon" title="Bearbeiten">✏️<f:ajax render=":mainForm:editModal" /></h:commandLink>
+											<h:commandLink action="#{planEditorController.removeExercise(pe.id)}" styleClass="btn-delete-icon" title="Entfernen" onclick="return confirm('Weg damit?');">🗑️<f:ajax render="@form" /></h:commandLink>
 										</h:panelGroup>
 									</h:column>
 								</h:dataTable>
@@ -728,42 +314,40 @@
 							</h:panelGroup>
 
 							<h:panelGroup rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}">
-								<div class="add-form-container">
 
-									<div class="input-group" style="flex-grow: 2; min-width: 150px;">
-										<label>Übung hinzufügen</label>
-										<h:selectOneMenu value="#{planEditorController.getInputForDay(day.id).exerciseId}"
-														 styleClass="dark-input">
-											<f:selectItem itemLabel="Wählen..." itemValue="#{null}"/>
-											<f:selectItems value="#{planEditorController.availableExercises}" var="ex"
-														   itemValue="#{ex.id}"
-														   itemLabel="#{ex.name}"/>
-										</h:selectOneMenu>
+								<button class="btn-toggle-add" onclick="document.getElementById('add-wrapper-#{day.id}').classList.toggle('open'); return false;">
+									<span>➕ Übung hinzufügen</span>
+								</button>
+
+								<div id="add-wrapper-#{day.id}" class="add-form-wrapper">
+									<div class="add-form-container">
+										<div class="input-group" style="flex-grow: 2; min-width: 150px;">
+											<label>Übung auswählen</label>
+											<h:selectOneMenu value="#{planEditorController.getInputForDay(day.id).exerciseId}" styleClass="dark-input">
+												<f:selectItem itemLabel="Wählen..." itemValue="#{null}"/>
+												<f:selectItems value="#{planEditorController.availableExercises}" var="ex" itemValue="#{ex.id}" itemLabel="#{ex.name}"/>
+											</h:selectOneMenu>
+										</div>
+
+										<div class="input-group" style="width: 60px;">
+											<label>Sätze</label>
+											<h:inputText value="#{planEditorController.getInputForDay(day.id).sets}" styleClass="dark-input" style="text-align: center;"/>
+										</div>
+
+										<div class="input-group" style="width: 70px;">
+											<label>Wdh.</label>
+											<h:inputText value="#{planEditorController.getInputForDay(day.id).reps}" styleClass="dark-input" style="text-align: center;"/>
+										</div>
+
+										<div class="input-group" style="width: 70px;">
+											<label>Kg</label>
+											<h:inputText value="#{planEditorController.getInputForDay(day.id).weight}" styleClass="dark-input" style="text-align: center;"/>
+										</div>
+
+										<h:commandButton value="+" action="#{planEditorController.addExercise(day.id)}" styleClass="btn-add">
+											<f:ajax execute="@form" render="@form"/>
+										</h:commandButton>
 									</div>
-
-									<div class="input-group" style="width: 60px;">
-										<label>Sätze</label>
-										<h:inputText value="#{planEditorController.getInputForDay(day.id).sets}"
-													 styleClass="dark-input" style="text-align: center;"/>
-									</div>
-
-									<div class="input-group" style="width: 70px;">
-										<label>Wdh.</label>
-										<h:inputText value="#{planEditorController.getInputForDay(day.id).reps}"
-													 styleClass="dark-input" style="text-align: center;"/>
-									</div>
-
-									<div class="input-group" style="width: 70px;">
-										<label>Kg</label>
-										<h:inputText value="#{planEditorController.getInputForDay(day.id).weight}"
-													 styleClass="dark-input" style="text-align: center;"/>
-									</div>
-
-									<h:commandButton value="+"
-													 action="#{planEditorController.addExercise(day.id)}"
-													 styleClass="btn-add">
-										<f:ajax execute="@form" render="@form"/>
-									</h:commandButton>
 								</div>
 							</h:panelGroup>
 
@@ -778,10 +362,8 @@
 						</div>
 					</h:panelGroup>
 				</ui:repeat>
-
 			</h:panelGroup>
 		</div>
 	</h:form>
-
 </h:body>
 </html>
