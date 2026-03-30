@@ -42,13 +42,13 @@
         .header-center { flex: 2; text-align: center; }
         .header-right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 15px; }
 
-        .media-links { display: flex; gap: 8px; margin-top: 6px; }
+        .media-links { display: flex; gap: 8px; margin-top: 10px; }
         .media-badge {
-            font-size: 0.7em; text-decoration: none; padding: 3px 8px; border-radius: 4px;
+            font-size: 0.7em; text-decoration: none; padding: 4px 10px; border-radius: 4px;
             font-weight: 600; display: inline-flex; align-items: center; gap: 4px;
             transition: all 0.2s; border: 1px solid transparent;
         }
-        .media-badge.video { color: #28a745; border-color: #28a745; background-color: rgba(255, 107, 107, 0.1); }
+        .media-badge.video { color: #28a745; border-color: #28a745; background-color: rgba(40, 167, 69, 0.1); }
         .media-badge.video:hover { background-color: #28a745; color: white; }
         .media-badge.gif { color: #4facfe; border-color: #4facfe; background-color: rgba(79, 172, 254, 0.1); }
         .media-badge.gif:hover { background-color: #4facfe; color: white; }
@@ -56,13 +56,12 @@
         h2 { margin: 0; font-size: 1.8em; color: white; white-space: nowrap; }
         .subtitle { display: block; font-size: 0.6em; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
 
-        /* TAB NAVIGATION */
+        /* TAB NAVIGATION - IMMER ZENTRIERT */
         .tabs-container {
-            display: flex; justify-content: flex-start; gap: 10px; margin-bottom: 20px;
+            display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;
             overflow-x: auto; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: #444 #1e1e1e;
             -webkit-overflow-scrolling: touch;
         }
-        @media (min-width: 601px) { .tabs-container { justify-content: center; } }
 
         .tab-btn {
             background-color: #1e1e1e; border: 1px solid #333; color: #aaa; padding: 12px 20px;
@@ -92,15 +91,97 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* TABELLEN-WRAPPER */
-        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .exercise-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 25px; min-width: 500px; }
-        .exercise-table th { text-align: left; color: #666; text-transform: uppercase; font-size: 0.75em; letter-spacing: 1px; padding: 10px; border-bottom: 1px solid #333; }
-        .exercise-table td { padding: 15px 10px; border-bottom: 1px solid #222; color: #ddd; vertical-align: middle; }
-        .exercise-table tr:last-child td { border-bottom: none; }
-        .exercise-table tr:hover td { background-color: #1a1a1a; }
+        /* --- NEU: MODERNE ÜBUNGS-KARTEN (Ersetzt die Tabelle) --- */
+        .exercise-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
 
-        /* --- NEU: TOGGLE ADD FORM --- */
+        .exercise-item {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            transition: border-color 0.2s;
+        }
+
+        .exercise-item:hover {
+            border-color: #4facfe;
+            background-color: #1e1e1e;
+        }
+
+        .exercise-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .exercise-item-title {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .exercise-item-title strong {
+            color: #fff;
+            font-size: 1.15em;
+        }
+
+        .exercise-item-title .muscle {
+            color: #888;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .exercise-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .exercise-item-stats {
+            display: flex;
+            background-color: #121212;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #222;
+        }
+
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            text-align: center;
+            border-right: 1px solid #2a2a2a;
+        }
+
+        .stat-box:last-child {
+            border-right: none;
+        }
+
+        .stat-label {
+            font-size: 0.65em;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            color: #ddd;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .stat-value.highlight {
+            color: #4facfe;
+        }
+
+
+        /* TOGGLE ADD FORM */
         .btn-toggle-add {
             background-color: transparent;
             border: 2px dashed #4facfe;
@@ -118,38 +199,21 @@
             align-items: center;
             gap: 10px;
         }
-        .btn-toggle-add:hover {
-            background-color: rgba(79, 172, 254, 0.1);
-            color: #fff;
-            border-color: #fff;
-        }
+        .btn-toggle-add:hover { background-color: rgba(79, 172, 254, 0.1); color: #fff; border-color: #fff; }
 
-        .add-form-wrapper {
-            display: none; /* Standardmäßig versteckt */
-            margin-bottom: 20px;
-        }
-        .add-form-wrapper.open {
-            display: block; /* Wird per JS geschaltet */
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .add-form-wrapper { display: none; margin-bottom: 20px; }
+        .add-form-wrapper.open { display: block; animation: slideDown 0.3s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ADD FORM (bestehend) */
-        .add-form-container {
-            background-color: #1f1f1f; padding: 15px; border-radius: 8px;
-            display: flex; gap: 10px; align-items: flex-end; border: 1px solid #333; flex-wrap: wrap;
-        }
+        .add-form-container { background-color: #1f1f1f; padding: 15px; border-radius: 8px; display: flex; gap: 10px; align-items: flex-end; border: 1px solid #333; flex-wrap: wrap; }
         .input-group { display: flex; flex-direction: column; }
         .input-group label { font-size: 0.75em; color: #888; margin-bottom: 5px; font-weight: bold; }
         .dark-input { background-color: #2b2b2b; border: 1px solid #444; color: white; padding: 10px; border-radius: 6px; outline: none; box-sizing: border-box; }
         .dark-input:focus { border-color: #4facfe; }
         .btn-add { background-color: #28a745; color: white; border: none; border-radius: 6px; width: 40px; height: 40px; font-size: 1.5em; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
         .btn-add:hover { transform: scale(1.05); background-color: #34ce57; }
-        .btn-delete-icon { color: #ff6b6b; text-decoration: none; font-size: 1.1em; opacity: 0.7; transition: opacity 0.2s; background: transparent; border: none; cursor: pointer; }
+        .btn-delete-icon { color: #ff6b6b; text-decoration: none; font-size: 1.1em; opacity: 0.7; transition: opacity 0.2s; background: transparent; border: none; cursor: pointer; padding: 5px; }
         .btn-delete-icon:hover { opacity: 1; transform: scale(1.1); }
         .back-link { color: #888; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: color 0.2s; }
         .back-link:hover { color: #fff; }
@@ -172,7 +236,7 @@
         .btn-cancel:hover { border-color: #bbb; color: #fff; }
         .btn-save-modal { background-color: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .btn-save-modal:hover { background-color: #0056b3; }
-        .btn-edit-icon { color: #ffc107; background: none; border: none; cursor: pointer; font-size: 1.1em; margin-right: 10px; transition: transform 0.2s; text-decoration: none; }
+        .btn-edit-icon { color: #ffc107; background: none; border: none; cursor: pointer; font-size: 1.1em; transition: transform 0.2s; text-decoration: none; padding: 5px; }
         .btn-edit-icon:hover { transform: scale(1.1); color: #ffca2c; }
 
         /* WORKOUT BUTTON */
@@ -283,29 +347,55 @@
 								</h:commandLink>
 							</div>
 
-							<div class="table-responsive">
-								<h:dataTable value="#{day.plannedExercises}" var="pe" styleClass="exercise-table" rendered="#{not empty day.plannedExercises}">
-									<h:column>
-										<f:facet name="header">Übung</f:facet>
-										<strong style="color: #fff;">#{pe.exercise.name}</strong>
-										<div style="font-size: 0.8em; color: #666;">#{pe.exercise.targetMuscle}</div>
-										<div class="media-links">
-											<h:outputLink value="#{pe.exercise.videoLink}" target="_blank" styleClass="media-badge video" rendered="#{not empty pe.exercise.videoLink}"><span>▶ Video</span></h:outputLink>
-											<h:outputLink value="#{pe.exercise.gifUrl}" target="_blank" styleClass="media-badge gif" rendered="#{not empty pe.exercise.gifUrl}"><span>👾 GIF</span></h:outputLink>
+							<h:panelGroup layout="block" styleClass="exercise-list" rendered="#{not empty day.plannedExercises}">
+
+								<ui:repeat value="#{day.plannedExercises}" var="pe">
+									<div class="exercise-item">
+
+										<div class="exercise-item-header">
+											<div class="exercise-item-title">
+												<strong>#{pe.exercise.name}</strong>
+												<span class="muscle">#{pe.exercise.targetMuscle}</span>
+											</div>
+
+											<h:panelGroup layout="block" styleClass="exercise-actions" rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}">
+												<h:commandLink action="#{planEditorController.prepareEdit(pe)}" styleClass="btn-edit-icon" title="Bearbeiten">
+													✏️<f:ajax render=":mainForm:editModal" />
+												</h:commandLink>
+												<h:commandLink action="#{planEditorController.removeExercise(pe.id)}" styleClass="btn-delete-icon" title="Entfernen" onclick="return confirm('Weg damit?');">
+													🗑️<f:ajax render="@form" />
+												</h:commandLink>
+											</h:panelGroup>
 										</div>
-									</h:column>
-									<h:column><f:facet name="header">Sätze</f:facet>#{pe.sets}</h:column>
-									<h:column><f:facet name="header">Wdh.</f:facet>#{pe.reps}</h:column>
-									<h:column><f:facet name="header">Gewicht</f:facet><span style="color: #4facfe;">#{pe.weight} kg</span></h:column>
-									<h:column>
-										<f:facet name="header"></f:facet>
-										<h:panelGroup layout="block" style="text-align: right; min-width: 60px;" rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}">
-											<h:commandLink action="#{planEditorController.prepareEdit(pe)}" styleClass="btn-edit-icon" title="Bearbeiten">✏️<f:ajax render=":mainForm:editModal" /></h:commandLink>
-											<h:commandLink action="#{planEditorController.removeExercise(pe.id)}" styleClass="btn-delete-icon" title="Entfernen" onclick="return confirm('Weg damit?');">🗑️<f:ajax render="@form" /></h:commandLink>
-										</h:panelGroup>
-									</h:column>
-								</h:dataTable>
-							</div>
+
+										<div class="exercise-item-stats">
+											<div class="stat-box">
+												<span class="stat-label">Sätze</span>
+												<span class="stat-value">#{pe.sets}</span>
+											</div>
+											<div class="stat-box">
+												<span class="stat-label">Wdh.</span>
+												<span class="stat-value">#{pe.reps}</span>
+											</div>
+											<div class="stat-box">
+												<span class="stat-label">Gewicht</span>
+												<span class="stat-value highlight">#{pe.weight} kg</span>
+											</div>
+										</div>
+
+										<div class="media-links">
+											<h:outputLink value="#{pe.exercise.videoLink}" target="_blank" styleClass="media-badge video" rendered="#{not empty pe.exercise.videoLink}">
+												<span>▶ Video</span>
+											</h:outputLink>
+											<h:outputLink value="#{pe.exercise.gifUrl}" target="_blank" styleClass="media-badge gif" rendered="#{not empty pe.exercise.gifUrl}">
+												<span>👾 GIF</span>
+											</h:outputLink>
+										</div>
+
+									</div>
+								</ui:repeat>
+
+							</h:panelGroup>
 
 							<h:panelGroup rendered="#{empty day.plannedExercises}">
 								<div style="text-align: center; padding: 30px; color: #555; border: 2px dashed #333; border-radius: 8px; margin-bottom: 20px;">
