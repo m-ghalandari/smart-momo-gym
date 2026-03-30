@@ -36,10 +36,12 @@
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+            /* Sorgt dafür, dass die 3 Boxen (Links, Mitte, Rechts) den Platz fair aufteilen */
+            justify-content: space-between;
         }
 
         .header-left { flex: 1; display: flex; justify-content: flex-start; }
-        .header-center { flex: 2; text-align: center; }
+        .header-center { flex: 1; text-align: center; } /* Auf flex: 1 geändert für bessere Balance */
         .header-right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 15px; }
 
         .media-links { display: flex; gap: 8px; margin-top: 10px; }
@@ -54,7 +56,6 @@
         .media-badge.gif:hover { background-color: #4facfe; color: white; }
 
         h2 { margin: 0; font-size: 1.8em; color: white; white-space: nowrap; }
-        .subtitle { display: block; font-size: 0.6em; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
 
         /* TAB NAVIGATION - IMMER ZENTRIERT */
         .tabs-container {
@@ -77,10 +78,9 @@
             padding: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 0.3s ease-out;
         }
         .day-card-header {
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; justify-content: flex-end; align-items: center;
             border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px;
         }
-        .day-card-title { margin: 0; color: #4facfe; font-size: 1.4em; }
 
         .btn-delete-day {
             background-color: transparent; border: 1px solid #dc3545; color: #dc3545;
@@ -91,7 +91,7 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- NEU: MODERNE ÜBUNGS-KARTEN (Ersetzt die Tabelle) --- */
+        /* --- MODERNE ÜBUNGS-KARTEN --- */
         .exercise-list {
             display: flex;
             flex-direction: column;
@@ -180,7 +180,6 @@
             color: #4facfe;
         }
 
-
         /* TOGGLE ADD FORM */
         .btn-toggle-add {
             background-color: transparent;
@@ -215,17 +214,19 @@
         .btn-add:hover { transform: scale(1.05); background-color: #34ce57; }
         .btn-delete-icon { color: #ff6b6b; text-decoration: none; font-size: 1.1em; opacity: 0.7; transition: opacity 0.2s; background: transparent; border: none; cursor: pointer; padding: 5px; }
         .btn-delete-icon:hover { opacity: 1; transform: scale(1.1); }
-        .back-link { color: #888; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: color 0.2s; }
+
+        /* HEADER LINKS/BUTTONS COMPACT */
+        .back-link { color: #888; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: color 0.2s; font-size: 0.9em; }
         .back-link:hover { color: #fff; }
 
-        /* TOGGLE SWITCH (Aktiv/Inaktiv) */
-        .header-toggle { display: flex; align-items: center; gap: 12px; background: #1a1a1a; padding: 8px 15px; border-radius: 30px; border: 1px solid #333; }
-        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+        /* TOGGLE SWITCH (Aktiv/Inaktiv) - KOMPAKTER GEMACHT FÜR HANDY */
+        .header-toggle { display: flex; align-items: center; gap: 8px; background: #1a1a1a; padding: 5px 10px; border-radius: 30px; border: 1px solid #333; }
+        .switch { position: relative; display: inline-block; width: 36px; height: 20px; } /* Kleiner */
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; } /* Kleiner */
         input:checked + .slider { background-color: #28a745; }
-        input:checked + .slider:before { transform: translateX(22px); }
+        input:checked + .slider:before { transform: translateX(16px); } /* Angepasst auf neue Breite */
 
         /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 1000; display: flex; justify-content: center; align-items: center; animation: fadeIn 0.2s; }
@@ -242,18 +243,44 @@
         /* WORKOUT BUTTON */
         .btn-start-workout { display: block; width: 100%; background-color: #ff9800; color: #000; text-align: center; padding: 15px; border-radius: 8px; font-size: 1.3em; font-weight: bold; text-decoration: none; margin-top: 20px; transition: all 0.2s; box-sizing: border-box; }
         .btn-start-workout:hover { background-color: #ffb300; transform: scale(1.02); }
-        .btn-stats { display: inline-flex; align-items: center; gap: 6px; background-color: transparent; border: 1px solid #4facfe; color: #4facfe; padding: 8px 16px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 0.85em; transition: all 0.2s; }
+        .btn-stats { display: inline-flex; align-items: center; gap: 6px; background-color: transparent; border: 1px solid #4facfe; color: #4facfe; padding: 5px 12px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 0.75em; transition: all 0.2s; } /* Kompakter */
         .btn-stats:hover { background-color: #4facfe; color: #000; box-shadow: 0 0 12px rgba(79, 172, 254, 0.4); }
 
         /* --- MOBILE OPTIMIERUNG --- */
         @media (max-width: 600px) {
             body { padding: 10px; }
-            .header-bar { flex-direction: column; gap: 15px; text-align: center; }
-            .header-left { width: 100%; justify-content: flex-start; }
-            .header-center, .header-right { width: 100%; justify-content: center; }
-            .header-right { flex-wrap: wrap; }
+
+            /* HEADER BAR: Alles zwingend in einer Zeile */
+            .header-bar {
+                flex-direction: row;
+                flex-wrap: nowrap; /* Verhindert den Umbruch auf eine neue Zeile */
+                gap: 5px;
+                padding-bottom: 10px;
+            }
+
+            /* Links und Rechts bekommen den gleichen Flex-Wert, damit die Mitte auch wirklich mittig ist */
+            .header-left { flex: 1; }
+
+            .header-right {
+                flex: 1;
+                gap: 8px;
+                justify-content: flex-end;
+            }
+
+            /* Der Titel exakt zentriert in der Mitte */
+            .header-center {
+                flex: 1;
+                text-align: center; /* Zwingt den Text in die Mitte */
+                padding-left: 0;
+                /* Schützt das Layout, falls ein Plan-Name auf dem Handy zu lang ist */
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            h2 { font-size: 1.3em; } /* Titel minimal kleiner für's Handy */
+
             .day-card { padding: 15px; }
-            .day-card-header { flex-direction: column; gap: 15px; text-align: center; }
             .add-form-container { flex-direction: column; align-items: stretch; }
             .input-group { width: 100% !important; }
             select.dark-input { width: 100%; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 10px center; background-size: 15px; padding-right: 30px; }
@@ -285,7 +312,6 @@
 			</h:panelGroup>
 		</h:panelGroup>
 
-
 		<div class="header-bar">
 			<div class="header-left">
 				<h:link outcome="athleteDetail" styleClass="back-link">
@@ -294,16 +320,13 @@
 				</h:link>
 			</div>
 			<div class="header-center">
-				<span class="subtitle">Plan Editor</span>
 				<h2>#{planEditorController.trainingPlan.name}</h2>
 			</div>
 			<div class="header-right">
 				<h:link outcome="progress" styleClass="btn-stats" title="Fortschritt anzeigen">
 					<f:param name="planId" value="#{planEditorController.planId}" />
-					<span>Statistiken</span>
-				</h:link>
+					<span>📊</span> </h:link>
 				<h:panelGroup rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="header-toggle">
-					<span style="color: #aaa; font-size: 0.85em; font-weight: 600;">Aktiv</span>
 					<label class="switch">
 						<h:selectBooleanCheckbox value="#{planEditorController.trainingPlan.active}">
 							<f:ajax listener="#{planEditorController.toggleActiveStatus}"/>
@@ -311,8 +334,8 @@
 						<span class="slider"></span>
 					</label>
 				</h:panelGroup>
-				<h:panelGroup rendered="#{planEditorController.trainingPlan.athlete.id != userSession.loggedInAthlete.id}" layout="block" style="padding: 8px 15px; border: 1px solid #333; border-radius: 30px; background: #1a1a1a;">
-                <span style="font-weight: 600; font-size: 0.85em; color: #{planEditorController.trainingPlan.active ? '#28a745' : '#888'};">
+				<h:panelGroup rendered="#{planEditorController.trainingPlan.athlete.id != userSession.loggedInAthlete.id}" layout="block" style="padding: 5px 10px; border: 1px solid #333; border-radius: 30px; background: #1a1a1a;">
+                <span style="font-weight: 600; font-size: 0.75em; color: #{planEditorController.trainingPlan.active ? '#28a745' : '#888'};">
                    #{planEditorController.trainingPlan.active ? 'AKTIV' : 'INAKTIV'}
                 </span>
 				</h:panelGroup>
@@ -336,8 +359,6 @@
 
 						<div class="day-card">
 							<div class="day-card-header">
-								<h3 class="day-card-title">#{day.name}</h3>
-
 								<h:commandLink action="#{planEditorController.deleteTrainingDay(day.id)}"
 											   rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}"
 											   styleClass="btn-delete-day"
