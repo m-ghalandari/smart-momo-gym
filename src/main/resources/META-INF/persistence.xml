@@ -6,15 +6,13 @@
 
 	<persistence-unit name="trainingsverwaltung-pu" transaction-type="JTA">
 
-		<jta-data-source>java:app/jdbc/NeonDS</jta-data-source>
+		<jta-data-source>java:jboss/datasources/NeonDS</jta-data-source>
 
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-
 			<property name="hibernate.hbm2ddl.auto" value="update"/>
-
 			<property name="hibernate.show_sql" value="true"/>
 			<property name="hibernate.format_sql" value="true"/>
 		</properties>
