@@ -7,155 +7,96 @@
 
 <h:head>
 	<title>Live Workout</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 	<style>
+        /* --- GLOBAL THEME --- */
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #0a0a0a;
-            color: #e0e0e0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: #050505;
+            color: #f0f0f0;
             margin: 0;
-            padding: 20px;
+            padding: 20px 15px;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        .container { max-width: 600px; margin: 0 auto; padding-bottom: 50px; }
 
-        /* HEADER OPTIMIERT */
+        /* HEADER */
         .header {
-            position: relative;
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 20px;
+            position: relative; text-align: center; margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px;
         }
-
         .btn-back {
-            position: absolute;
-            left: 0;
-            top: 5px;
-            color: #888;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1em;
+            position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+            color: #888; text-decoration: none; font-weight: 600; font-size: 1.2em;
+            background: rgba(255,255,255,0.05); width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; transition: 0.2s;
         }
+        .btn-back:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
-        .header h1 {
-            color: #ff9800; /* Auffälliges Orange für den Workout-Modus */
-            margin: 0;
-            font-size: 2em;
-        }
+        .header h1 { color: #ff9800; margin: 0; font-size: 1.8em; font-weight: 800; letter-spacing: 1px; }
+        .header-sub { color: #888; margin-top: 5px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1.5px; }
 
+        /* --- EXERCISE CARDS --- */
         .exercise-card {
-            background-color: #161616;
-            border: 1px solid #333;
-            border-left: 5px solid #4facfe; /* Blaue Markierung */
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px; /* Abstand zwischen Text und Button */
-            box-sizing: border-box;
+            background: #121212;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 20px; margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            display: flex; flex-direction: column; gap: 15px;
+            position: relative; overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .exercise-info h3 {
-            margin: 0 0 5px 0;
-            color: #fff;
-        }
+        /* Orange Markierung für Offene Übungen */
+        .card-pending { border-left: 4px solid #ff9800; }
 
-        .exercise-stats {
-            color: #aaa;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
+        /* Ausgegraut und grün für Erledigte Übungen */
+        .card-completed { border-left: 4px solid #28a745; opacity: 0.6; }
 
-        .input-row {
-            display: flex;
-            gap: 10px;
-        }
+        .exercise-info { display: flex; justify-content: space-between; align-items: flex-start; }
+        .exercise-info h3 { margin: 0 0 4px 0; color: #fff; font-size: 1.3em; }
+        .exercise-stats { color: #4facfe; font-size: 0.8em; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+
+        /* INPUT ROW */
+        .input-row { display: flex; gap: 10px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; }
+        .input-group { flex: 1; display: flex; flex-direction: column; align-items: center; }
+        .input-group label { font-size: 0.7em; color: #888; margin-bottom: 6px; text-transform: uppercase; font-weight: bold; }
 
         .input-box {
-            background-color: #2b2b2b;
-            border: 1px solid #444;
-            color: white;
-            padding: 10px;
-            border-radius: 6px;
-            width: 60px;
-            text-align: center;
-            font-size: 1.1em;
-            box-sizing: border-box;
+            background-color: #0a0a0a; border: 1px solid #333; color: white;
+            padding: 12px; border-radius: 10px; width: 100%; text-align: center;
+            font-size: 1.2em; font-weight: bold; box-sizing: border-box; transition: 0.2s;
         }
+        .input-box:focus { border-color: #ff9800; outline: none; }
 
+        /* Statische Anzeige für erledigte Übungen */
+        .static-val { font-size: 1.4em; font-weight: bold; color: #ddd; }
+
+        /* ACTION BUTTONS */
         .btn-done {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 15px 20px;
-            border-radius: 8px;
-            font-size: 1.2em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: rgba(40, 167, 69, 0.1); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.3);
+            padding: 16px; border-radius: 14px; font-size: 1.1em; font-weight: bold;
+            cursor: pointer; transition: all 0.2s; width: 100%; display: flex; justify-content: center; gap: 8px;
         }
-
-        .btn-done:hover {
-            background-color: #34ce57;
-            transform: scale(1.05);
-        }
+        .btn-done:hover { background: #28a745; color: white; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4); }
 
         .btn-finish-workout {
-            display: block;
-            width: 100%;
-            background-color: #dc3545;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 1.2em;
-            font-weight: bold;
-            text-decoration: none;
-            margin-top: 40px;
-            border: none;
-            cursor: pointer;
-            box-sizing: border-box;
+            display: block; width: 100%; background: linear-gradient(135deg, #ff5252 0%, #d50000 100%);
+            color: white; text-align: center; padding: 18px; border-radius: 16px;
+            font-size: 1.2em; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            text-decoration: none; margin-top: 40px; border: none; cursor: pointer; box-shadow: 0 10px 20px rgba(255, 82, 82, 0.3);
         }
+        .btn-finish-workout:active { transform: scale(0.98); }
 
-        /* --- MOBILE OPTIMIERUNG --- */
+        .section-title { color: #888; font-size: 0.9em; text-transform: uppercase; letter-spacing: 2px; margin: 30px 0 15px 0; text-align: center; }
+
+        /* MOBILE OPTIMIERUNG */
         @media (max-width: 600px) {
-            body {
-                padding: 15px;
-            }
-            .header {
-                padding-top: 40px; /* Platz machen, damit Titel und Zurück-Button nicht überlappen */
-            }
-            .btn-back {
-                top: 0;
-            }
-            .exercise-card {
-                flex-direction: column; /* Alles untereinander auf dem Handy */
-                align-items: stretch;
-                text-align: center;
-            }
-            .input-row {
-                justify-content: center; /* Inputs mittig zentrieren */
-                margin-bottom: 15px;
-            }
-            .input-box {
-                flex: 1; /* Inputs nehmen gleichmäßig Platz ein */
-                max-width: 80px;
-            }
-            .btn-done {
-                width: 100%; /* Großer Button über die volle Breite */
-                padding: 15px;
-            }
+            .header { padding-top: 50px; } /* Platz für den absoluten Zurück-Button */
+            .btn-back { top: 0; transform: none; }
         }
 	</style>
 </h:head>
@@ -164,41 +105,81 @@
 	<div class="container">
 
 		<div class="header">
-			<h:link outcome="planEditor" value="← Zurück" styleClass="btn-back">
+			<h:link outcome="planEditor" styleClass="btn-back">
 				<f:param name="planId" value="#{workoutSessionController.planId}" />
 				<f:param name="dayId" value="#{workoutSessionController.trainingDay.id}" />
+				❮
 			</h:link>
 			<h1>🔥 Live Workout</h1>
-			<div style="color: #aaa; margin-top: 5px;">#{workoutSessionController.trainingDay.name}</div>
+			<div class="header-sub">#{workoutSessionController.trainingDay.name}</div>
 		</div>
 
 		<h:form id="workoutForm">
-			<ui:repeat value="#{workoutSessionController.pendingExercises}" var="pe">
-				<div class="exercise-card">
-					<div class="exercise-info">
-						<h3>#{pe.plannedExercise.exercise.name}</h3>
-						<div class="exercise-stats">Ziel: #{pe.plannedExercise.sets} Sätze x #{pe.plannedExercise.reps} Wdh.</div>
+
+			<h:panelGroup rendered="#{not empty workoutSessionController.pendingExercises}">
+				<ui:repeat value="#{workoutSessionController.pendingExercises}" var="pe">
+					<div class="exercise-card card-pending">
+
+						<div class="exercise-info">
+							<div>
+								<h3>#{pe.plannedExercise.exercise.name}</h3>
+								<div class="exercise-stats">Ziel: #{pe.plannedExercise.sets}x#{pe.plannedExercise.reps}</div>
+							</div>
+						</div>
 
 						<div class="input-row">
-							<h:inputText value="#{pe.actualSets}" styleClass="input-box" title="Sätze" />
-							<h:inputText value="#{pe.actualReps}" styleClass="input-box" title="Wdh." />
-							<h:inputText value="#{pe.actualWeight}" styleClass="input-box" title="Kg" />
+							<div class="input-group">
+								<label>Sätze</label>
+								<h:inputText value="#{pe.actualSets}" styleClass="input-box" />
+							</div>
+							<div class="input-group">
+								<label>Wdh.</label>
+								<h:inputText value="#{pe.actualReps}" styleClass="input-box" />
+							</div>
+							<div class="input-group">
+								<label>Kg</label>
+								<h:inputText value="#{pe.actualWeight}" styleClass="input-box" />
+							</div>
 						</div>
-					</div>
 
-					<h:commandButton action="#{workoutSessionController.markAsDone(pe)}" value="✔️ Erledigt" styleClass="btn-done">
-						<f:ajax execute="@form" render="@form" />
-					</h:commandButton>
-				</div>
-			</ui:repeat>
+						<h:commandButton action="#{workoutSessionController.markAsDone(pe)}" value="✔️ Erledigt" styleClass="btn-done">
+							<f:ajax execute="@form" render="@form" />
+						</h:commandButton>
+					</div>
+				</ui:repeat>
+			</h:panelGroup>
 
 			<h:panelGroup rendered="#{empty workoutSessionController.pendingExercises}">
-				<div style="text-align: center; color: #28a745; font-size: 1.3em; font-weight: bold; margin-bottom: 20px;">
+				<div style="text-align: center; color: #28a745; font-size: 1.3em; font-weight: bold; margin: 30px 0; padding: 20px; background: rgba(40, 167, 69, 0.1); border-radius: 16px;">
 					🎉 Alles erledigt! Starkes Workout!
 				</div>
 			</h:panelGroup>
 
+
+			<h:panelGroup rendered="#{not empty workoutSessionController.completedExercises}">
+				<div class="section-title">Bereits erledigt</div>
+
+				<ui:repeat value="#{workoutSessionController.completedExercises}" var="donePe">
+					<div class="exercise-card card-completed">
+						<div class="exercise-info">
+							<div>
+								<h3>#{donePe.plannedExercise.exercise.name}</h3>
+								<div class="exercise-stats" style="color: #28a745;">Erfolgreich geloggt</div>
+							</div>
+							<div style="font-size: 1.5em; color: #28a745;">✔️</div>
+						</div>
+
+						<div class="input-row" style="background: transparent; padding: 0;">
+							<div class="input-group"><label>Sätze</label><span class="static-val">#{donePe.actualSets}</span></div>
+							<div class="input-group"><label>Wdh.</label><span class="static-val">#{donePe.actualReps}</span></div>
+							<div class="input-group"><label>Kg</label><span class="static-val">#{donePe.actualWeight}</span></div>
+						</div>
+					</div>
+				</ui:repeat>
+			</h:panelGroup>
+
 			<h:commandButton action="#{workoutSessionController.finishWorkout}" value="🏁 Workout beenden" styleClass="btn-finish-workout" />
+
 		</h:form>
 	</div>
 </h:body>

@@ -205,4 +205,9 @@ public class TrainingPlanService {
 		return query.getSingleResult() > 0;
 	}
 
+	public List<ExerciseLog> getLogsForTodayAndPlan(Long planId) {
+		return entityManager.createQuery("SELECT l FROM ExerciseLog l WHERE l.trainingPlan.id = :planId AND l.logDate = CURRENT_DATE", ExerciseLog.class)
+			.setParameter("planId", planId)
+			.getResultList();
+	}
 }
