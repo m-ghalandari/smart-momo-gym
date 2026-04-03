@@ -363,6 +363,7 @@
 						<f:facet name="header"></f:facet>
 						<h:commandLink
 								action="#{exerciseController.deleteExercise(ex.id)}"
+								rendered="#{userSession.loggedInAthlete.admin}"
 								styleClass="btn-delete-icon"
 								title="Löschen"
 								onclick="return confirm('Übung wirklich löschen?');">

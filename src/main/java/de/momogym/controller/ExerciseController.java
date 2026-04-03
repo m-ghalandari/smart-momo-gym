@@ -1,5 +1,6 @@
 package de.momogym.controller;
 
+import de.momogym.auth.UserSession;
 import de.momogym.exceptions.EntityAlreadyExistsException;
 import de.momogym.persistence.Exercise;
 import de.momogym.services.ExerciseService;
@@ -20,7 +21,9 @@ public class ExerciseController implements Serializable {
 	@Inject
 	private ExerciseService exerciseService;
 
-	// The controller needs a list of all exercises (for the table) and fields for a new exercise.
+	@Inject
+	private UserSession userSession;
+
 	private List<Exercise> allExercises;
 	private Exercise newExercise;
 
@@ -42,6 +45,10 @@ public class ExerciseController implements Serializable {
 	}
 
 	public void deleteExercise(Long exerciseId){
+		if(!userSession.getLoggedInAthlete().isAdmin()){
+			addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Nur Admins dürfen Übungen löschen!");
+			return;
+		}
 		try {
 			this.exerciseService.deleteExercise(exerciseId);
 			addMessage(FacesMessage.SEVERITY_INFO, "Gelöscht", "Die Übung ist erfolgreich gelöscht.");

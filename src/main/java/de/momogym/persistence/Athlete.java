@@ -25,6 +25,9 @@ public class Athlete {
 	@Column(name = "PASSWORD", nullable = false)
 	private String password;
 
+	@Column(name = "IS_ADMIN", columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean admin = false;
+
     // Ein Athlet hat VIELE Pläne
     @OneToMany(
             mappedBy = "athlete",
@@ -104,4 +107,10 @@ public class Athlete {
     public void setLogs(List<ExerciseLog> logs) {
         this.logs = logs;
     }
+	public boolean isAdmin() {
+		return admin;
+	}
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
 }
