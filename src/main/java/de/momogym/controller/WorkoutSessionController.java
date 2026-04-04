@@ -1,6 +1,7 @@
 package de.momogym.controller;
 
 import de.momogym.dto.WorkoutExerciseDTO;
+import de.momogym.dto.WorkoutSetDTO;
 import de.momogym.persistence.ExerciseLog;
 import de.momogym.persistence.PlannedExercise;
 import de.momogym.persistence.TrainingDay;
@@ -25,7 +26,7 @@ public class WorkoutSessionController implements Serializable {
 	private TrainingPlanService trainingPlanService;
 
 	private TrainingDay trainingDay;
-	private Long planId; // Um beim "Abbrechen" zurück navigieren zu können
+	private Long planId;
 
 	private List<WorkoutExerciseDTO> pendingExercises;
 	private List<WorkoutExerciseDTO> completedExercises;
@@ -55,9 +56,17 @@ public class WorkoutSessionController implements Serializable {
 
 				if (logMap.containsKey(pe.getExercise().getId())) {
 					ExerciseLog log = logMap.get(pe.getExercise().getId());
-					dto.setActualSets(log.getSets());
-					dto.setActualReps(log.getReps());
-					dto.setActualWeight(log.getWeight());
+
+					String[] loggedReps = log.getReps() != null ? log.getReps().split(",\\s*") : new String[0];
+
+					for (int i = 0; i < dto.getSets().size(); i++) {
+						WorkoutSetDTO set = dto.getSets().get(i);
+						set.setCompleted(true);
+						set.setWeight(log.getWeight());
+						if (i < loggedReps.length) {
+							set.setReps(loggedReps[i]);
+						}
+					}
 					completedExercises.add(dto);
 				} else {
 					pendingExercises.add(dto);
@@ -66,18 +75,31 @@ public class WorkoutSessionController implements Serializable {
 		}
 	}
 
-	public void markAsDone(WorkoutExerciseDTO exercise) {
-		pendingExercises.remove(exercise);
-		trainingPlanService.logWorkoutExercise(
-			this.planId,
-			exercise.getPlannedExercise().getExercise().getId(),
-			exercise.getActualSets(),
-			exercise.getActualReps(),
-			exercise.getActualWeight()
-		);
+	public void markSetAsDone(WorkoutExerciseDTO exercise, WorkoutSetDTO set) {
+		set.setCompleted(true);
 
-		pendingExercises.remove(exercise);
-		completedExercises.add(exercise);
+		if (exercise.isAllSetsCompleted()) {
+
+			String aggregatedReps = exercise.getSets().stream()
+				.map(WorkoutSetDTO::getReps)
+				.reduce((r1, r2) -> r1 + ", " + r2)
+				.orElse("");
+
+			Double maxWeight = exercise.getSets().stream()
+				.mapToDouble(WorkoutSetDTO::getWeight)
+				.max().orElse(0.0);
+
+			trainingPlanService.logWorkoutExercise(
+				this.planId,
+				exercise.getPlannedExercise().getExercise().getId(),
+				exercise.getSets().size(),
+				aggregatedReps,
+				maxWeight
+			);
+
+			pendingExercises.remove(exercise);
+			completedExercises.add(exercise);
+		}
 	}
 
 	public String finishWorkout(){

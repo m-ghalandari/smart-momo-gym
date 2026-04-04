@@ -18,9 +18,10 @@
             margin: 0;
             padding: 20px 15px;
             -webkit-font-smoothing: antialiased;
+            padding-bottom: 120px;
         }
 
-        .container { max-width: 600px; margin: 0 auto; padding-bottom: 50px; }
+        .container { max-width: 600px; margin: 0 auto; }
 
         /* HEADER */
         .header {
@@ -50,38 +51,38 @@
             transition: all 0.3s ease;
         }
 
-        /* Orange Markierung für Offene Übungen */
         .card-pending { border-left: 4px solid #ff9800; }
-
-        /* Ausgegraut und grün für Erledigte Übungen */
         .card-completed { border-left: 4px solid #28a745; opacity: 0.6; }
 
         .exercise-info { display: flex; justify-content: space-between; align-items: flex-start; }
         .exercise-info h3 { margin: 0 0 4px 0; color: #fff; font-size: 1.3em; }
         .exercise-stats { color: #4facfe; font-size: 0.8em; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
 
-        /* INPUT ROW */
-        .input-row { display: flex; gap: 10px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; }
-        .input-group { flex: 1; display: flex; flex-direction: column; align-items: center; }
-        .input-group label { font-size: 0.7em; color: #888; margin-bottom: 6px; text-transform: uppercase; font-weight: bold; }
-
-        .input-box {
-            background-color: #0a0a0a; border: 1px solid #333; color: white;
-            padding: 12px; border-radius: 10px; width: 100%; text-align: center;
-            font-size: 1.2em; font-weight: bold; box-sizing: border-box; transition: 0.2s;
+        /* --- NEU: SET ROWS --- */
+        .set-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .set-row {
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 10px;
+            transition: all 0.3s;
         }
-        .input-box:focus { border-color: #ff9800; outline: none; }
-
-        /* Statische Anzeige für erledigte Übungen */
-        .static-val { font-size: 1.4em; font-weight: bold; color: #ddd; }
-
-        /* ACTION BUTTONS */
-        .btn-done {
-            background: rgba(40, 167, 69, 0.1); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.3);
-            padding: 16px; border-radius: 14px; font-size: 1.1em; font-weight: bold;
-            cursor: pointer; transition: all 0.2s; width: 100%; display: flex; justify-content: center; gap: 8px;
+        .set-row.is-done { background: rgba(40, 167, 69, 0.1); opacity: 0.7; }
+        .set-number { font-weight: bold; color: #888; width: 25px; }
+        .set-input-mini {
+            background: #0a0a0a; border: 1px solid #333; color: white;
+            padding: 8px; border-radius: 8px; width: 60px; text-align: center;
+            font-weight: bold; box-sizing: border-box; transition: 0.2s;
         }
-        .btn-done:hover { background: #28a745; color: white; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4); }
+        .set-input-mini:focus { border-color: #ff9800; outline: none; }
+
+        /* Check Buttons */
+        .btn-check-set {
+            background: rgba(255,255,255,0.05); color: #888; border: 1px solid #333;
+            width: 40px; height: 40px; border-radius: 10px; font-size: 1.1em;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-check-set:hover { background: rgba(40, 167, 69, 0.2); color: #28a745; border-color: #28a745; }
+        .btn-check-set.is-done { background: #28a745; color: white; border-color: #28a745; }
+
 
         .btn-finish-workout {
             display: block; width: 100%; background: linear-gradient(135deg, #ff5252 0%, #d50000 100%);
@@ -93,10 +94,42 @@
 
         .section-title { color: #888; font-size: 0.9em; text-transform: uppercase; letter-spacing: 2px; margin: 30px 0 15px 0; text-align: center; }
 
+        /* --- FLOATING REST TIMER --- */
+        .rest-timer-bar {
+            position: fixed; bottom: -150px; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 600px;
+            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255,255,255,0.1); border-top-left-radius: 24px; border-top-right-radius: 24px;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.8); z-index: 1000;
+            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        .rest-timer-bar.active { bottom: 0; }
+
+        .timer-progress-container { width: 100%; height: 4px; background: #222; }
+        .timer-progress { height: 100%; width: 100%; background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%); transition: width 1s linear; }
+
+        .timer-content { padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+        .timer-display-wrapper { display: flex; flex-direction: column; }
+        .timer-label { color: #888; font-size: 0.7em; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; margin-bottom: -5px; }
+        .timer-display { font-size: 2.5em; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; transition: color 0.3s; }
+
+        .timer-presets { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; justify-content: center; }
+        .btn-preset { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #ccc; padding: 6px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-preset:hover { background: #4facfe; color: #000; border-color: #4facfe; }
+
+        .timer-actions { display: flex; flex-direction: column; gap: 8px; }
+        .btn-timer-action { background: rgba(255,255,255,0.1); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; font-size: 0.9em; transition: 0.2s; }
+        .btn-timer-action:hover { background: rgba(255,255,255,0.2); }
+        .btn-timer-close { color: #ff5252; background: rgba(255,82,82,0.1); }
+        .btn-timer-close:hover { background: rgba(255,82,82,0.3); }
+
         /* MOBILE OPTIMIERUNG */
         @media (max-width: 600px) {
-            .header { padding-top: 50px; } /* Platz für den absoluten Zurück-Button */
+            .header { padding-top: 50px; }
             .btn-back { top: 0; transform: none; }
+            .timer-content { flex-direction: column; padding: 15px; }
+            .timer-actions { flex-direction: row; position: absolute; top: 15px; right: 15px; }
         }
 	</style>
 </h:head>
@@ -127,24 +160,31 @@
 							</div>
 						</div>
 
-						<div class="input-row">
-							<div class="input-group">
-								<label>Sätze</label>
-								<h:inputText value="#{pe.actualSets}" styleClass="input-box" />
+						<div class="set-list">
+							<div style="display: flex; justify-content: space-between; padding: 0 12px; font-size: 0.7em; color: #888; text-transform: uppercase; font-weight: bold;">
+								<span style="width: 25px;">Satz</span>
+								<span style="width: 60px; text-align: center;">Kg</span>
+								<span style="width: 60px; text-align: center;">Wdh</span>
+								<span style="width: 40px; text-align: center;">✓</span>
 							</div>
-							<div class="input-group">
-								<label>Wdh.</label>
-								<h:inputText value="#{pe.actualReps}" styleClass="input-box" />
-							</div>
-							<div class="input-group">
-								<label>Kg</label>
-								<h:inputText value="#{pe.actualWeight}" styleClass="input-box" />
-							</div>
+
+							<ui:repeat value="#{pe.sets}" var="set">
+								<div class="set-row #{set.completed ? 'is-done' : ''}">
+									<span class="set-number">#{set.setNumber}</span>
+									<h:inputText value="#{set.weight}" styleClass="set-input-mini" disabled="#{set.completed}" />
+									<h:inputText value="#{set.reps}" styleClass="set-input-mini" disabled="#{set.completed}" />
+
+									<h:commandButton action="#{workoutSessionController.markSetAsDone(pe, set)}"
+													 value="#{set.completed ? '✔️' : '☐'}"
+													 styleClass="btn-check-set #{set.completed ? 'is-done' : ''}"
+													 disabled="#{set.completed}"
+													 onclick="startRestTimer(90);">
+										<f:ajax execute="@form" render="@form" />
+									</h:commandButton>
+								</div>
+							</ui:repeat>
 						</div>
 
-						<h:commandButton action="#{workoutSessionController.markAsDone(pe)}" value="✔️ Erledigt" styleClass="btn-done">
-							<f:ajax execute="@form" render="@form" />
-						</h:commandButton>
 					</div>
 				</ui:repeat>
 			</h:panelGroup>
@@ -169,10 +209,22 @@
 							<div style="font-size: 1.5em; color: #28a745;">✔️</div>
 						</div>
 
-						<div class="input-row" style="background: transparent; padding: 0;">
-							<div class="input-group"><label>Sätze</label><span class="static-val">#{donePe.actualSets}</span></div>
-							<div class="input-group"><label>Wdh.</label><span class="static-val">#{donePe.actualReps}</span></div>
-							<div class="input-group"><label>Kg</label><span class="static-val">#{donePe.actualWeight}</span></div>
+						<div class="set-list">
+							<div style="display: flex; justify-content: space-between; padding: 0 12px; font-size: 0.7em; color: #888; text-transform: uppercase; font-weight: bold;">
+								<span style="width: 25px;">Satz</span>
+								<span style="width: 60px; text-align: center;">Kg</span>
+								<span style="width: 60px; text-align: center;">Wdh</span>
+								<span style="width: 40px; text-align: center;">✓</span>
+							</div>
+
+							<ui:repeat value="#{donePe.sets}" var="doneSet">
+								<div class="set-row is-done">
+									<span class="set-number">#{doneSet.setNumber}</span>
+									<span class="set-input-mini" style="border: none; background: transparent;">#{doneSet.weight}</span>
+									<span class="set-input-mini" style="border: none; background: transparent;">#{doneSet.reps}</span>
+									<div class="btn-check-set is-done" style="cursor: default;">✔️</div>
+								</div>
+							</ui:repeat>
 						</div>
 					</div>
 				</ui:repeat>
@@ -182,5 +234,106 @@
 
 		</h:form>
 	</div>
+
+	<div id="restTimerBar" class="rest-timer-bar">
+		<div class="timer-progress-container">
+			<div id="timerProgress" class="timer-progress"></div>
+		</div>
+		<div class="timer-content">
+			<div class="timer-display-wrapper">
+				<span class="timer-label">Pause</span>
+				<span id="timerDisplay" class="timer-display">01:30</span>
+			</div>
+
+			<div class="timer-presets">
+				<button type="button" class="btn-preset" onclick="setTimerPreset(60)">1 Min</button>
+				<button type="button" class="btn-preset" onclick="setTimerPreset(90)">1:30 Min</button>
+				<button type="button" class="btn-preset" onclick="setTimerPreset(120)">2 Min</button>
+				<button type="button" class="btn-preset" onclick="setTimerPreset(180)">3 Min</button>
+			</div>
+
+			<div class="timer-actions">
+				<button type="button" class="btn-timer-action" onclick="addTime(30)" title="+30 Sekunden">+30</button>
+				<button type="button" class="btn-timer-action btn-timer-close" onclick="closeTimer()" title="Timer beenden">✕</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+        let timerInterval = null;
+        let totalSeconds = 0;
+        let currentSeconds = 0;
+
+        function startRestTimer(seconds) {
+            document.getElementById('restTimerBar').classList.add('active');
+            setTimerPreset(seconds);
+        }
+
+        function setTimerPreset(seconds) {
+            clearInterval(timerInterval);
+            totalSeconds = seconds;
+            currentSeconds = seconds;
+            document.getElementById('timerDisplay').style.color = '#fff';
+            updateUI();
+
+            timerInterval = setInterval(() => {
+                currentSeconds--;
+                updateUI();
+
+                if (currentSeconds &lt;= 0) {
+                    clearInterval(timerInterval);
+                    playBeepSound();
+                    document.getElementById('timerDisplay').style.color = '#ff5252';
+                    setTimeout(closeTimer, 3000);
+                }
+            }, 1000);
+        }
+
+        function addTime(secondsToAdd) {
+            currentSeconds += secondsToAdd;
+            totalSeconds += secondsToAdd;
+            document.getElementById('timerDisplay').style.color = '#fff';
+            updateUI();
+        }
+
+        function closeTimer() {
+            clearInterval(timerInterval);
+            document.getElementById('restTimerBar').classList.remove('active');
+        }
+
+        function updateUI() {
+            if(currentSeconds &lt; 0) currentSeconds = 0;
+
+            let mins = Math.floor(currentSeconds / 60);
+            let secs = currentSeconds % 60;
+            document.getElementById('timerDisplay').innerText =
+                mins + ":" + (secs &lt; 10 ? "0" : "") + secs;
+
+            let percentage = (currentSeconds / totalSeconds) * 100;
+            document.getElementById('timerProgress').style.width = percentage + "%";
+        }
+
+        function playBeepSound() {
+            try {
+                let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                let oscillator = audioCtx.createOscillator();
+                let gainNode = audioCtx.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+
+                gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.5);
+            } catch(e) {
+                console.log("Web Audio API wird vom Browser nicht unterstützt.");
+            }
+        }
+	</script>
 </h:body>
 </html>
