@@ -27,6 +27,8 @@ public class ExerciseController implements Serializable {
 	private List<Exercise> allExercises;
 	private Exercise newExercise;
 
+	private Exercise exerciseToEdit;
+
 	@PostConstruct
 	public void init() {
 		this.allExercises = exerciseService.findAllExercises();
@@ -39,6 +41,30 @@ public class ExerciseController implements Serializable {
 			addMessage(FacesMessage.SEVERITY_INFO, "Erfolg", "Neues Training erfolgreich angelegt.");
 			init();
 
+		} catch (EntityAlreadyExistsException e) {
+			addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", e.getMessage());
+		}
+	}
+
+	public void prepareEdit(Exercise exercise) {
+		this.exerciseToEdit = exercise;
+	}
+
+	public void cancelEdit() {
+		this.exerciseToEdit = null;
+		init();
+	}
+
+	public void saveEdit() {
+		if (!userSession.getLoggedInAthlete().isAdmin()) {
+			addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Nur Admins dürfen Übungen bearbeiten!");
+			return;
+		}
+		try {
+			exerciseService.updateExercise(exerciseToEdit);
+			addMessage(FacesMessage.SEVERITY_INFO, "Aktualisiert", "Übung erfolgreich bearbeitet.");
+			this.exerciseToEdit = null;
+			init();
 		} catch (EntityAlreadyExistsException e) {
 			addMessage(FacesMessage.SEVERITY_ERROR, "Fehler", e.getMessage());
 		}
@@ -70,6 +96,9 @@ public class ExerciseController implements Serializable {
 	public void setNewExercise(Exercise newExercise) {
 		this.newExercise = newExercise;
 	}
+
+	public Exercise getExerciseToEdit() { return exerciseToEdit; }
+	public void setExerciseToEdit(Exercise exerciseToEdit) { this.exerciseToEdit = exerciseToEdit; }
 
 	/**
 	 * Hilfsmethode zum Anzeigen von Nachrichten in JSF

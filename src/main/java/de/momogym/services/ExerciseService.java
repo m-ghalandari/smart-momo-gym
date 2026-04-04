@@ -28,6 +28,20 @@ public class ExerciseService {
 		return exercise;
 	}
 
+	public Exercise updateExercise(Exercise exercise) throws EntityAlreadyExistsException {
+		TypedQuery<Long> query = entityManager.createQuery(
+			"SELECT COUNT(e) FROM Exercise e WHERE e.name = :name AND e.id != :id", Long.class);
+		query.setParameter("name", exercise.getName());
+		query.setParameter("id", exercise.getId());
+		Long count = query.getSingleResult();
+
+		if (count > 0) {
+			throw new EntityAlreadyExistsException("Fehler: Eine andere Übung mit dem Namen '" + exercise.getName() + "' existiert bereits!");
+		}
+
+		return entityManager.merge(exercise);
+	}
+
 	public List<Exercise> findAllExercises() {
 		return entityManager.createQuery("SELECT e FROM Exercise e ORDER BY e.name ASC", Exercise.class).getResultList();
 	}
