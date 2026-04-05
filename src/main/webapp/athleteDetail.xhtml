@@ -10,7 +10,7 @@
 <h:head>
 	<title>Athleten Details</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
+	<h:outputStylesheet name="css/app.css" />
 	<style>
         /* --- GLOBAL THEME --- */
         body {
@@ -390,13 +390,11 @@
 
 			<h:panelGroup rendered="#{athleteDetailController.athlete != null and athleteDetailController.athlete.id == userSession.loggedInAthlete.id}">
 				<h:form styleClass="header-delete-form">
-					<h:commandLink action="#{athleteDetailController.deleteAccount}"
-								   styleClass="btn-circle delete-btn"
+					<h:commandLink styleClass="btn-circle delete-btn"
 								   title="Account löschen"
-								   onclick="return confirm('Bist du dir GANZ sicher? Alle deine Pläne und Fortschritte gehen für immer verloren!');">
+								   onclick="openConfirmModal(#{athleteDetailController.athlete.id}, 'deleteAccountCmd', 'Account löschen?', 'Bist du dir GANZ sicher? Alle deine Pläne und Fortschritte gehen für immer verloren!'); return false;">
 						🗑️
-					</h:commandLink>
-				</h:form>
+					</h:commandLink>				</h:form>
 			</h:panelGroup>
 			<h:panelGroup rendered="#{athleteDetailController.athlete == null or athleteDetailController.athlete.id != userSession.loggedInAthlete.id}">
 				<div style="width: 44px;"></div>
@@ -452,14 +450,11 @@
 									<f:ajax render=":editPlanModal" />
 								</h:commandLink>
 
-								<h:commandLink action="#{athleteDetailController.deletePlan(plan.id)}"
-											   styleClass="btn-icon btn-delete"
+								<h:commandLink styleClass="btn-icon btn-delete"
 											   title="Plan löschen"
-											   onclick="return confirm('Diesen Plan wirklich löschen?');">
+											   onclick="openConfirmModal(#{plan.id}, 'deletePlanCmd', 'Plan löschen?', 'Möchtest du diesen Trainingsplan inklusive aller Übungen wirklich entfernen?'); return false;">
 									🗑️
-									<f:ajax render="@form" />
-								</h:commandLink>
-							</h:panelGroup>
+								</h:commandLink>							</h:panelGroup>
 						</div>
 					</ui:repeat>
 				</h:panelGroup>
@@ -519,6 +514,15 @@
 			</h:form>
 		</h:panelGroup>
 	</h:panelGroup>
+	<h:form style="display: none;">
+		<h:commandScript name="deleteAccountCmd"
+						 action="#{athleteDetailController.deleteAccount}" />
 
+		<h:commandScript name="deletePlanCmd"
+						 action="#{athleteDetailController.deletePlan(param.delId)}"
+						 render=":mainForm" />
+	</h:form>
+
+	<ui:include src="/WEB-INF/includes/confirmModal.xhtml" />
 </h:body>
 </html>
