@@ -1,0 +1,20 @@
+/* --- GLASSMORPHISM CONFIRM MODAL --- */
+.confirm-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 2000; opacity: 0; visibility: hidden; transition: 0.3s ease;
+}
+.confirm-modal-overlay.active { opacity: 1; visibility: visible; }
+.confirm-modal {
+    background: #0a0a0a; border: 1px solid #333; border-radius: 24px;
+    padding: 30px; width: 90%; max-width: 350px; text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    transform: translateY(-20px); transition: 0.3s ease;
+}
+.confirm-modal-overlay.active .confirm-modal { transform: translateY(0); }
+.confirm-title { color: #ff3333; font-size: 1.5em; margin-bottom: 10px; font-weight: 700; }
+.confirm-text { color: #a0a0a0; margin-bottom: 25px; font-size: 0.95em; }
+.confirm-actions { display: flex; gap: 15px; justify-content: center; }
+.btn-confirm-no { background: #222; color: #fff; border: none; padding: 12px 24px; border-radius: 16px; cursor: pointer; font-weight: bold; width: 100%; }
+.btn-confirm-yes { background: #ff3333; color: #fff; border: none; padding: 12px 24px; border-radius: 16px; cursor: pointer; font-weight: bold; width: 100%; }

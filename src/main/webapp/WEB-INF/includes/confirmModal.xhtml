@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="jakarta.faces.facelets">
+
+	<div id="deleteConfirmModal" class="confirm-modal-overlay">
+		<div class="confirm-modal">
+			<div class="confirm-title" id="confirmModalTitle">Wirklich löschen?</div>
+			<div class="confirm-text" id="confirmModalText">Diese Aktion kann nicht rückgängig gemacht werden.</div>
+			<div class="confirm-actions">
+				<button type="button" class="btn-confirm-no" onclick="closeConfirmModal()">Abbrechen</button>
+				<button type="button" class="btn-confirm-yes" onclick="executeConfirmModal()">Löschen</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+        let confirmModalId = null;
+        let confirmModalCallback = null;
+
+        // Erwartet ID, den Namen des JSF-Scripts und optionale Texte
+        function openConfirmModal(id, callbackName, customTitle, customText) {
+            confirmModalId = id;
+            confirmModalCallback = callbackName;
+
+            if(customTitle) document.getElementById('confirmModalTitle').innerText = customTitle;
+            if(customText) document.getElementById('confirmModalText').innerText = customText;
+
+            document.getElementById('deleteConfirmModal').classList.add('active');
+        }
+
+        function closeConfirmModal() {
+            confirmModalId = null;
+            confirmModalCallback = null;
+            document.getElementById('deleteConfirmModal').classList.remove('active');
+        }
+
+        function executeConfirmModal() {
+            // Führt die dynamische JSF-Funktion aus (z.B. deleteExerciseCmd oder deletePlanCmd)
+            if (confirmModalId !== null &amp;&amp; confirmModalCallback !== null) {
+                window[confirmModalCallback]({ delId: confirmModalId });
+                closeConfirmModal();
+            }
+        }
+	</script>
+</ui:composition>
