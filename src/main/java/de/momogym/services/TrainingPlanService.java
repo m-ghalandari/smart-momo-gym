@@ -63,7 +63,12 @@ public class TrainingPlanService {
 
 	public void deleteTrainingPlan(Long planId) {
 		TrainingPlan plan = entityManager.find(TrainingPlan.class, planId);
+
 		if (plan != null) {
+			entityManager.createQuery("DELETE FROM ExerciseLog l WHERE l.trainingPlan = :plan")
+				.setParameter("plan", plan)
+				.executeUpdate();
+
 			entityManager.remove(plan);
 		}
 	}
