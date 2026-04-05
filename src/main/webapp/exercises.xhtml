@@ -110,7 +110,7 @@
         .btn-submit:active { transform: scale(0.98); }
         .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4); }
 
-        /* --- NEU: CARD LISTE FÜR ÜBUNGEN --- */
+        /* --- CARD LISTE FÜR ÜBUNGEN --- */
         .exercise-list {
             display: flex;
             flex-direction: column;
@@ -222,37 +222,37 @@
 			<div style="width: 44px;"></div>
 		</div>
 
-		<h:panelGroup rendered="#{userSession.loggedInAthlete.admin}">
-			<div class="card">
-				<h:form>
-					<div class="form-grid">
-						<div class="input-wrapper">
-							<h:outputLabel value="Name der Übung" styleClass="form-label"/>
-							<h:inputText value="#{exerciseController.newExercise.name}" required="true" requiredMessage="Name fehlt" styleClass="dark-input"/>
-						</div>
-						<div class="input-wrapper">
-							<h:outputLabel value="Zielmuskel" styleClass="form-label"/>
-							<h:inputText value="#{exerciseController.newExercise.targetMuscle}" styleClass="dark-input"/>
-						</div>
+		<div class="card">
+			<h:form>
+				<div class="form-grid">
+					<div class="input-wrapper">
+						<h:outputLabel value="Name der Übung" styleClass="form-label"/>
+						<h:inputText value="#{exerciseController.newExercise.name}" required="true" requiredMessage="Name fehlt" styleClass="dark-input"/>
 					</div>
-
-					<div class="form-grid">
-						<div class="input-wrapper">
-							<h:outputLabel value="Video Link" styleClass="form-label"/>
-							<h:inputText value="#{exerciseController.newExercise.videoLink}" styleClass="dark-input" f:passThroughAttribute="placeholder" f:passThroughValue="YouTube URL..."/>
-						</div>
-						<div class="input-wrapper">
-							<h:outputLabel value="Gif Link" styleClass="form-label"/>
-							<h:inputText value="#{exerciseController.newExercise.gifUrl}" styleClass="dark-input" f:passThroughAttribute="placeholder" f:passThroughValue=".gif URL..."/>
-						</div>
+					<div class="input-wrapper">
+						<h:outputLabel value="Zielmuskel" styleClass="form-label"/>
+						<h:inputText value="#{exerciseController.newExercise.targetMuscle}" styleClass="dark-input"/>
 					</div>
+				</div>
 
-					<h:commandButton value="Speichern" action="#{exerciseController.createExercise}" styleClass="btn-submit"/>
-				</h:form>
-			</div>
+				<div class="form-grid">
+					<div class="input-wrapper">
+						<h:outputLabel value="Video Link" styleClass="form-label"/>
+						<h:inputText value="#{exerciseController.newExercise.videoLink}" styleClass="dark-input" f:passThroughAttribute="placeholder" f:passThroughValue="YouTube URL..."/>
+					</div>
+					<div class="input-wrapper">
+						<h:outputLabel value="Gif Link" styleClass="form-label"/>
+						<h:inputText value="#{exerciseController.newExercise.gifUrl}" styleClass="dark-input" f:passThroughAttribute="placeholder" f:passThroughValue=".gif URL..."/>
+					</div>
+				</div>
+
+				<h:commandButton value="Speichern" action="#{exerciseController.createExercise}" styleClass="btn-submit"/>
+			</h:form>
+		</div>
+
+		<h:panelGroup id="catalogCount" layout="block" styleClass="section-label">
+			Katalog (#{exerciseController.allExercises.size()} Einträge)
 		</h:panelGroup>
-
-		<span class="section-label">Katalog (#{exerciseController.allExercises.size()} Einträge)</span>
 
 		<h:form id="exerciseListForm">
 			<h:panelGroup layout="block" styleClass="exercise-list" rendered="#{not empty exerciseController.allExercises}">
@@ -284,7 +284,7 @@
 
 								<h:commandLink action="#{exerciseController.deleteExercise(ex.id)}" styleClass="btn-icon-small btn-delete" title="Löschen" onclick="return confirm('Übung wirklich löschen?');">
 									🗑️
-									<f:ajax render="@form :toastMsg"/>
+									<f:ajax render="@form :toastMsg :catalogCount"/>
 								</h:commandLink>
 							</h:panelGroup>
 						</div>
@@ -333,7 +333,7 @@
 							<f:ajax render=":editModalGroup"/>
 						</h:commandButton>
 						<h:commandButton value="Speichern" action="#{exerciseController.saveEdit()}" styleClass="btn-modal-save">
-							<f:ajax execute="@form" render=":exerciseListForm :editModalGroup :toastMsg"/>
+							<f:ajax execute="@form" render=":exerciseListForm :editModalGroup :toastMsg :catalogCount"/>
 						</h:commandButton>
 					</div>
 				</div>
