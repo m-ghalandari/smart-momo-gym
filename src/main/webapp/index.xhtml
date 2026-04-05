@@ -14,6 +14,7 @@
 	<link rel="icon" type="image/png" href="#{resource['images/icon.png']}" />
 	<link rel="apple-touch-icon" href="#{resource['images/icon.png']}" />
 	<link rel="manifest" href="#{request.contextPath}/manifest.json?v=2" />
+	<h:outputStylesheet name="css/app.css" />
 
 	<style>
         /* --- GLOBAL THEME --- */
@@ -291,11 +292,25 @@
 						</div>
 					</div>
 					<div class="arrow-icon">›</div>
+					<h:panelGroup rendered="#{userSession.loggedInAthlete.admin and athlete.id != userSession.loggedInAthlete.id}">
+						<h:commandLink styleClass="btn-icon-small btn-delete"
+									   style="position: relative; z-index: 2; margin-left: 10px;"
+									   onclick="openConfirmModal(#{athlete.id}, 'deleteAthleteCmd', 'Athlet löschen?', 'Soll dieser Athlet wirklich mitsamt all seiner Pläne gelöscht werden?'); return false;">
+							🗑️
+						</h:commandLink>
+					</h:panelGroup>
 				</div>
 			</ui:repeat>
 
 		</h:panelGroup>
 
 	</div>
+	<h:form style="display: none;">
+		<h:commandScript name="deleteAthleteCmd"
+						 action="#{dashboardController.deleteAthlete(param.delId)}"
+						 render="@all" />
+	</h:form>
+
+	<ui:include src="/WEB-INF/includes/confirmModal.xhtml" />
 </h:body>
 </html>
