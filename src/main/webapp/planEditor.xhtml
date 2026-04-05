@@ -11,6 +11,7 @@
 	<title>Plan Editor</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
+	<h:outputStylesheet name="css/app.css" />
 	<style>
         /* --- GLOBAL THEME --- */
         body {
@@ -346,14 +347,11 @@
 
 						<div class="day-card">
 							<div class="day-card-header">
-								<h:commandLink action="#{planEditorController.deleteTrainingDay(day.id)}"
-											   rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}"
+								<h:commandLink rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}"
 											   styleClass="btn-delete-day"
-											   onclick="return confirm('Ganzen Tag #{day.name} und alle Übungen löschen?');">
+											   onclick="openConfirmModal(#{day.id}, 'deleteDayCmd', 'Tag löschen?', 'Der gesamte Tag und alle darin enthaltenen Übungen werden unwiderruflich entfernt.'); return false;">
 									🗑️ Tag löschen
-									<f:ajax render="@form"/>
-								</h:commandLink>
-							</div>
+								</h:commandLink>							</div>
 
 							<h:panelGroup layout="block" styleClass="exercise-list" rendered="#{not empty day.plannedExercises}">
 								<ui:repeat value="#{day.plannedExercises}" var="pe">
@@ -369,10 +367,11 @@
 												<h:commandLink action="#{planEditorController.prepareEdit(pe)}" styleClass="btn-icon-small btn-edit" title="Bearbeiten">
 													✏️<f:ajax render=":mainForm:editModal" />
 												</h:commandLink>
-												<h:commandLink action="#{planEditorController.removeExercise(pe.id)}" styleClass="btn-icon-small btn-delete" title="Entfernen" onclick="return confirm('Übung wirklich entfernen?');">
-													🗑️<f:ajax render="@form" />
-												</h:commandLink>
-											</h:panelGroup>
+												<h:commandLink styleClass="btn-icon-small btn-delete"
+															   title="Entfernen"
+															   onclick="openConfirmModal(#{pe.id}, 'removeExerciseCmd', 'Übung entfernen?', 'Möchtest du diese Übung aus deinem Plan löschen?'); return false;">
+													🗑️
+												</h:commandLink>											</h:panelGroup>
 										</div>
 
 										<div class="exercise-stats">
@@ -462,5 +461,16 @@
 			</h:panelGroup>
 		</h:form>
 	</div>
+	<h:form style="display: none;">
+		<h:commandScript name="deleteDayCmd"
+						 action="#{planEditorController.deleteTrainingDay(param.delId)}"
+						 render=":mainForm:dayContent :mainForm:daySelectorWrapper" />
+
+		<h:commandScript name="removeExerciseCmd"
+						 action="#{planEditorController.removeExercise(param.delId)}"
+						 render=":mainForm:dayContent" />
+	</h:form>
+
+	<ui:include src="/WEB-INF/includes/confirmModal.xhtml" />
 </h:body>
 </html>
