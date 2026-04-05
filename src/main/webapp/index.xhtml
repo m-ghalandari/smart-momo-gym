@@ -7,122 +7,160 @@
 	  lang="de">
 <h:head>
 	<title>Dashboard - Smart Momo Gym</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 	<link rel="icon" type="image/png" href="#{resource['images/icon.png']}" />
 	<link rel="apple-touch-icon" href="#{resource['images/icon.png']}" />
 	<link rel="manifest" href="#{request.contextPath}/manifest.json?v=2" />
 
 	<style>
+        /* --- GLOBAL THEME --- */
         body {
-            font-family: 'Segoe UI', sans-serif;
-            padding: 20px;
-            background-color: #121212;
-            color: #e0e0e0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background-color: #050505;
+            color: #f0f0f0;
             margin: 0;
+            padding: 20px 15px;
         }
 
-        h2, h3 {
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* --- TYPOGRAFIE --- */
+        h2 {
             color: #ffffff;
-            margin-top: 0;
-        }
-
-        /* Zentrierte Überschriften */
-        h3 {
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin: 0 0 5px 0;
+            font-size: 1.8em;
             text-align: center;
-            margin-bottom: 25px;
-            font-size: 1.5em;
-            color: #b0b0b0;
-            font-weight: normal;
         }
 
-        /* HEADER LAYOUT */
-        .header-container {
+        .section-label {
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #888888;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: block;
+            text-align: center;
+        }
+
+        /* --- HEADER BUTTONS --- */
+        .header {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            border-bottom: 1px solid #333;
-            padding-bottom: 15px;
+            gap: 20px;
             margin-bottom: 40px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 25px;
         }
 
         .header-actions {
             display: flex;
             gap: 15px;
+            width: 100%;
+        }
+
+        .btn {
+            display: inline-flex;
             align-items: center;
-        }
-
-        /* HEADER BUTTONS */
-        .btn-exercises {
-            background-color: #17a2b8;
-            color: white;
-            padding: 10px 15px;
+            justify-content: center;
+            min-height: 44px; /* Mobile Touch Target */
+            min-width: 44px;
+            padding: 0 20px;
+            border-radius: 16px;
+            font-weight: 800;
             text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: background-color 0.2s;
-        }
-        .btn-exercises:hover { background-color: #20c9e2; }
-
-        /* LOGOUT BUTTON */
-        .btn-logout {
-            background-color: transparent;
-            color: #ff6b6b;
-            border: 1px solid #ff6b6b;
-            padding: 9px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
             cursor: pointer;
-            display: inline-block;
+            border: none;
+            flex: 1; /* Buttons teilen sich den Platz fair auf */
         }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-exercises {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #050505;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
+        }
+
+        .btn-exercises:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-logout {
+            background-color: rgba(255, 82, 82, 0.1);
+            color: #ff5252;
+            border: 1px solid rgba(255, 82, 82, 0.3);
+        }
+
         .btn-logout:hover {
-            background-color: #dc3545;
-            color: white;
+            background-color: #ff5252;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 82, 82, 0.3);
         }
 
         .logout-form {
             margin: 0;
+            display: flex;
+            flex: 1;
         }
 
-        /* NEU: MODERNE ATHLETEN-LISTE */
+        /* --- ATHLETEN KARTEN --- */
         .athlete-list {
-            max-width: 450px; /* Schön schmal und elegant */
-            margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
 
         .athlete-card {
-            background: linear-gradient(145deg, #1e1e1e, #222);
-            border: 1px solid #333;
-            border-radius: 12px;
+            background-color: #121212;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative; /* Wichtig für Stretched Link */
             transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
-
-        .athlete-card:hover {
-            transform: translateY(-3px);
-            border-color: #4facfe;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
-            background: linear-gradient(145deg, #222, #2a2a2a);
-        }
-
-        .athlete-link {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 15px 20px;
+        }
+
+        .athlete-card:hover {
+            transform: translateY(-2px);
+            border-color: #4facfe;
+            background-color: #161616;
+        }
+
+        .athlete-card:active {
+            transform: scale(0.98);
+        }
+
+        /* STRETCHED LINK PATTERN */
+        .athlete-link {
             text-decoration: none;
-            color: #e0e0e0;
-            width: 100%;
-            box-sizing: border-box;
+            color: #ffffff;
+        }
+
+        .athlete-link::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1;
+            border-radius: 20px;
         }
 
         .athlete-info {
@@ -132,128 +170,130 @@
         }
 
         .athlete-avatar {
-            font-size: 1.4em;
-            background-color: #121212;
-            border: 1px solid #444;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
+            font-size: 1.2em;
+            background-color: #050505;
+            border: 1px solid #333;
+            border-radius: 50px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #888;
+            color: #888888;
+            transition: all 0.2s ease;
         }
 
         .athlete-card:hover .athlete-avatar {
             border-color: #4facfe;
             color: #4facfe;
+            background-color: rgba(79, 172, 254, 0.1);
         }
 
         .athlete-name {
-            font-weight: bold;
-            font-size: 1.15em;
+            font-weight: 800;
+            font-size: 1.1em;
+            letter-spacing: 0.5px;
         }
 
         .badge-you {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: #000;
-            font-size: 0.65em;
-            font-weight: bold;
-            padding: 3px 8px;
-            border-radius: 20px;
-            margin-left: 10px;
+            color: #050505;
+            font-size: 0.7em;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 50px; /* Pill-Badge Rule */
+            margin-left: 8px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 2px 5px rgba(79, 172, 254, 0.3);
         }
 
         .arrow-icon {
-            color: #555;
+            color: #888888;
             font-size: 1.5em;
             transition: transform 0.2s, color 0.2s;
+            position: relative;
+            z-index: 2; /* Über dem Stretched Link, falls separate Interaktion nötig */
         }
 
         .athlete-card:hover .arrow-icon {
             color: #4facfe;
-            transform: translateX(4px); /* Pfeil bewegt sich leicht nach rechts */
+            transform: translateX(4px);
         }
 
-        /* MOBILE REGELN */
-        @media (max-width: 600px) {
-            .header-container {
-                flex-direction: column;
-                gap: 15px;
-                border-bottom: none;
-            }
+        .empty-state {
+            text-align: center;
+            color: #888888;
+            font-size: 0.9em;
+            padding: 40px 20px;
+            background-color: #121212;
+            border-radius: 20px;
+            border: 1px dashed #333;
+        }
+
+        /* --- MOBILE REGELN --- */
+        @media (max-width: 450px) {
             .header-actions {
                 flex-direction: column;
-                width: 100%;
             }
-            .btn-exercises, .btn-logout {
+            .btn {
                 width: 100%;
-                text-align: center;
-                box-sizing: border-box;
-            }
-            .logout-form {
-                width: 100%;
-            }
-            .athlete-list {
-                padding: 0 10px;
             }
         }
 	</style>
 </h:head>
 
 <h:body>
+	<div class="container">
 
-	<div class="header-container">
-		<div>
-			<h2 style="margin:0; text-align: center;">Smart Momo Gym</h2>
+		<div class="header">
+			<div>
+				<h2>Smart Momo Gym</h2>
+				<span class="section-label">Dashboard</span>
+			</div>
+
+			<div class="header-actions">
+				<h:link value="🏋️ Übungen"
+						outcome="exercises.xhtml"
+						styleClass="btn btn-exercises" />
+
+				<h:form styleClass="logout-form">
+					<h:commandLink action="#{userSession.logout}"
+								   value="🚪 Logout"
+								   styleClass="btn btn-logout" />
+				</h:form>
+			</div>
 		</div>
 
-		<div class="header-actions">
-			<h:link value="🏋️ Übungskatalog"
-					outcome="exercises.xhtml"
-					styleClass="btn-exercises" />
+		<span class="section-label">Aktive Athleten</span>
 
-			<h:form styleClass="logout-form">
-				<h:commandLink action="#{userSession.logout}"
-							   value="🚪 Logout"
-							   styleClass="btn-logout" />
-			</h:form>
-		</div>
-	</div>
+		<h:panelGroup rendered="#{empty dashboardController.allAthletes}">
+			<div class="empty-state">
+				Noch keine Athleten sichtbar.
+			</div>
+		</h:panelGroup>
 
-	<h3>Athleten</h3>
+		<h:panelGroup rendered="#{not empty dashboardController.allAthletes}" layout="block" styleClass="athlete-list">
 
-	<h:panelGroup rendered="#{empty dashboardController.allAthletes}">
-		<p style="text-align: center; color: #888; font-style: italic;">Noch keine Athleten sichtbar.</p>
-	</h:panelGroup>
-
-	<h:panelGroup rendered="#{not empty dashboardController.allAthletes}" layout="block" styleClass="athlete-list">
-
-		<ui:repeat value="#{dashboardController.allAthletes}" var="athlete">
-			<div class="athlete-card">
-				<h:link outcome="athleteDetail" styleClass="athlete-link">
-					<f:param name="athleteId" value="#{athlete.id}" />
-
+			<ui:repeat value="#{dashboardController.allAthletes}" var="athlete">
+				<div class="athlete-card">
 					<div class="athlete-info">
 						<div class="athlete-avatar">👤</div>
 						<div class="athlete-name">
-							#{athlete.username}
+							<h:link outcome="athleteDetail" styleClass="athlete-link" value="#{athlete.username}">
+								<f:param name="athleteId" value="#{athlete.id}" />
+							</h:link>
 
 							<h:panelGroup rendered="#{athlete.id == userSession.loggedInAthlete.id}">
 								<span class="badge-you">Du</span>
 							</h:panelGroup>
 						</div>
 					</div>
-
 					<div class="arrow-icon">›</div>
-				</h:link>
-			</div>
-		</ui:repeat>
+				</div>
+			</ui:repeat>
 
-	</h:panelGroup>
+		</h:panelGroup>
 
+	</div>
 </h:body>
 </html>

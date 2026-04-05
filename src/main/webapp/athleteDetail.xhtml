@@ -7,116 +7,131 @@
 
 <h:head>
 	<title>Athleten Details</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 	<style>
         /* --- GLOBAL THEME --- */
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background-color: #050505;
+            color: #f0f0f0;
             margin: 0;
-            padding: 0;
+            padding: 20px 15px;
         }
 
-
-        .header-bar {
-            padding: 20px;
-            width: 100%;
-            box-sizing: border-box;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 10;
-            display: flex;
-            justify-content: space-between; /* Links Zurück, Rechts Löschen */
-            align-items: center;
-        }
-
-        .back-link {
-            color: #888;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: color 0.2s;
-            font-size: 1rem;
-        }
-        .back-link:hover { color: #fff; }
-
-        /* HEADER DELETE BUTTON */
-        .header-delete-form {
-            margin: 0;
-        }
-        .btn-header-delete {
-            background: transparent;
-            color: #ff6b6b;
-            border: 1px solid transparent;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .btn-header-delete:hover {
-            background-color: rgba(255, 107, 107, 0.1);
-            border-color: #ff6b6b;
-        }
-
-        .main-container {
-            padding-top: 80px;
-            padding-left: 20px;
-            padding-right: 20px;
-            padding-bottom: 40px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        h2 { color: #ffffff; text-align: center; margin-top: 0; margin-bottom: 5px; font-size: 2em; }
-        h3 { color: #b0b0b0; font-weight: normal; margin-top: 0; margin-bottom: 30px; text-align: center;}
-
-        /* --- SETTINGS CARD (Privatsphäre) --- */
-        .settings-card {
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin: 0 auto 30px auto;
+        .container {
             max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* --- TYPOGRAFIE --- */
+        h2 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 1.8em;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-align: center;
+            flex: 1;
+        }
+
+        .section-label {
+            color: #888888;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            font-size: 0.75em;
+            letter-spacing: 1.5px;
+            display: block;
+        }
+
+        /* --- HEADER --- */
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 10px;
         }
+
+        .btn-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        .btn-circle:active { transform: scale(0.92); }
+
+        .back-btn {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #f0f0f0;
+        }
+        .back-btn:hover { background-color: rgba(255, 255, 255, 0.1); }
+
+        .delete-btn {
+            background-color: rgba(255, 82, 82, 0.1);
+            color: #ff5252;
+            border: 1px solid rgba(255, 82, 82, 0.3);
+        }
+        .delete-btn:hover {
+            background-color: #ff5252;
+            color: #ffffff;
+            box-shadow: 0 5px 15px rgba(255, 82, 82, 0.4);
+        }
+
+        /* --- SETTINGS CARD (Privatsphäre) --- */
+        .settings-card {
+            background-color: #121212;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            gap: 15px;
+        }
+
         .settings-info {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
             flex: 1;
-            padding-right: 15px;
         }
+
         .settings-title {
-            color: #fff;
+            color: #ffffff;
             font-size: 1.1em;
-            font-weight: bold;
+            font-weight: 800;
         }
+
         .settings-desc {
-            color: #888;
+            color: #888888;
             font-size: 0.85em;
             line-height: 1.4;
         }
 
-        /* TOGGLE SWITCH */
+        /* TOGGLE SWITCH PRO */
         .switch {
             position: relative;
             display: inline-block;
-            width: 50px;
-            height: 26px;
+            width: 52px;
+            height: 30px;
             flex-shrink: 0;
         }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -124,153 +139,270 @@
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #444;
-            transition: .4s;
+            background-color: #333;
+            transition: .3s cubic-bezier(0.4, 0.0, 0.2, 1);
             border-radius: 34px;
         }
         .slider:before {
             position: absolute;
             content: "";
-            height: 20px; width: 20px;
-            left: 3px; bottom: 3px;
-            background-color: white;
-            transition: .4s;
+            height: 22px; width: 22px;
+            left: 4px; bottom: 4px;
+            background-color: #ffffff;
+            transition: .3s cubic-bezier(0.4, 0.0, 0.2, 1);
             border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
-        input:checked + .slider { background-color: #4facfe; }
-        input:checked + .slider:before { transform: translateX(24px); }
+        input:checked + .slider { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        input:checked + .slider:before { transform: translateX(22px); }
 
-
-        /* BUTTONS */
-        .btn-create {
-            background-color: #28a745;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 1.1em;
-            transition: background-color 0.2s;
-            display: inline-block;
+        /* --- PLAN CARDS --- */
+        .plan-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-        .btn-create:hover { background-color: #34ce57; }
 
-        /* PLAN CARDS */
         .plan-card {
-            width: 100%;
-            max-width: 600px;
-            background-color: #1e1e1e;
-            border: 1px solid #333;
+            background-color: #121212;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
             padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-left: auto;
-            margin-right: auto;
-            transition: transform 0.2s ease, background-color 0.2s, border-color 0.2s;
-            box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             position: relative;
-            cursor: pointer;
-        }
-        .plan-card:hover {
-            background-color: #252525;
-            border-color: #4facfe;
-            transform: translateY(-2px);
+            transition: all 0.2s ease;
         }
 
-        .status-active { color: #4caf50; font-weight: bold; }
-        .status-inactive { color: #b0b0b0; }
+        .plan-card:hover {
+            transform: translateY(-2px);
+            background-color: #161616;
+            border-color: #4facfe;
+        }
+
+        .plan-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+        }
 
         .plan-name-link {
             font-size: 1.3em;
-            font-weight: bold;
+            font-weight: 800;
             color: #ffffff;
             text-decoration: none;
-            display: block;
-            margin-bottom: 5px;
         }
-        .plan-name-link:hover { color: #64b5f6; }
+
+        /* STRETCHED LINK (damit die ganze Karte klickbar ist) */
         .plan-name-link::after {
-            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1;
+            border-radius: 20px;
         }
 
-        /* ACTION BUTTONS IN CARD */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.7em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 50px;
+            width: max-content;
+        }
+
+        .status-active {
+            color: #28a745;
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+
+        .status-inactive {
+            color: #888888;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* ACTION BUTTONS (müssen über dem Stretched Link liegen) */
         .card-actions {
-            display: flex; gap: 10px; position: relative; z-index: 2;
+            display: flex;
+            gap: 8px;
+            position: relative;
+            z-index: 2; /* WICHTIG */
         }
+
         .btn-icon {
-            padding: 10px; border-radius: 6px; text-decoration: none; font-size: 1.2em;
-            line-height: 1; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
-            background: transparent; cursor: pointer;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid transparent;
+            cursor: pointer;
         }
-        .btn-delete { border: 1px solid #ff6b6b; color: #ff6b6b; }
-        .btn-delete:hover { background-color: #dc3545; border-color: #dc3545; color: white; }
-        .btn-edit { border: 1px solid #ffc107; color: #ffc107; }
-        .btn-edit:hover { background-color: #ffc107; color: black; }
+        .btn-icon:active { transform: scale(0.92); }
 
+        .btn-edit { color: #f0f0f0; }
+        .btn-edit:hover { background-color: #1e1e1e; border-color: #4facfe; color: #4facfe; }
 
-        /* MODAL STYLES */
+        .btn-delete { color: #ff5252; }
+        .btn-delete:hover { background-color: rgba(255, 82, 82, 0.1); border-color: #ff5252; }
+
+        /* --- PRIMARY BUTTON --- */
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 50px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #050505;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.2);
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:hover { box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4); transform: translateY(-2px); }
+
+        /* --- GLASSMORPHISM MODAL --- */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); z-index: 1000;
-            display: flex; justify-content: center; align-items: center;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
         }
+
         .modal-box {
-            background-color: #1e1e1e; padding: 30px; border-radius: 12px;
-            border: 1px solid #444; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            width: 90%; max-width: 400px; box-sizing: border-box;
-            position: relative; z-index: 1001;
+            background-color: #121212;
+            padding: 30px 25px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
         }
-        .modal-title { font-size: 1.2em; color: #4facfe; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .modal-input { width: 100%; padding: 10px; background: #2b2b2b; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .btn-modal-cancel { background: transparent; border: 1px solid #666; color: #aaa; padding: 8px 15px; border-radius: 6px; cursor: pointer; }
-        .btn-modal-cancel:hover { border-color: #bbb; color: white; }
-        .btn-modal-save { background-color: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .btn-modal-save:hover { background-color: #0056b3; }
 
-        .checkbox-list table { width: 100%; }
-        .checkbox-list td { padding: 5px 0; }
-        .checkbox-list label { margin-left: 8px; color: #ddd; cursor: pointer;}
-        .checkbox-list input { accent-color: #007bff; }
-        .action-container { text-align: center; margin-top: 30px; margin-bottom: 50px; }
+        .modal-title {
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 25px;
+            text-align: center;
+        }
 
-        /* --- MOBILE OPTIMIERUNG --- */
-        @media (max-width: 600px) {
+        .input-group { margin-bottom: 20px; }
+
+        .dark-input {
+            width: 100%;
+            padding: 15px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .dark-input:focus { border-color: #4facfe; }
+
+        .checkbox-list { width: 100%; background: #0a0a0a; border-radius: 12px; border: 1px solid #333; padding: 10px; box-sizing: border-box; }
+        .checkbox-list td { padding: 10px; border-bottom: 1px solid #222; }
+        .checkbox-list td:last-child { border-bottom: none; }
+        .checkbox-list label { margin-left: 10px; color: #f0f0f0; cursor: pointer; font-size: 0.95em;}
+        .checkbox-list input[type="checkbox"] { accent-color: #4facfe; transform: scale(1.2); }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-modal-cancel, .btn-modal-save {
+            flex: 1;
+            min-height: 48px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            font-size: 1em;
+            transition: all 0.2s;
+        }
+
+        .btn-modal-cancel {
+            background: rgba(255, 255, 255, 0.05);
+            color: #f0f0f0;
+        }
+        .btn-modal-cancel:hover { background: rgba(255, 255, 255, 0.1); }
+
+        .btn-modal-save {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #050505;
+        }
+        .btn-modal-save:active { transform: scale(0.96); }
+
+        .empty-state { text-align: center; color: #888; font-style: italic; padding: 30px; background: #121212; border-radius: 20px; border: 1px dashed #333; }
+
+        @media (max-width: 450px) {
             .plan-card { flex-direction: column; align-items: flex-start; gap: 15px; }
             .card-actions { width: 100%; justify-content: flex-end; }
-            .main-container { padding-left: 15px; padding-right: 15px; }
-            .header-bar { padding: 15px; }
-            .modal-box { padding: 20px; }
-            .settings-card { flex-direction: row; }
         }
 	</style>
 </h:head>
 
 <h:body>
-	<div class="header-bar">
-		<h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link"/>
+	<div class="container">
 
-		<h:form styleClass="header-delete-form" rendered="#{athleteDetailController.athlete != null and athleteDetailController.athlete.id == userSession.loggedInAthlete.id}">
-			<h:commandLink action="#{athleteDetailController.deleteAccount}"
-						   styleClass="btn-header-delete"
-						   title="Account löschen"
-						   onclick="return confirm('Bist du dir GANZ sicher? Alle deine Pläne und Fortschritte gehen für immer verloren!');">
-				🗑️
-			</h:commandLink>
-		</h:form>
-	</div>
+		<h:messages showDetail="true" showSummary="true" style="color: #ff5252; list-style:none; text-align:center; padding: 0; margin: 0; font-weight: bold;"/>
 
-	<div class="main-container">
-		<h:messages showDetail="true" showSummary="true" style="color: #ff6b6b; list-style:none; text-align:center;"/>
+		<div class="header">
+			<h:link outcome="index" styleClass="btn-circle back-btn">
+				❮
+			</h:link>
+
+			<h2 class="header-title">#{athleteDetailController.athlete != null ? athleteDetailController.athlete.username : 'Fehler'}</h2>
+
+			<h:panelGroup rendered="#{athleteDetailController.athlete != null and athleteDetailController.athlete.id == userSession.loggedInAthlete.id}">
+				<h:form styleClass="header-delete-form">
+					<h:commandLink action="#{athleteDetailController.deleteAccount}"
+								   styleClass="btn-circle delete-btn"
+								   title="Account löschen"
+								   onclick="return confirm('Bist du dir GANZ sicher? Alle deine Pläne und Fortschritte gehen für immer verloren!');">
+						🗑️
+					</h:commandLink>
+				</h:form>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{athleteDetailController.athlete == null or athleteDetailController.athlete.id != userSession.loggedInAthlete.id}">
+				<div style="width: 44px;"></div>
+			</h:panelGroup>
+		</div>
 
 		<h:form id="mainForm">
 			<h:panelGroup rendered="#{athleteDetailController.athlete != null}">
-
-				<h2>#{athleteDetailController.athlete.username}</h2>
 
 				<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="settings-card">
 					<h:panelGroup id="privacyStatusInfo" layout="block" styleClass="settings-info">
@@ -278,77 +410,72 @@
 							#{athleteDetailController.athlete.profilePublic ? '🌍 Öffentliches Profil' : '🕵️ Privates Profil'}
 						</div>
 						<div class="settings-desc">
-							#{athleteDetailController.athlete.profilePublic ? 'Dein Name und deine Pläne sind auf dem Dashboard sichtbar.' : 'Ghost-Modus: Du bist für andere auf dem Dashboard unsichtbar.'}
+							#{athleteDetailController.athlete.profilePublic ? 'Dein Name und Pläne sind sichtbar.' : 'Ghost-Modus: Du bist unsichtbar.'}
 						</div>
 					</h:panelGroup>
 
-					<div class="settings-action">
-						<label class="switch">
-							<h:selectBooleanCheckbox value="#{athleteDetailController.athlete.profilePublic}">
-								<f:ajax listener="#{athleteDetailController.toggleVisibility}" render="privacyStatusInfo" />
-							</h:selectBooleanCheckbox>
-							<span class="slider"></span>
-						</label>
-					</div>
+					<label class="switch">
+						<h:selectBooleanCheckbox value="#{athleteDetailController.athlete.profilePublic}">
+							<f:ajax listener="#{athleteDetailController.toggleVisibility}" render="privacyStatusInfo" />
+						</h:selectBooleanCheckbox>
+						<span class="slider"></span>
+					</label>
 				</h:panelGroup>
 
-				<h3>Trainingspläne</h3>
+				<span class="section-label" style="margin-top: 10px;">Trainingspläne</span>
 
-				<h:panelGroup rendered="#{empty athleteDetailController.athlete.trainingPlans}">
-					<p style="color: #888; text-align: center;">Dieser Athlet hat noch keine Trainingspläne.</p>
+				<h:panelGroup rendered="#{empty athleteDetailController.athlete.trainingPlans}" layout="block" styleClass="empty-state">
+					Dieser Athlet hat noch keine Trainingspläne.
 				</h:panelGroup>
 
-				<ui:repeat value="#{athleteDetailController.athlete.trainingPlans}" var="plan">
-					<div class="plan-card">
-						<div>
-							<h:link outcome="planEditor" styleClass="plan-name-link">
-								<f:param name="planId" value="#{plan.id}" />
-								#{plan.name}
-							</h:link>
+				<h:panelGroup rendered="#{not empty athleteDetailController.athlete.trainingPlans}" layout="block" styleClass="plan-list">
+					<ui:repeat value="#{athleteDetailController.athlete.trainingPlans}" var="plan">
 
-							<div style="font-size: 0.9em;">
-								Status:
-								<span class="#{plan.active ? 'status-active' : 'status-inactive'}">
+						<div class="plan-card">
+							<div class="plan-info">
+								<h:link outcome="planEditor" styleClass="plan-name-link">
+									<f:param name="planId" value="#{plan.id}" />
+									#{plan.name}
+								</h:link>
+								<span class="status-badge #{plan.active ? 'status-active' : 'status-inactive'}">
                                     #{plan.active ? 'AKTIV' : 'Inaktiv'}
                                 </span>
 							</div>
+
+							<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="card-actions">
+								<h:commandLink action="#{athleteDetailController.prepareEditPlan(plan)}"
+											   styleClass="btn-icon btn-edit"
+											   title="Plan bearbeiten">
+									✏️
+									<f:ajax render=":editPlanModal" />
+								</h:commandLink>
+
+								<h:commandLink action="#{athleteDetailController.deletePlan(plan.id)}"
+											   styleClass="btn-icon btn-delete"
+											   title="Plan löschen"
+											   onclick="return confirm('Diesen Plan wirklich löschen?');">
+									🗑️
+									<f:ajax render="@form" />
+								</h:commandLink>
+							</h:panelGroup>
 						</div>
+					</ui:repeat>
+				</h:panelGroup>
 
-						<div class="card-actions">
-							<h:commandLink action="#{athleteDetailController.prepareEditPlan(plan)}"
-										   rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}"
-										   styleClass="btn-icon btn-edit"
-										   title="Plan bearbeiten">
-								✏️
-								<f:ajax render=":editPlanModal" />
-							</h:commandLink>
-
-							<h:commandLink action="#{athleteDetailController.deletePlan(plan.id)}"
-										   rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}"
-										   styleClass="btn-icon btn-delete"
-										   title="Plan löschen"
-										   onclick="return confirm('Diesen Plan wirklich löschen?');">
-								🗑️
-								<f:ajax render="@form" />
-							</h:commandLink>
-						</div>
-					</div>
-				</ui:repeat>
-
-				<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="action-container">
+				<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" style="margin-top: 30px;">
 					<h:link value="+ Neuer Trainingsplan"
 							outcome="/trainingPlan.xhtml"
-							styleClass="btn-create">
+							styleClass="btn-primary">
 						<f:param name="athleteId" value="#{athleteDetailController.athlete.id}"/>
 					</h:link>
 				</h:panelGroup>
 
 			</h:panelGroup>
-		</h:form>
 
-		<h:panelGroup rendered="#{athleteDetailController.athlete == null}">
-			<p style="color: #ff6b6b; text-align: center; margin-top: 50px;">Kein Athlet geladen.</p>
-		</h:panelGroup>
+			<h:panelGroup rendered="#{athleteDetailController.athlete == null}">
+				<p style="color: #ff5252; text-align: center; margin-top: 50px;">Kein Athlet geladen.</p>
+			</h:panelGroup>
+		</h:form>
 	</div>
 
 	<h:panelGroup id="editPlanModal">
@@ -357,16 +484,16 @@
 				<div class="modal-box">
 					<div class="modal-title">Plan bearbeiten</div>
 
-					<div style="margin-bottom: 15px;">
-						<label style="color:#aaa; font-size:0.8em; font-weight:bold; display:block; margin-bottom:5px;">Name des Plans</label>
-						<h:inputText value="#{athleteDetailController.newPlanName}" styleClass="modal-input" required="true" />
+					<div class="input-group">
+						<span class="section-label">Name des Plans</span>
+						<h:inputText value="#{athleteDetailController.newPlanName}" styleClass="dark-input" required="true" />
 					</div>
 
-					<div style="margin-bottom: 15px;">
-						<label style="color:#aaa; font-size:0.8em; font-weight:bold; display:block; margin-bottom:5px;">Neue Tage hinzufügen</label>
+					<div class="input-group">
+						<span class="section-label">Neue Tage hinzufügen</span>
 
 						<h:panelGroup rendered="#{empty athleteDetailController.missingDays}">
-							<div style="color:#666; font-style:italic; font-size:0.9em;">Alle Wochentage bereits vorhanden.</div>
+							<div style="color:#666; font-style:italic; font-size:0.9em; background: #0a0a0a; padding: 15px; border-radius: 12px; border: 1px solid #333;">Alle Wochentage bereits vorhanden.</div>
 						</h:panelGroup>
 
 						<h:selectManyCheckbox value="#{athleteDetailController.selectedNewDays}"

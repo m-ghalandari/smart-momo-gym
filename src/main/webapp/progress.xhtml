@@ -7,99 +7,150 @@
 
 <h:head>
 	<title>Fortschritt</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 	<style>
+        /* --- GLOBAL THEME --- */
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #0a0a0a;
-            color: #e0e0e0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background-color: #050505;
+            color: #f0f0f0;
             margin: 0;
-            padding: 20px;
+            padding: 20px 15px;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* HEADER OPTIMIERT */
+        /* --- HEADER --- */
         .header {
-            position: relative;
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .btn-back {
-            position: absolute;
-            left: 0;
-            top: 5px;
-            color: #888;
+        .btn-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #f0f0f0;
         }
-        .btn-back:hover { color: #fff; }
+        .btn-circle:active { transform: scale(0.92); }
+        .btn-circle:hover { background-color: rgba(255, 255, 255, 0.1); }
 
-        .header h1 {
-            color: #4facfe;
+        .header-center {
+            flex: 2;
+            text-align: center;
+        }
+
+        .header-center h2 {
             margin: 0;
-            font-size: 2em;
+            font-size: 1.6em;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
         }
 
+        .header-sub {
+            color: #888888;
+            margin-top: 4px;
+            font-size: 0.75em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* --- CARD  FORM --- */
         .card {
-            background-color: #161616;
-            border: 1px solid #333;
-            border-radius: 12px;
+            background-color: #121212;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             box-sizing: border-box;
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .form-label {
+            font-size: 0.75em;
+            color: #888888;
+            margin-bottom: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
         }
 
         .dark-input {
-            background-color: #2b2b2b;
-            border: 1px solid #444;
-            color: white;
-            padding: 12px;
-            border-radius: 6px;
+            background-color: #0a0a0a;
+            border: 1px solid #333;
+            color: #ffffff;
+            padding: 0 15px;
+            min-height: 48px; /* Touch Target */
+            border-radius: 12px;
             outline: none;
             width: 100%;
-            font-size: 1.1em;
+            font-size: 1em;
+            font-weight: 600;
             margin-bottom: 20px;
-            box-sizing: border-box; /* Verhindert, dass 100% Breite + Padding das Layout sprengen */
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            padding-right: 40px;
         }
         .dark-input:focus { border-color: #4facfe; }
 
-        /* WICHTIG FÜR CHART.JS AUF HANDYS */
+        /* --- EMPTY STATE --- */
+        .empty-state {
+            text-align: center;
+            color: #888888;
+            padding: 40px 20px;
+            background: #0a0a0a;
+            border-radius: 16px;
+            border: 1px dashed #333;
+            font-style: italic;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        /* --- CHART.JS CONTAINER --- */
         .chart-container {
             position: relative;
             width: 100%;
-            height: 50vh; /* Nimmt 50% der Bildschirmhöhe ein */
-            min-height: 300px; /* Wird aber nie kleiner als 300px */
-            margin-top: 20px;
+            height: 45vh;
+            min-height: 300px;
+            margin-top: 15px;
         }
 
         /* --- MOBILE OPTIMIERUNG --- */
         @media (max-width: 600px) {
-            body {
-                padding: 15px;
-            }
-            .header {
-                padding-top: 40px; /* Verhindert Überlappung von Titel und Button */
-            }
-            .btn-back {
-                top: 0;
-            }
-            .card {
-                padding: 15px;
-            }
-            .chart-container {
-                height: 40vh; /* Auf kleinen Displays etwas flacher machen */
-                min-height: 250px;
-            }
+            .card { padding: 20px; border-radius: 20px; }
+            .chart-container { height: 40vh; min-height: 250px; }
         }
 	</style>
 </h:head>
@@ -107,28 +158,34 @@
 <h:body>
 	<div class="container">
 		<div class="header">
-			<h:link outcome="planEditor" value="← Zurück" styleClass="btn-back">
+			<h:link outcome="planEditor" styleClass="btn-circle" title="Zurück">
 				<f:param name="planId" value="#{progressController.planId}" />
+				❮
 			</h:link>
-			<h1>📈 Fortschritt</h1>
-			<div style="color: #aaa; margin-top: 5px;">#{progressController.trainingPlan.name}</div>
-		</div>
+
+			<div class="header-center">
+				<h2>📈 Fortschritt</h2>
+				<div class="header-sub">#{progressController.trainingPlan.name}</div>
+			</div>
+
+			<div style="width: 44px;"></div> </div>
 
 		<div class="card">
 			<h:form id="progressForm">
-				<label style="color:#aaa; font-weight:bold; margin-bottom: 5px; display:block;">Übung auswählen:</label>
+				<h:outputLabel value="Übung auswählen" styleClass="form-label"/>
 
 				<h:selectOneMenu value="#{progressController.selectedExerciseId}" styleClass="dark-input">
 					<f:selectItem itemLabel="Bitte wählen..." itemValue="#{null}" />
 					<f:selectItems value="#{progressController.planExercises}" var="ex" itemValue="#{ex.id}" itemLabel="#{ex.name}" />
-
 					<f:ajax listener="#{progressController.loadChartData}" render="chartWrapper" />
 				</h:selectOneMenu>
 
-				<h:panelGroup id="chartWrapper" layout="block" style="margin-top: 10px;">
+				<h:panelGroup id="chartWrapper" layout="block">
 
 					<h:panelGroup rendered="#{not progressController.hasData and progressController.selectedExerciseId != null}">
-						<div style="text-align: center; color: #888; padding: 40px;">Noch keine Trainingsdaten für diese Übung vorhanden. Mach ein Workout!</div>
+						<div class="empty-state">
+							Noch keine Trainingsdaten für diese Übung vorhanden. Mach ein Workout!
+						</div>
 					</h:panelGroup>
 
 					<h:panelGroup rendered="#{progressController.hasData}">
@@ -137,33 +194,68 @@
 						</div>
 
 						<script>
-                            // Alten Graphen zerstören, falls vorhanden (wichtig bei AJAX!)
+                            // Alten Graphen zerstören
                             if (window.myChart != null) {
                                 window.myChart.destroy();
                             }
                             var ctx = document.getElementById('progressChart').getContext('2d');
+
+                            // Neon-Glow Effekt für den Chart
+                            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                            gradient.addColorStop(0, 'rgba(79, 172, 254, 0.4)');
+                            gradient.addColorStop(1, 'rgba(79, 172, 254, 0.0)');
+
                             window.myChart = new Chart(ctx, {
                                 type: 'line',
                                 data: {
-                                    labels: #{progressController.chartLabels}, // z.B. ['01.10.', '03.10.']
+                                    labels: #{progressController.chartLabels},
                             datasets: [{
                                 label: 'Gewicht (kg)',
-                                data: #{progressController.chartData}, // z.B. [80, 82.5]
+                                data: #{progressController.chartData},
                             borderColor: '#4facfe',
-                                backgroundColor: 'rgba(79, 172, 254, 0.2)',
+                                backgroundColor: gradient,
                                 borderWidth: 3,
-                                tension: 0.3, // Macht die Linie schön geschwungen
-                                pointBackgroundColor: '#ff9800',
-                                pointRadius: 5
+                                tension: 0.4, // Smoother curve
+                                pointBackgroundColor: '#ff9800', // Orange Workout Focus
+                                pointBorderColor: '#121212', // Blend with card bg
+                                pointBorderWidth: 2,
+                                pointRadius: 6,
+                                pointHoverRadius: 8,
+                                fill: true
                             }]
                             },
                             options: {
                                 responsive: true,
-                                    maintainAspectRatio: false, // WICHTIG: Damit sich das Diagramm an den .chart-container anpasst
-                                    plugins: { legend: { labels: { color: '#ddd' } } },
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                    legend: {
+                                        display: false // Entfernt die unnötige Legende für mehr Platz
+                                    },
+                                    tooltip: {
+                                        backgroundColor: 'rgba(15, 15, 15, 0.95)',
+                                            titleColor: '#888',
+                                            bodyColor: '#fff',
+                                            bodyFont: { weight: 'bold', size: 14 },
+                                        padding: 12,
+                                            cornerRadius: 8,
+                                            borderColor: '#333',
+                                            borderWidth: 1
+                                    }
+                                },
                                 scales: {
-                                    x: { ticks: { color: '#aaa' }, grid: { color: '#333' } },
-                                    y: { ticks: { color: '#aaa' }, grid: { color: '#333' } }
+                                    x: {
+                                        ticks: { color: '#888888', font: { weight: '600' } },
+                                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }
+                                    },
+                                    y: {
+                                        ticks: { color: '#888888', font: { weight: '600' } },
+                                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
+                                        beginAtZero: false
+                                    }
+                                },
+                                interaction: {
+                                    mode: 'index',
+                                        intersect: false,
                                 }
                             }
                             });

@@ -7,93 +7,220 @@
 
 <h:head>
 	<title>Übungskatalog</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 	<style>
         /* --- GLOBAL THEME --- */
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #0a0a0a;
-            color: #e0e0e0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background-color: #050505;
+            color: #f0f0f0;
             margin: 0;
-            padding: 0;
+            padding: 20px 15px;
         }
 
-        .header-bar { padding: 20px; width: 100%; box-sizing: border-box; position: absolute; top: 0; left: 0; z-index: 10; }
-        .back-link { color: #888; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: color 0.2s; font-size: 1rem; }
-        .back-link:hover { color: #fff; }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
-        .content-container { max-width: 700px; margin: 0 auto; width: 100%; padding-top: 80px; padding-bottom: 40px; padding-left: 20px; padding-right: 20px; box-sizing: border-box; }
+        /* --- HEADER --- */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-        h2 { text-align: center; margin: 0 0 30px 0; font-size: 1.8em; color: white; }
-        h3 { color: #888; font-weight: 600; margin-top: 40px; margin-bottom: 15px; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1.5px; text-align: center; }
+        .btn-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #f0f0f0;
+        }
+        .btn-circle:active { transform: scale(0.92); }
+        .btn-circle:hover { background-color: rgba(255, 255, 255, 0.1); }
 
-        .card { background-color: #161616; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #333; animation: fadeIn 0.4s ease-out; box-sizing: border-box; }
+        .header h2 {
+            margin: 0;
+            font-size: 1.6em;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            text-align: center;
+            flex: 1;
+        }
+
+        .section-label {
+            color: #888888;
+            font-weight: 800;
+            margin: 30px 0 15px 0;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            letter-spacing: 1.5px;
+            display: block;
+            text-align: center;
+        }
+
+        /* --- ADMIN CARD (Formular) --- */
+        .card {
+            background-color: #121212;
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+            animation: fadeIn 0.4s ease-out;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        .input-wrapper { display: flex; flex-direction: column; }
-        .form-label { font-size: 0.7em; color: #888; margin-bottom: 6px; font-weight: bold; text-transform: uppercase; }
+        .form-grid { display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px; }
+        @media (min-width: 500px) { .form-grid { flex-direction: row; } }
 
-        .dark-input { background-color: #212121; border: 1px solid #333; color: white; padding: 10px; border-radius: 6px; outline: none; transition: border-color 0.2s; box-sizing: border-box; width: 100%; }
+        .input-wrapper { display: flex; flex-direction: column; flex: 1; }
+
+        .form-label {
+            font-size: 0.75em; color: #888888; margin-bottom: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .dark-input {
+            background-color: #0a0a0a; border: 1px solid #333; color: #ffffff; padding: 0 15px; min-height: 44px; border-radius: 12px; outline: none; transition: border-color 0.2s; box-sizing: border-box; width: 100%; font-size: 1em;
+        }
         .dark-input:focus { border-color: #4facfe; }
 
-        .btn-submit { width: auto; min-width: 200px; display: block; margin: 20px auto 0 auto; padding: 12px 30px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #000; border: none; border-radius: 30px; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-sizing: border-box; }
-        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4); }
+        .btn-submit {
+            width: 100%; min-height: 50px; margin-top: 10px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #050505; border: none; border-radius: 16px; font-size: 1.1em; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 10px 20px rgba(79, 172, 254, 0.2);
+        }
+        .btn-submit:active { transform: scale(0.98); }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4); }
 
-        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 10px; }
-        .modern-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; min-width: 550px; }
-        .modern-table th { text-align: left; color: #666; text-transform: uppercase; font-size: 0.7em; letter-spacing: 1px; padding: 0 15px 5px 15px; white-space: nowrap; }
-        .modern-table td { background-color: #1a1a1a; padding: 15px; color: #ddd; border-top: 1px solid #333; border-bottom: 1px solid #333; vertical-align: middle; }
-        .modern-table td:first-child { border-left: 1px solid #333; border-top-left-radius: 8px; border-bottom-left-radius: 8px; font-weight: bold; color: white; }
-        .modern-table td:last-child { border-right: 1px solid #333; border-top-right-radius: 8px; border-bottom-right-radius: 8px; text-align: right; white-space: nowrap; }
-        .modern-table tr:hover td { background-color: #222; border-color: #444; transform: translateY(-1px); transition: all 0.2s; }
+        /* --- NEU: CARD LISTE FÜR ÜBUNGEN --- */
+        .exercise-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-bottom: 20px;
+        }
 
-        .link-badge { display: inline-block; padding: 4px 10px; background-color: #252525; color: #4facfe; border-radius: 15px; text-decoration: none; font-size: 0.75em; font-weight: 600; transition: background 0.2s; margin-bottom: 4px; }
-        .link-badge:hover { background-color: #4facfe; color: black; }
+        .exercise-item {
+            background-color: #121212;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: border-color 0.2s ease;
+        }
+        .exercise-item:hover { border-color: #4facfe; }
 
-        .action-buttons { display: flex; gap: 10px; justify-content: flex-end; align-items: center; }
-        .btn-delete-icon { color: #ff6b6b; text-decoration: none; font-size: 1.1em; opacity: 0.7; background: transparent; border: none; cursor: pointer; transition: all 0.2s; }
-        .btn-delete-icon:hover { opacity: 1; transform: scale(1.2); }
-        .btn-edit-icon { color: #ffc107; text-decoration: none; font-size: 1.1em; opacity: 0.7; background: transparent; border: none; cursor: pointer; transition: all 0.2s; }
-        .btn-edit-icon:hover { opacity: 1; transform: scale(1.2); }
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
 
-        .muscle-tag { color: #888; font-style: italic; font-size: 0.9em; }
+        .exercise-title {
+            font-size: 1.15em;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 4px;
+            display: block;
+        }
 
-        /* TOAST NOTIFICATION */
-        .toast-notification { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: #252525; color: #4caf50; padding: 15px 30px; border-radius: 50px; border: 1px solid #4caf50; box-shadow: 0 5px 20px rgba(0,0,0,0.5); list-style: none; font-weight: bold; font-size: 1rem; opacity: 1; transition: opacity 0.5s ease-out; max-width: 90%; text-align: center; box-sizing: border-box; }
+        .muscle-tag {
+            color: #888888;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+
+        .exercise-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 15px;
+        }
+
+        .media-links { display: flex; gap: 8px; flex-wrap: wrap; }
+        .link-badge {
+            display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 50px; text-decoration: none; font-size: 0.7em; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; background-color: rgba(255,255,255,0.05);
+        }
+        .link-badge.video { color: #28a745; }
+        .link-badge.video:hover { background-color: #28a745; color: #050505; }
+        .link-badge.gif { color: #4facfe; }
+        .link-badge.gif:hover { background-color: #4facfe; color: #050505; }
+
+        .action-buttons { display: flex; gap: 8px; justify-content: flex-end; }
+
+        .btn-icon-small {
+            width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(255,255,255,0.05); border: 1px solid transparent; cursor: pointer; transition: all 0.2s ease;
+        }
+        .btn-icon-small:active { transform: scale(0.9); }
+        .btn-edit { color: #f0f0f0; }
+        .btn-edit:hover { background-color: #1e1e1e; border-color: #4facfe; color: #4facfe; }
+        .btn-delete { color: #ff5252; }
+        .btn-delete:hover { background-color: rgba(255,82,82,0.1); border-color: #ff5252; }
+
+        /* --- TOAST NOTIFICATION --- */
+        .toast-notification {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; background-color: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); color: #28a745; padding: 15px 30px; border-radius: 50px; border: 1px solid rgba(40, 167, 69, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5); list-style: none; font-weight: 800; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; opacity: 1; transition: opacity 0.5s ease-out; max-width: 90%; text-align: center; box-sizing: border-box; margin: 0;
+        }
         .toast-notification li { margin: 0; }
 
-        /* MODAL STYLES */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; }
-        .modal-box { background-color: #161616; padding: 25px; border-radius: 16px; border: 1px solid #333; box-shadow: 0 15px 50px rgba(0,0,0,0.9); width: 100%; max-width: 400px; box-sizing: border-box; }
-        .modal-title { font-size: 1.3em; color: #fff; margin-bottom: 20px; font-weight: bold; text-align: center; }
-        .modal-actions { display: flex; gap: 10px; margin-top: 25px; }
-        .btn-modal-cancel { flex: 1; background: transparent; border: 1px solid #444; color: #aaa; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-modal-cancel:hover { border-color: #666; color: #fff; }
-        .btn-modal-save { flex: 1; background: #4facfe; color: #000; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-modal-save:hover { background: #3da0e6; transform: translateY(-2px); }
-
-        @media (max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .content-container { padding-left: 15px; padding-right: 15px; padding-top: 60px; }
-            .card { padding: 15px; }
-            .btn-submit { width: 100%; }
-            h2 { font-size: 1.5em; }
+        /* --- GLASSMORPHISM MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 15, 15, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; animation: fadeIn 0.2s;
         }
+        .modal-box {
+            background-color: #121212; padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.8); width: 100%; max-width: 400px; box-sizing: border-box;
+        }
+        .modal-title { font-size: 1.4em; color: #ffffff; font-weight: 800; margin-bottom: 25px; text-align: center;}
+
+        .modal-actions { display: flex; gap: 10px; margin-top: 25px; }
+        .btn-modal-cancel, .btn-modal-save {
+            flex: 1; min-height: 48px; border-radius: 12px; font-weight: 800; cursor: pointer; border: none; font-size: 1em; transition: all 0.2s;
+        }
+        .btn-modal-cancel { background: rgba(255, 255, 255, 0.05); color: #f0f0f0; }
+        .btn-modal-cancel:hover { background: rgba(255, 255, 255, 0.1); }
+        .btn-modal-save { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #050505; }
+        .btn-modal-save:active { transform: scale(0.96); }
+
+        /* Empty State */
+        .empty-state { text-align: center; padding: 40px; color: #888888; font-style: italic; background: #121212; border-radius: 24px; border: 1px dashed #333; }
 	</style>
 </h:head>
 
 <h:body>
-	<h:messages globalOnly="true" styleClass="toast-notification" id="toastMsg"/>
+	<div class="container">
 
-	<div class="header-bar">
-		<h:link value="← Dashboard" outcome="index.xhtml" styleClass="back-link"/>
-	</div>
+		<h:messages globalOnly="true" styleClass="toast-notification" id="toastMsg"/>
 
-	<div class="content-container">
-
-		<h2>Übungen</h2>
+		<div class="header">
+			<h:link outcome="index.xhtml" styleClass="btn-circle" title="Zurück">
+				❮
+			</h:link>
+			<h2>Übungen</h2>
+			<div style="width: 44px;"></div>
+		</div>
 
 		<h:panelGroup rendered="#{userSession.loggedInAthlete.admin}">
 			<div class="card">
@@ -125,53 +252,50 @@
 			</div>
 		</h:panelGroup>
 
-		<h3>Katalog (#{exerciseController.allExercises.size()} Einträge)</h3>
+		<span class="section-label">Katalog (#{exerciseController.allExercises.size()} Einträge)</span>
 
 		<h:form id="exerciseListForm">
-			<div class="table-responsive">
-				<h:dataTable value="#{exerciseController.allExercises}" var="ex" styleClass="modern-table" rendered="#{not empty exerciseController.allExercises}">
+			<h:panelGroup layout="block" styleClass="exercise-list" rendered="#{not empty exerciseController.allExercises}">
 
-					<h:column>
-						<f:facet name="header">Name</f:facet>
-						#{ex.name}
-					</h:column>
+				<ui:repeat value="#{exerciseController.allExercises}" var="ex">
+					<div class="exercise-item">
+						<div class="exercise-header">
+							<div>
+								<span class="exercise-title">#{ex.name}</span>
+								<span class="muscle-tag">#{ex.targetMuscle}</span>
+							</div>
+						</div>
 
-					<h:column>
-						<f:facet name="header">Muskel</f:facet>
-						<span class="muscle-tag">#{ex.targetMuscle}</span>
-					</h:column>
+						<div class="exercise-footer">
+							<div class="media-links">
+								<h:panelGroup rendered="#{not empty ex.videoLink}">
+									<h:outputLink value="#{ex.videoLink}" target="_blank" styleClass="link-badge video">▶ Video</h:outputLink>
+								</h:panelGroup>
+								<h:panelGroup rendered="#{not empty ex.gifUrl}">
+									<h:outputLink value="#{ex.gifUrl}" target="_blank" styleClass="link-badge gif">👾 Gif</h:outputLink>
+								</h:panelGroup>
+							</div>
 
-					<h:column>
-						<f:facet name="header">Medien</f:facet>
-						<h:panelGroup rendered="#{not empty ex.videoLink}">
-							<h:outputLink value="#{ex.videoLink}" target="_blank" styleClass="link-badge" style="margin-right: 5px;">Video</h:outputLink>
-						</h:panelGroup>
-						<h:panelGroup rendered="#{not empty ex.gifUrl}">
-							<h:outputLink value="#{ex.gifUrl}" target="_blank" styleClass="link-badge">Gif</h:outputLink>
-						</h:panelGroup>
-					</h:column>
+							<h:panelGroup styleClass="action-buttons" rendered="#{userSession.loggedInAthlete.admin}">
+								<h:commandLink action="#{exerciseController.prepareEdit(ex)}" styleClass="btn-icon-small btn-edit" title="Bearbeiten">
+									✏️
+									<f:ajax render=":editModalGroup"/>
+								</h:commandLink>
 
-					<h:column>
-						<f:facet name="header"></f:facet>
-						<h:panelGroup styleClass="action-buttons" rendered="#{userSession.loggedInAthlete.admin}">
-							<h:commandLink action="#{exerciseController.prepareEdit(ex)}" styleClass="btn-edit-icon" title="Bearbeiten">
-								✏️
-								<f:ajax render=":editModalGroup"/>
-							</h:commandLink>
+								<h:commandLink action="#{exerciseController.deleteExercise(ex.id)}" styleClass="btn-icon-small btn-delete" title="Löschen" onclick="return confirm('Übung wirklich löschen?');">
+									🗑️
+									<f:ajax render="@form :toastMsg"/>
+								</h:commandLink>
+							</h:panelGroup>
+						</div>
+					</div>
+				</ui:repeat>
 
-							<h:commandLink action="#{exerciseController.deleteExercise(ex.id)}" styleClass="btn-delete-icon" title="Löschen" onclick="return confirm('Übung wirklich löschen?');">
-								🗑️
-								<f:ajax render="@form :toastMsg"/>
-							</h:commandLink>
-						</h:panelGroup>
-					</h:column>
-
-				</h:dataTable>
-			</div>
+			</h:panelGroup>
 		</h:form>
 
 		<h:panelGroup rendered="#{empty exerciseController.allExercises}">
-			<div style="text-align: center; padding: 40px; color: #555;">
+			<div class="empty-state">
 				Noch keine Übungen. Leg los und erstell die Erste!
 			</div>
 		</h:panelGroup>
@@ -226,7 +350,7 @@
                     setTimeout(function() {
                         toast.style.display = 'none';
                     }, 500);
-                }, 2000); // Etwas länger anzeigen (2 Sekunden)
+                }, 2000);
             }
         };
 	</script>

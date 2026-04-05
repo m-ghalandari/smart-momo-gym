@@ -13,123 +13,335 @@
         /* --- GLOBAL THEME --- */
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
             background-color: #050505;
             color: #f0f0f0;
             margin: 0;
             padding: 20px 15px;
-            -webkit-font-smoothing: antialiased;
-            padding-bottom: 120px;
+            padding-bottom: 120px; /* Platz für den Timer */
         }
 
-        .container { max-width: 600px; margin: 0 auto; }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
 
-        /* HEADER */
+        /* --- HEADER --- */
         .header {
-            position: relative; text-align: center; margin-bottom: 30px;
-            border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .btn-back {
-            position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-            color: #888; text-decoration: none; font-weight: 600; font-size: 1.2em;
-            background: rgba(255,255,255,0.05); width: 40px; height: 40px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; transition: 0.2s;
-        }
-        .btn-back:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
-        .header h1 { color: #ff9800; margin: 0; font-size: 1.8em; font-weight: 800; letter-spacing: 1px; }
-        .header-sub { color: #888; margin-top: 5px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1.5px; }
+        .header-left, .header-right {
+            flex: 1;
+            display: flex;
+        }
+
+        .header-right {
+            justify-content: flex-end;
+        }
+
+        .header-center {
+            flex: 2;
+            text-align: center;
+        }
+
+        .btn-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #f0f0f0;
+        }
+        .btn-circle:active { transform: scale(0.92); }
+        .btn-circle:hover { background-color: rgba(255, 255, 255, 0.1); }
+
+        .header-center h1 {
+            color: #ff9800; /* Workout Focus Orange */
+            margin: 0;
+            font-size: 1.6em;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .header-sub {
+            color: #888888;
+            margin-top: 4px;
+            font-size: 0.75em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .section-title {
+            color: #888888;
+            font-size: 0.8em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 30px 0 15px 0;
+            text-align: center;
+        }
 
         /* --- EXERCISE CARDS --- */
         .exercise-card {
-            background: #121212;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 20px;
-            padding: 20px; margin-bottom: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            display: flex; flex-direction: column; gap: 15px;
-            position: relative; overflow: hidden;
+            background-color: #121212;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
             transition: all 0.3s ease;
         }
 
         .card-pending { border-left: 4px solid #ff9800; }
-        .card-completed { border-left: 4px solid #28a745; opacity: 0.6; }
+        .card-completed { border-left: 4px solid #28a745; opacity: 0.7; }
 
-        .exercise-info { display: flex; justify-content: space-between; align-items: flex-start; }
-        .exercise-info h3 { margin: 0 0 4px 0; color: #fff; font-size: 1.3em; }
-        .exercise-stats { color: #4facfe; font-size: 0.8em; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+        .exercise-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
 
-        /* --- NEU: SET ROWS --- */
-        .set-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .exercise-info h3 {
+            margin: 0 0 6px 0;
+            color: #ffffff;
+            font-size: 1.3em;
+            font-weight: 800;
+        }
+
+        .exercise-stats {
+            color: #4facfe;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        /* --- SET ROWS --- */
+        .set-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .set-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 12px;
+            font-size: 0.7em;
+            color: #888888;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
         .set-row {
-            display: flex; align-items: center; justify-content: space-between;
-            background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0a0a0a;
+            padding: 10px 12px;
+            border-radius: 16px;
             transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.02);
         }
-        .set-row.is-done { background: rgba(40, 167, 69, 0.1); opacity: 0.7; }
-        .set-number { font-weight: bold; color: #888; width: 25px; }
+
+        .set-row.is-done {
+            background: rgba(40, 167, 69, 0.05);
+            border-color: rgba(40, 167, 69, 0.2);
+        }
+
+        .set-number {
+            font-weight: 800;
+            color: #888888;
+            width: 25px;
+        }
+
         .set-input-mini {
-            background: #0a0a0a; border: 1px solid #333; color: white;
-            padding: 8px; border-radius: 8px; width: 60px; text-align: center;
-            font-weight: bold; box-sizing: border-box; transition: 0.2s;
+            background: #161616;
+            border: 1px solid #333;
+            color: #ffffff;
+            height: 44px; /* Touch Target Rule */
+            border-radius: 12px;
+            width: 65px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.1em;
+            box-sizing: border-box;
+            transition: 0.2s;
+            outline: none;
         }
-        .set-input-mini:focus { border-color: #ff9800; outline: none; }
+        .set-input-mini:focus { border-color: #ff9800; }
+        .set-input-mini:disabled { background: transparent; border-color: transparent; opacity: 1; color: #f0f0f0;}
 
-        /* Check Buttons */
+        /* CHECK BUTTONS */
         .btn-check-set {
-            background: rgba(255,255,255,0.05); color: #888; border: 1px solid #333;
-            width: 40px; height: 40px; border-radius: 10px; font-size: 1.1em;
-            cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.05);
+            color: #888888;
+            border: 1px solid transparent;
+            width: 44px; /* Touch Target Rule */
+            height: 44px;
+            border-radius: 12px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .btn-check-set:hover { background: rgba(40, 167, 69, 0.2); color: #28a745; border-color: #28a745; }
-        .btn-check-set.is-done { background: #28a745; color: white; border-color: #28a745; }
+        .btn-check-set:active { transform: scale(0.9); }
+        .btn-check-set:hover { background: rgba(40, 167, 69, 0.2); color: #28a745; }
+        .btn-check-set.is-done { background: #28a745; color: #050505; border-color: transparent; }
 
-
+        /* --- FINISH BUTTON --- */
         .btn-finish-workout {
-            display: block; width: 100%; background: linear-gradient(135deg, #ff5252 0%, #d50000 100%);
-            color: white; text-align: center; padding: 18px; border-radius: 16px;
-            font-size: 1.2em; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            text-decoration: none; margin-top: 40px; border: none; cursor: pointer; box-shadow: 0 10px 20px rgba(255, 82, 82, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background: linear-gradient(135deg, #ff5252 0%, #d50000 100%);
+            color: #ffffff;
+            min-height: 56px;
+            border-radius: 16px;
+            font-size: 1.1em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            margin-top: 30px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 82, 82, 0.2);
+            transition: all 0.2s ease;
         }
         .btn-finish-workout:active { transform: scale(0.98); }
+        .btn-finish-workout:hover { box-shadow: 0 10px 30px rgba(255, 82, 82, 0.4); transform: translateY(-2px); }
 
-        .section-title { color: #888; font-size: 0.9em; text-transform: uppercase; letter-spacing: 2px; margin: 30px 0 15px 0; text-align: center; }
+        .success-banner {
+            text-align: center;
+            color: #28a745;
+            font-size: 1.2em;
+            font-weight: 800;
+            margin: 30px 0;
+            padding: 25px;
+            background: rgba(40, 167, 69, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
 
         /* --- FLOATING REST TIMER --- */
         .rest-timer-bar {
-            position: fixed; bottom: -150px; left: 50%; transform: translateX(-50%);
-            width: 100%; max-width: 600px;
-            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(255,255,255,0.1); border-top-left-radius: 24px; border-top-right-radius: 24px;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.8); z-index: 1000;
-            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; overflow: hidden;
+            position: fixed;
+            bottom: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 600px;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+            z-index: 1000;
+            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .rest-timer-bar.active { bottom: 0; }
 
-        .timer-progress-container { width: 100%; height: 4px; background: #222; }
+        .timer-progress-container { width: 100%; height: 4px; background: rgba(255,255,255,0.05); }
         .timer-progress { height: 100%; width: 100%; background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%); transition: width 1s linear; }
 
-        .timer-content { padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
-        .timer-display-wrapper { display: flex; flex-direction: column; }
-        .timer-label { color: #888; font-size: 0.7em; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; margin-bottom: -5px; }
-        .timer-display { font-size: 2.5em; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; transition: color 0.3s; }
+        .timer-content {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
 
-        .timer-presets { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; justify-content: center; }
-        .btn-preset { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #ccc; padding: 6px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .btn-preset:hover { background: #4facfe; color: #000; border-color: #4facfe; }
+        .timer-display-wrapper { display: flex; flex-direction: column; }
+        .timer-label { color: #888888; font-size: 0.7em; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: -5px; }
+        .timer-display { font-size: 2.5em; font-weight: 800; color: #ffffff; font-variant-numeric: tabular-nums; transition: color 0.3s; }
+
+        .timer-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn-preset {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #cccccc;
+            padding: 0 15px;
+            height: 44px; /* Touch Target Rule */
+            border-radius: 50px;
+            font-size: 0.85em;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-preset:active { transform: scale(0.92); }
+        .btn-preset:hover { background: #4facfe; color: #050505; border-color: transparent; }
 
         .timer-actions { display: flex; flex-direction: column; gap: 8px; }
-        .btn-timer-action { background: rgba(255,255,255,0.1); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; font-size: 0.9em; transition: 0.2s; }
+        .btn-timer-action {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #ffffff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.9em;
+            transition: 0.2s;
+        }
+        .btn-timer-action:active { transform: scale(0.92); }
         .btn-timer-action:hover { background: rgba(255,255,255,0.2); }
-        .btn-timer-close { color: #ff5252; background: rgba(255,82,82,0.1); }
-        .btn-timer-close:hover { background: rgba(255,82,82,0.3); }
 
-        /* MOBILE OPTIMIERUNG */
-        @media (max-width: 600px) {
-            .header { padding-top: 50px; }
-            .btn-back { top: 0; transform: none; }
-            .timer-content { flex-direction: column; padding: 15px; }
+        .btn-timer-close { color: #ff5252; background: rgba(255,82,82,0.1); }
+        .btn-timer-close:hover { background: rgba(255,82,82,0.2); }
+
+        /* --- MOBILE OPTIMIERUNG --- */
+        @media (max-width: 500px) {
+            .timer-content { flex-direction: column; padding: 15px; gap: 20px;}
             .timer-actions { flex-direction: row; position: absolute; top: 15px; right: 15px; }
+            .set-input-mini { width: 55px; } /* Minimal anpassen für sehr kleine Displays */
         }
 	</style>
 </h:head>
@@ -138,13 +350,19 @@
 	<div class="container">
 
 		<div class="header">
-			<h:link outcome="planEditor" styleClass="btn-back">
-				<f:param name="planId" value="#{workoutSessionController.planId}" />
-				<f:param name="dayId" value="#{workoutSessionController.trainingDay.id}" />
-				❮
-			</h:link>
-			<h1>🔥 Live Workout</h1>
-			<div class="header-sub">#{workoutSessionController.trainingDay.name}</div>
+			<div class="header-left">
+				<h:link outcome="planEditor" styleClass="btn-circle">
+					<f:param name="planId" value="#{workoutSessionController.planId}" />
+					<f:param name="dayId" value="#{workoutSessionController.trainingDay.id}" />
+					❮
+				</h:link>
+			</div>
+			<div class="header-center">
+				<h1>🔥 Live Workout</h1>
+				<div class="header-sub">#{workoutSessionController.trainingDay.name}</div>
+			</div>
+			<div class="header-right">
+				<div style="width: 44px;"></div> </div>
 		</div>
 
 		<h:form id="workoutForm">
@@ -161,11 +379,11 @@
 						</div>
 
 						<div class="set-list">
-							<div style="display: flex; justify-content: space-between; padding: 0 12px; font-size: 0.7em; color: #888; text-transform: uppercase; font-weight: bold;">
+							<div class="set-header">
 								<span style="width: 25px;">Satz</span>
-								<span style="width: 60px; text-align: center;">Kg</span>
-								<span style="width: 60px; text-align: center;">Wdh</span>
-								<span style="width: 40px; text-align: center;">✓</span>
+								<span style="width: 65px; text-align: center;">Kg</span>
+								<span style="width: 65px; text-align: center;">Wdh</span>
+								<span style="width: 44px; text-align: center;">✓</span>
 							</div>
 
 							<ui:repeat value="#{pe.sets}" var="set">
@@ -190,11 +408,10 @@
 			</h:panelGroup>
 
 			<h:panelGroup rendered="#{empty workoutSessionController.pendingExercises}">
-				<div style="text-align: center; color: #28a745; font-size: 1.3em; font-weight: bold; margin: 30px 0; padding: 20px; background: rgba(40, 167, 69, 0.1); border-radius: 16px;">
+				<div class="success-banner">
 					🎉 Alles erledigt! Starkes Workout!
 				</div>
 			</h:panelGroup>
-
 
 			<h:panelGroup rendered="#{not empty workoutSessionController.completedExercises}">
 				<div class="section-title">Bereits erledigt</div>
@@ -210,18 +427,18 @@
 						</div>
 
 						<div class="set-list">
-							<div style="display: flex; justify-content: space-between; padding: 0 12px; font-size: 0.7em; color: #888; text-transform: uppercase; font-weight: bold;">
+							<div class="set-header">
 								<span style="width: 25px;">Satz</span>
-								<span style="width: 60px; text-align: center;">Kg</span>
-								<span style="width: 60px; text-align: center;">Wdh</span>
-								<span style="width: 40px; text-align: center;">✓</span>
+								<span style="width: 65px; text-align: center;">Kg</span>
+								<span style="width: 65px; text-align: center;">Wdh</span>
+								<span style="width: 44px; text-align: center;">✓</span>
 							</div>
 
 							<ui:repeat value="#{donePe.sets}" var="doneSet">
 								<div class="set-row is-done">
 									<span class="set-number">#{doneSet.setNumber}</span>
-									<span class="set-input-mini" style="border: none; background: transparent;">#{doneSet.weight}</span>
-									<span class="set-input-mini" style="border: none; background: transparent;">#{doneSet.reps}</span>
+									<span class="set-input-mini" style="background: transparent; border-color: transparent;">#{doneSet.weight}</span>
+									<span class="set-input-mini" style="background: transparent; border-color: transparent;">#{doneSet.reps}</span>
 									<div class="btn-check-set is-done" style="cursor: default;">✔️</div>
 								</div>
 							</ui:repeat>
@@ -247,7 +464,7 @@
 
 			<div class="timer-presets">
 				<button type="button" class="btn-preset" onclick="setTimerPreset(60)">1 Min</button>
-				<button type="button" class="btn-preset" onclick="setTimerPreset(90)">1:30 Min</button>
+				<button type="button" class="btn-preset" onclick="setTimerPreset(90)">1:30</button>
 				<button type="button" class="btn-preset" onclick="setTimerPreset(120)">2 Min</button>
 				<button type="button" class="btn-preset" onclick="setTimerPreset(180)">3 Min</button>
 			</div>
