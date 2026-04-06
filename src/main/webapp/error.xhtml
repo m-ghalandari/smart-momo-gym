@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="jakarta.faces.html"
+	  xmlns:ui="jakarta.faces.facelets">
+<h:head>
+	<title>Fehler - Smart Momo Gym</title>
+	<h:outputStylesheet name="css/app.css" />
+	<style>
+        body { background-color: #050505; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .error-container { text-align: center; padding: 40px; background: #121212; border-radius: 32px; border: 1px solid #ff5252; max-width: 400px; }
+        h1 { color: #ff5252; margin-bottom: 20px; }
+        .btn-back { display: inline-block; margin-top: 25px; padding: 15px 30px; background: #4facfe; color: #000; text-decoration: none; border-radius: 16px; font-weight: bold; }
+	</style>
+</h:head>
+<h:body>
+	<div class="error-container">
+		<h1>Hoppla!</h1>
+		<p>Da ist etwas schiefgelaufen. Keine Sorge, dein Training ist sicher, aber die App brauchte eine kurze Pause.</p>
+
+		<p style="color: #666; font-size: 0.8em;">Typ: #{of:getRootCause(requestScope['jakarta.servlet.error.exception'])}</p>
+
+		<a href="index.xhtml" class="btn-back">Zurück zum Dashboard</a>
+	</div>
+</h:body>
+</html>

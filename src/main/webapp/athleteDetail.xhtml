@@ -1,512 +1,413 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
+		<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:h="jakarta.faces.html"
-	  xmlns:o="omnifaces.ui"
-	  xmlns:of="omnifaces.functions"
 	  xmlns:f="jakarta.faces.core"
-	  xmlns:ui="jakarta.faces.facelets">
-
+	  xmlns:ui="jakarta.faces.facelets"
+	  lang="de">
 <h:head>
-	<title>Athleten Details</title>
+	<title>Profil - Smart Momo Gym</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<link rel="manifest" href="#{request.contextPath}/manifest.json?v=2" />
 	<h:outputStylesheet name="css/app.css" />
+
 	<style>
         /* --- GLOBAL THEME --- */
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: #050505;
             color: #f0f0f0;
             margin: 0;
-            padding: 20px 15px;
+            padding: 0;
+            min-height: 100vh;
         }
+
+        .bg-glow {
+            position: fixed;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(79, 172, 254, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(90px);
+        }
+        .glow-1 { top: -100px; right: -100px; }
+        .glow-2 { bottom: -100px; left: -100px; }
 
         .container {
             max-width: 600px;
             margin: 0 auto;
-            width: 100%;
+            padding: 30px 20px;
+            box-sizing: border-box;
+        }
+
+        /* --- PROFIL HEADER --- */
+        .profile-header {
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            align-items: center;
+            margin-bottom: 40px;
+            animation: fadeIn 0.6s ease-out;
         }
 
-        /* --- TYPOGRAFIE --- */
+        .profile-nav {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar-large {
+            width: 100px;
+            height: 100px;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .avatar-large::after {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 35px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(10px);
+        }
+
         h2 {
-            color: #ffffff;
-            margin: 0;
-            font-size: 1.8em;
+            font-size: 2em;
             font-weight: 800;
-            letter-spacing: 0.5px;
-            text-align: center;
-            flex: 1;
+            margin: 0;
+            background: linear-gradient(to bottom, #ffffff, #aaaaaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
+        /* --- SETTINGS CARD --- */
+        .settings-glass {
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .settings-label-group { display: flex; flex-direction: column; gap: 4px; }
+        .settings-title { font-weight: 800; font-size: 1em; color: #fff; }
+        .settings-sub { font-size: 0.8em; color: #666; }
+
+        /* --- PLAN LIST --- */
         .section-label {
-            color: #888888;
-            font-weight: 800;
-            margin: 0 0 10px 0;
-            text-transform: uppercase;
             font-size: 0.75em;
-            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #4facfe;
+            font-weight: 800;
+            margin: 30px 0 15px 5px;
             display: block;
         }
 
-        /* --- HEADER --- */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 10px;
-        }
-
-        .btn-circle {
-            width: 44px;
-            height: 44px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 1.2em;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: none;
-            box-sizing: border-box;
-        }
-
-        .btn-circle:active { transform: scale(0.92); }
-
-        .back-btn {
-            background-color: rgba(255, 255, 255, 0.05);
-            color: #f0f0f0;
-        }
-        .back-btn:hover { background-color: rgba(255, 255, 255, 0.1); }
-
-        .delete-btn {
-            background-color: rgba(255, 82, 82, 0.1);
-            color: #ff5252;
-            border: 1px solid rgba(255, 82, 82, 0.3);
-        }
-        .delete-btn:hover {
-            background-color: #ff5252;
-            color: #ffffff;
-            box-shadow: 0 5px 15px rgba(255, 82, 82, 0.4);
-        }
-
-        /* --- SETTINGS CARD (Privatsphäre) --- */
-        .settings-card {
-            background-color: #121212;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            gap: 15px;
-        }
-
-        .settings-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-        }
-
-        .settings-title {
-            color: #ffffff;
-            font-size: 1.1em;
-            font-weight: 800;
-        }
-
-        .settings-desc {
-            color: #888888;
-            font-size: 0.85em;
-            line-height: 1.4;
-        }
-
-        /* TOGGLE SWITCH PRO */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 52px;
-            height: 30px;
-            flex-shrink: 0;
-        }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #333;
-            transition: .3s cubic-bezier(0.4, 0.0, 0.2, 1);
-            border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px; width: 22px;
-            left: 4px; bottom: 4px;
-            background-color: #ffffff;
-            transition: .3s cubic-bezier(0.4, 0.0, 0.2, 1);
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-        input:checked + .slider { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-        input:checked + .slider:before { transform: translateX(22px); }
-
-        /* --- PLAN CARDS --- */
-        .plan-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
         .plan-card {
-            background-color: #121212;
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 20px;
+            margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transition: 0.3s;
             position: relative;
-            transition: all 0.2s ease;
         }
 
         .plan-card:hover {
-            transform: translateY(-2px);
-            background-color: #161616;
+            background: rgba(255, 255, 255, 0.07);
             border-color: #4facfe;
+            transform: translateY(-3px);
         }
 
-        .plan-info {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            flex: 1;
-        }
+        .plan-info { display: flex; flex-direction: column; gap: 6px; }
+        .plan-name { font-size: 1.2em; font-weight: 800; color: #fff; text-decoration: none; }
+        .plan-link-overlay::after { content: ''; position: absolute; inset: 0; z-index: 1; }
 
-        .plan-name-link {
-            font-size: 1.3em;
-            font-weight: 800;
-            color: #ffffff;
-            text-decoration: none;
-        }
-
-        /* STRETCHED LINK (damit die ganze Karte klickbar ist) */
-        .plan-name-link::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 1;
-            border-radius: 20px;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            font-size: 0.7em;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .status-pill {
+            font-size: 0.65em;
+            font-weight: 900;
             padding: 4px 10px;
             border-radius: 50px;
-            width: max-content;
+            text-transform: uppercase;
+            width: fit-content;
         }
+        .status-active { background: rgba(40, 167, 69, 0.1); color: #28a745; }
+        .status-inactive { background: rgba(255, 255, 255, 0.05); color: #666; }
 
-        .status-active {
-            color: #28a745;
-            background-color: rgba(40, 167, 69, 0.1);
+        /* --- BUTTONS --- */
+        .btn-circle {
+            width: 44px; height: 44px; border-radius: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; transition: 0.2s;
         }
+        .btn-circle:hover { background: rgba(255,255,255,0.1); border-color: #4facfe; }
 
-        .status-inactive {
-            color: #888888;
-            background-color: rgba(255, 255, 255, 0.05);
-        }
+        .btn-delete-profile { color: #ff5252; border-color: rgba(255, 82, 82, 0.2); }
+        .btn-delete-profile:hover { background: rgba(255, 82, 82, 0.1); border-color: #ff5252; }
 
-        /* ACTION BUTTONS (müssen über dem Stretched Link liegen) */
-        .card-actions {
+        /* Zentriert den Button-Bereich */
+        .add-plan-wrapper {
             display: flex;
-            gap: 8px;
-            position: relative;
-            z-index: 2; /* WICHTIG */
-        }
-
-        .btn-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            text-decoration: none;
-            font-size: 1.2em;
-            transition: all 0.2s ease;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid transparent;
-            cursor: pointer;
-        }
-        .btn-icon:active { transform: scale(0.92); }
-
-        .btn-edit { color: #f0f0f0; }
-        .btn-edit:hover { background-color: #1e1e1e; border-color: #4facfe; color: #4facfe; }
-
-        .btn-delete { color: #ff5252; }
-        .btn-delete:hover { background-color: rgba(255, 82, 82, 0.1); border-color: #ff5252; }
-
-        /* --- PRIMARY BUTTON --- */
-        .btn-primary {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin-top: 30px;
             width: 100%;
-            min-height: 50px;
+        }
+
+        .btn-add-plan {
+            /* Breite reduziert und fest definiert */
+            width: 100%;
+            max-width: 280px;
+            padding: 16px;
+            border-radius: 20px;
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: #050505;
-            text-decoration: none;
-            border-radius: 16px;
             font-weight: 800;
-            font-size: 1.1em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s ease;
+            text-align: center;
+            text-decoration: none;
             box-shadow: 0 10px 20px rgba(79, 172, 254, 0.2);
-            border: none;
-            cursor: pointer;
+            transition: 0.3s;
         }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-primary:hover { box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4); transform: translateY(-2px); }
 
-        /* --- GLASSMORPHISM MODAL --- */
+        .card-actions { display: flex; gap: 10px; z-index: 2; }
+        .btn-action-small {
+            width: 38px; height: 38px; border-radius: 10px;
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
+            color: #fff; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn-action-small:hover { border-color: #4facfe; transform: scale(1.1); }
+
+        /* --- MODAL STYLES */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(15, 15, 15, 0.95);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 99999; /* Extrem hoch setzen */
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
         }
 
         .modal-box {
             background-color: #121212;
-            padding: 30px 25px;
-            border-radius: 24px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            width: 100%;
+            border-radius: 32px;
+            padding: 30px;
+            width: 90%; /* Responsive für Handy */
             max-width: 400px;
-            box-sizing: border-box;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+
+            /* Absolute Zentrierung erzwingen */
+            position: relative;
+            margin: auto;
+
+            animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .modal-title {
-            font-size: 1.4em;
-            font-weight: 800;
-            color: #ffffff;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .input-group { margin-bottom: 20px; }
-
-        .dark-input {
+        .btn-submit {
             width: 100%;
-            padding: 15px;
-            background: #0a0a0a;
-            border: 1px solid #333;
-            color: white;
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-size: 1em;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .dark-input:focus { border-color: #4facfe; }
-
-        .checkbox-list { width: 100%; background: #0a0a0a; border-radius: 12px; border: 1px solid #333; padding: 10px; box-sizing: border-box; }
-        .checkbox-list td { padding: 10px; border-bottom: 1px solid #222; }
-        .checkbox-list td:last-child { border-bottom: none; }
-        .checkbox-list label { margin-left: 10px; color: #f0f0f0; cursor: pointer; font-size: 0.95em;}
-        .checkbox-list input[type="checkbox"] { accent-color: #4facfe; transform: scale(1.2); }
-
-        .modal-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .btn-modal-cancel, .btn-modal-save {
-            flex: 1;
-            min-height: 48px;
-            border-radius: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            border: none;
-            font-size: 1em;
-            transition: all 0.2s;
-        }
-
-        .btn-modal-cancel {
-            background: rgba(255, 255, 255, 0.05);
-            color: #f0f0f0;
-        }
-        .btn-modal-cancel:hover { background: rgba(255, 255, 255, 0.1); }
-
-        .btn-modal-save {
+            min-height: 50px;
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: #050505;
+            border: none;
+            border-radius: 16px;
+            font-size: 1em;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
         }
-        .btn-modal-save:active { transform: scale(0.96); }
 
-        .empty-state { text-align: center; color: #888; font-style: italic; padding: 30px; background: #121212; border-radius: 20px; border: 1px dashed #333; }
-
-        @media (max-width: 450px) {
-            .plan-card { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .card-actions { width: 100%; justify-content: flex-end; }
+        .btn-glass {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-radius: 16px;
+            font-weight: 800;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
         }
+
+        .btn-danger-glass {
+            background: rgba(255, 82, 82, 0.1);
+            color: #ff5252;
+            border-color: rgba(255, 82, 82, 0.2);
+        }
+
+        .dark-input-modal {
+            width: 100%;
+            background-color: #050505;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 1em;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        /* --- TOGGLE --- */
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background-color: #333; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background: #4facfe; }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        @media (max-width: 600px) {
+            .modal-box {
+                padding: 25px 20px;
+                border-radius: 24px;
+            }
+            .dark-input-modal {
+                font-size: 16px; /* Wichtig gegen Auto-Zoom auf iOS */
+            }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 	</style>
 </h:head>
 
 <h:body>
+	<div class="bg-glow glow-1"></div>
+	<div class="bg-glow glow-2"></div>
+
 	<div class="container">
 
-		<h:messages showDetail="true" showSummary="true" style="color: #ff5252; list-style:none; text-align:center; padding: 0; margin: 0; font-weight: bold;"/>
+		<div class="profile-header">
+			<nav class="profile-nav">
+				<h:link outcome="index" styleClass="btn-circle">❮</h:link>
 
-		<div class="header">
-			<h:link outcome="index" styleClass="btn-circle back-btn">
-				❮
-			</h:link>
-
-			<h2 class="header-title">#{athleteDetailController.athlete != null ? athleteDetailController.athlete.username : 'Fehler'}</h2>
-
-			<h:panelGroup rendered="#{athleteDetailController.athlete != null and athleteDetailController.athlete.id == userSession.loggedInAthlete.id}">
-				<h:form styleClass="header-delete-form">
-					<h:commandLink styleClass="btn-circle delete-btn"
-								   title="Account löschen"
-								   onclick="openConfirmModal(#{athleteDetailController.athlete.id}, 'deleteAccountCmd', 'Account löschen?', 'Bist du dir GANZ sicher? Alle deine Pläne und Fortschritte gehen für immer verloren!'); return false;">
+				<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}">
+					<h:commandLink onclick="openConfirmModal(#{athleteDetailController.athlete.id}, 'deleteAccountCmd', 'Konto löschen?', 'Willst du wirklich gehen? Alle Fortschritte werden gelöscht.'); return false;"
+								   styleClass="btn-circle btn-delete-profile">
 						🗑️
-					</h:commandLink>				</h:form>
-			</h:panelGroup>
-			<h:panelGroup rendered="#{athleteDetailController.athlete == null or athleteDetailController.athlete.id != userSession.loggedInAthlete.id}">
-				<div style="width: 44px;"></div>
-			</h:panelGroup>
+					</h:commandLink>
+				</h:panelGroup>
+			</nav>
+
+			<div class="avatar-large">👤</div>
+			<h2>#{athleteDetailController.athlete.username}</h2>
 		</div>
 
 		<h:form id="mainForm">
-			<h:panelGroup rendered="#{athleteDetailController.athlete != null}">
-
-				<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="settings-card">
-					<h:panelGroup id="privacyStatusInfo" layout="block" styleClass="settings-info">
-						<div class="settings-title">
-							#{athleteDetailController.athlete.profilePublic ? '🌍 Öffentliches Profil' : '🕵️ Privates Profil'}
-						</div>
-						<div class="settings-desc">
-							#{athleteDetailController.athlete.profilePublic ? 'Dein Name und Pläne sind sichtbar.' : 'Ghost-Modus: Du bist unsichtbar.'}
-						</div>
+			<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="settings-glass">
+				<div class="settings-label-group">
+					<h:panelGroup id="privacyStatus">
+						<span class="settings-title">#{athleteDetailController.athlete.profilePublic ? 'Öffentliches Profil' : 'Privates Profil'}</span>
+						<span class="settings-sub">#{athleteDetailController.athlete.profilePublic ? 'Sichtbar für alle Athleten' : 'Nur für dich sichtbar'}</span>
 					</h:panelGroup>
-
-					<label class="switch">
-						<h:selectBooleanCheckbox value="#{athleteDetailController.athlete.profilePublic}">
-							<f:ajax listener="#{athleteDetailController.toggleVisibility}" render="privacyStatusInfo" />
-						</h:selectBooleanCheckbox>
-						<span class="slider"></span>
-					</label>
-				</h:panelGroup>
-
-				<span class="section-label" style="margin-top: 10px;">Trainingspläne</span>
-
-				<h:panelGroup rendered="#{empty athleteDetailController.athlete.trainingPlans}" layout="block" styleClass="empty-state">
-					Dieser Athlet hat noch keine Trainingspläne.
-				</h:panelGroup>
-
-				<h:panelGroup rendered="#{not empty athleteDetailController.athlete.trainingPlans}" layout="block" styleClass="plan-list">
-					<ui:repeat value="#{athleteDetailController.athlete.trainingPlans}" var="plan">
-
-						<div class="plan-card">
-							<div class="plan-info">
-								<h:link outcome="planEditor" styleClass="plan-name-link">
-									<f:param name="planId" value="#{plan.id}" />
-									#{plan.name}
-								</h:link>
-								<span class="status-badge #{plan.active ? 'status-active' : 'status-inactive'}">
-                                    #{plan.active ? 'AKTIV' : 'Inaktiv'}
-                                </span>
-							</div>
-
-							<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="card-actions">
-								<h:commandLink action="#{athleteDetailController.prepareEditPlan(plan)}"
-											   styleClass="btn-icon btn-edit"
-											   title="Plan bearbeiten">
-									✏️
-									<f:ajax render=":editPlanModal" />
-								</h:commandLink>
-
-								<h:commandLink styleClass="btn-icon btn-delete"
-											   title="Plan löschen"
-											   onclick="openConfirmModal(#{plan.id}, 'deletePlanCmd', 'Plan löschen?', 'Möchtest du diesen Trainingsplan inklusive aller Übungen wirklich entfernen?'); return false;">
-									🗑️
-								</h:commandLink>							</h:panelGroup>
-						</div>
-					</ui:repeat>
-				</h:panelGroup>
-
-				<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" style="margin-top: 30px;">
-					<h:link value="+ Neuer Trainingsplan"
-							outcome="/trainingPlan.xhtml"
-							styleClass="btn-primary">
-						<f:param name="athleteId" value="#{athleteDetailController.athlete.id}"/>
-					</h:link>
-				</h:panelGroup>
-
+				</div>
+				<label class="switch">
+					<h:selectBooleanCheckbox value="#{athleteDetailController.athlete.profilePublic}">
+						<f:ajax listener="#{athleteDetailController.toggleVisibility}" render="privacyStatus" />
+					</h:selectBooleanCheckbox>
+					<span class="slider"></span>
+				</label>
 			</h:panelGroup>
 
-			<h:panelGroup rendered="#{athleteDetailController.athlete == null}">
-				<p style="color: #ff5252; text-align: center; margin-top: 50px;">Kein Athlet geladen.</p>
+			<span class="section-label">Trainingspläne</span>
+
+			<div class="plan-list">
+				<ui:repeat value="#{athleteDetailController.athlete.trainingPlans}" var="plan">
+					<div class="plan-card">
+						<div class="plan-info">
+							<h:link outcome="planEditor" styleClass="plan-name plan-link-overlay">
+								<f:param name="planId" value="#{plan.id}" />
+								#{plan.name}
+							</h:link>
+							<span class="status-pill #{plan.active ? 'status-active' : 'status-inactive'}">
+                                #{plan.active ? 'Aktiv' : 'Pause'}
+                            </span>
+						</div>
+
+						<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="card-actions">
+							<h:commandLink action="#{athleteDetailController.prepareEditPlan(plan)}" styleClass="btn-action-small">
+								✏️ <f:ajax render=":editPlanModal" />
+							</h:commandLink>
+							<h:commandLink onclick="openConfirmModal(#{plan.id}, 'deletePlanCmd', 'Plan löschen?', 'Alle Tage und Übungen dieses Plans werden entfernt.'); return false;"
+										   styleClass="btn-action-small" style="color: #ff5252;">
+								🗑️
+							</h:commandLink>
+						</h:panelGroup>
+					</div>
+				</ui:repeat>
+			</div>
+
+			<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}"
+						  layout="block"
+						  styleClass="add-plan-wrapper">
+				<h:link value="+ Neuer Trainingsplan"
+						outcome="/trainingPlan.xhtml"
+						styleClass="btn-add-plan">
+					<f:param name="athleteId" value="#{athleteDetailController.athlete.id}"/>
+				</h:link>
 			</h:panelGroup>
 		</h:form>
 	</div>
 
-	<h:panelGroup id="editPlanModal">
-		<h:panelGroup rendered="#{athleteDetailController.planToEdit != null}" layout="block" styleClass="modal-overlay">
-			<h:form>
+	<h:panelGroup id="editPlanModal" layout="block">
+		<h:panelGroup rendered="#{athleteDetailController.planToEdit != null}"
+					  layout="block"
+					  styleClass="modal-overlay">
+			<h:form id="editPlanForm">
 				<div class="modal-box">
-					<div class="modal-title">Plan bearbeiten</div>
-
-					<div class="input-group">
-						<span class="section-label">Name des Plans</span>
-						<h:inputText value="#{athleteDetailController.newPlanName}" styleClass="dark-input" required="true" />
+					<div class="modal-title" style="margin-bottom: 25px; font-weight: 800; font-size: 1.4em; text-align: center; color: #fff;">
+						Plan bearbeiten
 					</div>
 
-					<div class="input-group">
-						<span class="section-label">Neue Tage hinzufügen</span>
-
-						<h:panelGroup rendered="#{empty athleteDetailController.missingDays}">
-							<div style="color:#666; font-style:italic; font-size:0.9em; background: #0a0a0a; padding: 15px; border-radius: 12px; border: 1px solid #333;">Alle Wochentage bereits vorhanden.</div>
-						</h:panelGroup>
-
-						<h:selectManyCheckbox value="#{athleteDetailController.selectedNewDays}"
-											  layout="pageDirection"
-											  styleClass="checkbox-list"
-											  rendered="#{not empty athleteDetailController.missingDays}">
-							<f:selectItems value="#{athleteDetailController.missingDays}" />
-						</h:selectManyCheckbox>
+					<div class="modal-input-group" style="margin-bottom: 20px;">
+						<span class="section-label" style="display: block; margin-bottom: 8px;">Name des Trainingsplans</span>
+						<h:inputText value="#{athleteDetailController.newPlanName}"
+									 styleClass="dark-input-modal"
+									 required="true" />
 					</div>
 
-					<div class="modal-actions">
-						<h:commandButton value="Abbrechen" action="#{athleteDetailController.cancelEdit()}" styleClass="btn-modal-cancel">
+					<div class="modal-actions" style="display: flex; gap: 10px;">
+						<h:commandButton value="Abbrechen"
+										 action="#{athleteDetailController.cancelEdit()}"
+										 styleClass="btn-glass btn-danger-glass"
+										 style="flex: 1; border-radius: 14px;">
 							<f:ajax render=":editPlanModal" />
 						</h:commandButton>
 
-						<h:commandButton value="Speichern" action="#{athleteDetailController.savePlanChanges}" styleClass="btn-modal-save">
+						<h:commandButton value="Speichern"
+										 action="#{athleteDetailController.savePlanChanges}"
+										 styleClass="btn-submit"
+										 style="flex: 1; margin-top: 0; min-height: 48px; border-radius: 14px;">
 							<f:ajax execute="@form" render=":editPlanModal :mainForm" />
 						</h:commandButton>
 					</div>
@@ -515,12 +416,8 @@
 		</h:panelGroup>
 	</h:panelGroup>
 	<h:form style="display: none;">
-		<h:commandScript name="deleteAccountCmd"
-						 action="#{athleteDetailController.deleteAccount}" />
-
-		<h:commandScript name="deletePlanCmd"
-						 action="#{athleteDetailController.deletePlan(param.delId)}"
-						 render=":mainForm" />
+		<h:commandScript name="deleteAccountCmd" action="#{athleteDetailController.deleteAccount}" />
+		<h:commandScript name="deletePlanCmd" action="#{athleteDetailController.deletePlan(param.delId)}" render=":mainForm" />
 	</h:form>
 
 	<ui:include src="/WEB-INF/includes/confirmModal.xhtml" />
