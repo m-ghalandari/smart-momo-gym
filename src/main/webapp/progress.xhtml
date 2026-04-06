@@ -2,31 +2,46 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:h="jakarta.faces.html"
-	  xmlns:o="omnifaces.ui"
-	  xmlns:of="omnifaces.functions"
 	  xmlns:f="jakarta.faces.core"
 	  xmlns:ui="jakarta.faces.facelets">
 
 <h:head>
-	<title>Fortschritt</title>
+	<title>Fortschritt - Smart Momo Gym</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<link rel="manifest" href="#{request.contextPath}/manifest.json?v=2" />
+	<h:outputStylesheet name="css/app.css" />
+
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 	<style>
         /* --- GLOBAL THEME --- */
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: #050505;
             color: #f0f0f0;
             margin: 0;
-            padding: 20px 15px;
+            padding: 0;
+            min-height: 100vh;
         }
+
+        /* --- BACKGROUND GLOWS --- */
+        .bg-glow {
+            position: fixed;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(79, 172, 254, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(90px);
+        }
+        .glow-1 { top: -100px; right: -100px; }
+        .glow-2 { bottom: -100px; left: -100px; }
 
         .container {
             max-width: 600px;
             margin: 0 auto;
-            width: 100%;
+            padding: 30px 20px 80px 20px;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
         }
@@ -36,231 +51,218 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 35px;
+            animation: fadeInDown 0.5s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .btn-circle {
-            width: 44px;
-            height: 44px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 1.2em;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: none;
-            background-color: rgba(255, 255, 255, 0.05);
+            width: 44px; height: 44px; border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 1.2em; transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
             color: #f0f0f0;
         }
         .btn-circle:active { transform: scale(0.92); }
-        .btn-circle:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .btn-circle:hover { background: rgba(255, 255, 255, 0.1); border-color: #4facfe; }
 
-        .header-center {
-            flex: 2;
-            text-align: center;
-        }
+        .header-center { flex: 2; text-align: center; }
 
-        .header-center h2 {
+        h2 {
             margin: 0;
-            font-size: 1.6em;
+            font-size: 1.8em;
             font-weight: 800;
-            color: #ffffff;
+            background: linear-gradient(to bottom, #ffffff, #aaaaaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             letter-spacing: 0.5px;
         }
 
         .header-sub {
-            color: #888888;
-            margin-top: 4px;
-            font-size: 0.75em;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            color: #888; margin-top: 4px; font-size: 0.8em; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px;
         }
 
-        /* --- CARD  FORM --- */
-        .card {
-            background-color: #121212;
+        /* --- GLASS CARD --- */
+        .glass-card {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border-radius: 32px;
+            padding: 30px 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            width: 100%;
             box-sizing: border-box;
-            animation: fadeIn 0.4s ease-out;
+            animation: cardEntrance 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- FORM ELEMENTS --- */
         .form-label {
-            font-size: 0.75em;
-            color: #888888;
-            margin-bottom: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: block;
+            font-size: 0.75em; color: #888; margin-bottom: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: block; padding-left: 5px;
         }
 
         .dark-input {
-            background-color: #0a0a0a;
-            border: 1px solid #333;
+            background-color: #000;
+            border: 1px solid #222;
             color: #ffffff;
-            padding: 0 15px;
-            min-height: 48px; /* Touch Target */
-            border-radius: 12px;
+            padding: 16px 20px;
+            border-radius: 16px;
             outline: none;
             width: 100%;
-            font-size: 1em;
-            font-weight: 600;
-            margin-bottom: 20px;
+            font-size: 1.05em;
+            font-weight: 700;
+            margin-bottom: 25px;
             box-sizing: border-box;
-            transition: border-color 0.2s;
+            transition: all 0.3s ease;
             appearance: none;
             -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234facfe' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 15px center;
             background-size: 16px;
-            padding-right: 40px;
+            cursor: pointer;
         }
-        .dark-input:focus { border-color: #4facfe; }
+        .dark-input:focus { border-color: #4facfe; box-shadow: 0 0 15px rgba(79, 172, 254, 0.1); }
+
+        /* --- KPI GRID (Wissenschaftliche Daten-Präsentation) --- */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .kpi-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 15px 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: inset 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .kpi-label { font-size: 0.65em; color: #888; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
+        .kpi-value { font-size: 1.4em; font-weight: 900; color: #fff; margin-top: 5px; }
+        .kpi-trend { font-size: 0.75em; font-weight: 800; margin-top: 5px; padding: 2px 8px; border-radius: 10px; display: inline-block; width: fit-content; margin-left: auto; margin-right: auto; }
+
+        .trend-up { background: rgba(40, 167, 69, 0.15); color: #28a745; }
+        .trend-down { background: rgba(255, 82, 82, 0.15); color: #ff5252; }
+        .trend-neutral { background: rgba(255, 255, 255, 0.05); color: #888; }
+        .kpi-highlight { color: #ff9800; text-shadow: 0 0 10px rgba(255, 152, 0, 0.3); }
 
         /* --- EMPTY STATE --- */
         .empty-state {
-            text-align: center;
-            color: #888888;
-            padding: 40px 20px;
-            background: #0a0a0a;
-            border-radius: 16px;
-            border: 1px dashed #333;
-            font-style: italic;
-            font-size: 0.9em;
-            margin-top: 10px;
+            text-align: center; color: #666; padding: 50px 20px; background: rgba(0, 0, 0, 0.4); border-radius: 24px; border: 1px dashed #333; font-size: 0.95em; margin-top: 10px; animation: fadeIn 0.4s;
         }
 
         /* --- CHART.JS CONTAINER --- */
         .chart-container {
             position: relative;
             width: 100%;
-            height: 45vh;
-            min-height: 300px;
-            margin-top: 15px;
+            height: 35vh;
+            min-height: 250px;
+            margin-top: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.02);
+            animation: fadeIn 0.8s ease-out;
         }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* --- MOBILE OPTIMIERUNG --- */
         @media (max-width: 600px) {
-            .card { padding: 20px; border-radius: 20px; }
-            .chart-container { height: 40vh; min-height: 250px; }
+            .glass-card { padding: 25px 15px; border-radius: 24px; }
+            .kpi-value { font-size: 1.2em; }
         }
 	</style>
 </h:head>
 
 <h:body>
+	<div class="bg-glow glow-1"></div>
+	<div class="bg-glow glow-2"></div>
+
 	<div class="container">
+
 		<div class="header">
-			<h:link outcome="planEditor" styleClass="btn-circle" title="Zurück">
-				<f:param name="planId" value="#{progressController.planId}" />
-				❮
-			</h:link>
+			<div class="header-left">
+				<h:link outcome="planEditor" styleClass="btn-circle" title="Zurück">
+					<f:param name="planId" value="#{progressController.planId}" />
+					❮
+				</h:link>
+			</div>
 
 			<div class="header-center">
-				<h2>📈 Fortschritt</h2>
+				<h2>📊 Fortschritt</h2>
 				<div class="header-sub">#{progressController.trainingPlan.name}</div>
 			</div>
 
-			<div style="width: 44px;"></div> </div>
+			<div class="header-right">
+				<div style="width: 44px;"></div> </div>
+		</div>
 
-		<div class="card">
+		<div class="glass-card">
 			<h:form id="progressForm">
 				<h:outputLabel value="Übung auswählen" styleClass="form-label"/>
 
 				<h:selectOneMenu value="#{progressController.selectedExerciseId}" styleClass="dark-input">
 					<f:selectItem itemLabel="Bitte wählen..." itemValue="#{null}" />
 					<f:selectItems value="#{progressController.planExercises}" var="ex" itemValue="#{ex.id}" itemLabel="#{ex.name}" />
-					<f:ajax listener="#{progressController.loadChartData}" render="chartWrapper" />
+					<f:ajax listener="#{progressController.loadChartData}" render="chartWrapper" onevent="onChartAjax" />
 				</h:selectOneMenu>
 
 				<h:panelGroup id="chartWrapper" layout="block">
 
 					<h:panelGroup rendered="#{not progressController.hasData and progressController.selectedExerciseId != null}">
 						<div class="empty-state">
-							Noch keine Trainingsdaten für diese Übung vorhanden. Mach ein Workout!
+							<div style="font-size: 2em; margin-bottom: 10px;">📉</div>
+							Keine Daten gefunden.<br/><br/>
+							<span style="color: #4facfe; font-weight: 800; font-style: normal;">Logge dein erstes Workout!</span>
 						</div>
+						<script>window.currentChartData = null;</script>
 					</h:panelGroup>
 
 					<h:panelGroup rendered="#{progressController.hasData}">
+
+						<div class="kpi-grid">
+							<div class="kpi-card">
+								<span class="kpi-label">Aktuell</span>
+								<span class="kpi-value" id="kpi-current">-</span>
+							</div>
+							<div class="kpi-card">
+								<span class="kpi-label">All-Time PR</span>
+								<span class="kpi-value kpi-highlight" id="kpi-pr">-</span>
+							</div>
+							<div class="kpi-card">
+								<span class="kpi-label">Entwicklung</span>
+								<span class="kpi-trend trend-neutral" id="kpi-trend">-</span>
+							</div>
+						</div>
+
 						<div class="chart-container">
 							<canvas id="progressChart"></canvas>
 						</div>
 
 						<script>
-                            // Alten Graphen zerstören
-                            if (window.myChart != null) {
-                                window.myChart.destroy();
-                            }
-                            var ctx = document.getElementById('progressChart').getContext('2d');
-
-                            // Neon-Glow Effekt für den Chart
-                            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
-                            gradient.addColorStop(0, 'rgba(79, 172, 254, 0.4)');
-                            gradient.addColorStop(1, 'rgba(79, 172, 254, 0.0)');
-
-                            window.myChart = new Chart(ctx, {
-                                type: 'line',
-                                data: {
-                                    labels: #{progressController.chartLabels},
-                            datasets: [{
-                                label: 'Gewicht (kg)',
-                                data: #{progressController.chartData},
-                            borderColor: '#4facfe',
-                                backgroundColor: gradient,
-                                borderWidth: 3,
-                                tension: 0.4, // Smoother curve
-                                pointBackgroundColor: '#ff9800', // Orange Workout Focus
-                                pointBorderColor: '#121212', // Blend with card bg
-                                pointBorderWidth: 2,
-                                pointRadius: 6,
-                                pointHoverRadius: 8,
-                                fill: true
-                            }]
-                            },
-                            options: {
-                                responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: {
-                                    legend: {
-                                        display: false // Entfernt die unnötige Legende für mehr Platz
-                                    },
-                                    tooltip: {
-                                        backgroundColor: 'rgba(15, 15, 15, 0.95)',
-                                            titleColor: '#888',
-                                            bodyColor: '#fff',
-                                            bodyFont: { weight: 'bold', size: 14 },
-                                        padding: 12,
-                                            cornerRadius: 8,
-                                            borderColor: '#333',
-                                            borderWidth: 1
-                                    }
-                                },
-                                scales: {
-                                    x: {
-                                        ticks: { color: '#888888', font: { weight: '600' } },
-                                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false }
-                                    },
-                                    y: {
-                                        ticks: { color: '#888888', font: { weight: '600' } },
-                                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
-                                        beginAtZero: false
-                                    }
-                                },
-                                interaction: {
-                                    mode: 'index',
-                                        intersect: false,
-                                }
-                            }
-                            });
+                            window.currentChartData = {
+                                labels: #{progressController.chartLabels},
+                            data: #{progressController.chartData}
+                            };
 						</script>
 					</h:panelGroup>
 
@@ -268,5 +270,146 @@
 			</h:form>
 		</div>
 	</div>
+
+	<script>
+        // <![CDATA[
+        function onChartAjax(data) {
+            if (data.status === 'success') {
+                setTimeout(renderChartAndKPIs, 50);
+            }
+        }
+
+        // Hilfsfunktion für sauberes Runden (verhindert Floating-Point Errors)
+        function formatWeight(val) {
+            return (Math.round(val * 10) / 10);
+        }
+
+        function renderChartAndKPIs() {
+            if (window.myChart != null) {
+                window.myChart.destroy();
+                window.myChart = null;
+            }
+
+            if (!window.currentChartData) return;
+
+            let labels = window.currentChartData.labels;
+            let dataPoints = window.currentChartData.data;
+
+            // --- 1. KPI BERECHNUNG ---
+            if(dataPoints && dataPoints.length > 0) {
+                let numericData = dataPoints.map(Number);
+
+                let currentWeight = numericData[numericData.length - 1];
+                let startWeight = numericData[0];
+                let maxWeight = Math.max(...numericData);
+                let diff = currentWeight - startWeight;
+
+                // DOM Updates (Sicher gerundet!)
+                document.getElementById('kpi-current').innerText = formatWeight(currentWeight) + ' kg';
+                document.getElementById('kpi-pr').innerText = formatWeight(maxWeight) + ' kg';
+
+                let trendEl = document.getElementById('kpi-trend');
+                if (diff > 0) {
+                    trendEl.innerText = '+' + formatWeight(diff) + ' kg';
+                    trendEl.className = 'kpi-trend trend-up';
+                } else if (diff < 0) {
+                    trendEl.innerText = formatWeight(diff) + ' kg';
+                    trendEl.className = 'kpi-trend trend-down';
+                } else {
+                    trendEl.innerText = '±0 kg';
+                    trendEl.className = 'kpi-trend trend-neutral';
+                }
+            }
+
+            // --- 2. CHART RENDERING ---
+            var canvas = document.getElementById('progressChart');
+            if (!canvas) return;
+
+            var ctx = canvas.getContext('2d');
+
+            let gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(79, 172, 254, 0.5)');
+            gradient.addColorStop(1, 'rgba(79, 172, 254, 0.0)');
+
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Gewicht (kg)',
+                        data: dataPoints,
+                        borderColor: '#4facfe',
+                        backgroundColor: gradient,
+                        borderWidth: 4,
+                        tension: 0.4,
+                        pointBackgroundColor: '#121212',
+                        pointBorderColor: '#4facfe',
+                        pointBorderWidth: 3,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        pointHoverBackgroundColor: '#ff9800',
+                        pointHoverBorderColor: '#fff',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 10, right: 10, bottom: 0, left: 0 }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 15, 15, 0.95)',
+                            titleColor: '#888',
+                            bodyColor: '#fff',
+                            bodyFont: { weight: 'bold', size: 15 },
+                            padding: 15,
+                            cornerRadius: 16,
+                            borderColor: 'rgba(79, 172, 254, 0.3)',
+                            borderWidth: 1,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    // Rundet den Wert im schwarzen Pop-Up
+                                    return formatWeight(context.parsed.y) + ' kg gehoben';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#666', font: { weight: '800', family: 'system-ui' }, maxRotation: 45, minRotation: 0 },
+                            grid: { display: false }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#888',
+                                font: { weight: '800', family: 'system-ui' },
+                                callback: function(value) {
+                                    // Rundet die Zahlen auf der linken Y-Achse
+                                    return formatWeight(value) + ' kg';
+                                }
+                            },
+                            grid: { color: 'rgba(255,255,255,0.05)', borderDash: [5, 5], drawBorder: false },
+                            beginAtZero: false
+                        }
+                    },
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                }
+            });
+        }
+
+        window.onload = function() {
+            if (window.currentChartData) {
+                renderChartAndKPIs();
+            }
+        };
+        // ]]>
+	</script>
 </h:body>
 </html>

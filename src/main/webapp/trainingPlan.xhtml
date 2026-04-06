@@ -2,29 +2,43 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:h="jakarta.faces.html"
-	  xmlns:o="omnifaces.ui"
-	  xmlns:of="omnifaces.functions"
 	  xmlns:f="jakarta.faces.core">
 
 <h:head>
-	<title>Neuen Plan erstellen</title>
+	<title>Neuen Plan erstellen - Smart Momo Gym</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<link rel="manifest" href="#{request.contextPath}/manifest.json?v=2" />
+	<h:outputStylesheet name="css/app.css" />
 
 	<style>
         /* --- GLOBAL THEME --- */
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: #050505;
             color: #f0f0f0;
             margin: 0;
-            padding: 20px 15px;
+            padding: 0;
+            min-height: 100vh;
         }
+
+        /* --- BACKGROUND GLOWS --- */
+        .bg-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(79, 172, 254, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(80px);
+        }
+        .glow-1 { top: -100px; right: -100px; }
+        .glow-2 { bottom: -100px; left: -100px; }
 
         .container {
             max-width: 600px;
             margin: 0 auto;
-            width: 100%;
+            padding: 30px 20px;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
         }
@@ -34,28 +48,31 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 35px;
+            animation: fadeInDown 0.5s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .btn-circle {
             width: 44px;
             height: 44px;
-            border-radius: 50px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
             font-size: 1.2em;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: none;
-            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: #f0f0f0;
         }
         .btn-circle:active { transform: scale(0.92); }
-        .btn-circle:hover { background-color: rgba(255, 255, 255, 0.1); }
+        .btn-circle:hover { background: rgba(255, 255, 255, 0.1); border-color: #4facfe; }
 
         .header-center {
             flex: 2;
@@ -64,35 +81,41 @@
 
         .header-center h2 {
             margin: 0;
-            font-size: 1.6em;
+            font-size: 1.8em;
             font-weight: 800;
-            color: #ffffff;
+            background: linear-gradient(to bottom, #ffffff, #aaaaaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             letter-spacing: 0.5px;
         }
 
         .header-sub {
             color: #888888;
             margin-top: 4px;
-            font-size: 0.75em;
+            font-size: 0.8em;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-
         .highlight { color: #4facfe; }
 
-        /* --- CARD --- */
-        .card {
-            background-color: #121212;
-            padding: 25px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255,255,255,0.05);
+        /* --- GLASS CARD --- */
+        .glass-card {
+            background: rgba(18, 18, 18, 0.7);
+            padding: 35px 25px;
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
             width: 100%;
             box-sizing: border-box;
-            animation: fadeIn 0.4s ease-out;
+            animation: cardEntrance 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* --- FORM ELEMENTS --- */
         .form-group { margin-bottom: 25px; }
@@ -102,25 +125,29 @@
             margin-bottom: 10px;
             font-weight: 800;
             font-size: 0.75em;
-            color: #888888;
+            color: #666;
             text-transform: uppercase;
             letter-spacing: 1.5px;
+            padding-left: 5px;
         }
 
         .dark-input {
             width: 100%;
-            padding: 0 15px;
-            min-height: 48px; /* Touch Target Rule */
-            background-color: #0a0a0a;
-            border: 1px solid #333;
-            border-radius: 12px;
+            padding: 18px;
+            background-color: rgba(5, 5, 5, 0.6);
+            border: 1px solid #222;
+            border-radius: 18px;
             font-size: 1em;
             color: #ffffff;
             box-sizing: border-box;
-            transition: border-color 0.2s;
+            transition: all 0.3s ease;
             outline: none;
         }
-        .dark-input:focus { border-color: #4facfe; }
+        .dark-input:focus {
+            border-color: #4facfe;
+            background-color: #000;
+            box-shadow: 0 0 15px rgba(79, 172, 254, 0.1);
+        }
 
         /* --- DAY GRID (CHECKBOXES) --- */
         .checkbox-table {
@@ -130,26 +157,30 @@
         .checkbox-table tbody {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 12px;
             width: 100%;
         }
-        .checkbox-table tr { display: flex; width: 100%; }
+
+        /* Macht die TRs unsichtbar für das Grid, damit TDs direkte Grid-Kinder werden */
+        .checkbox-table tr { display: contents; }
 
         .checkbox-table td {
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #0a0a0a;
-            border: 1px solid #333;
-            border-radius: 12px;
-            min-height: 48px; /* Fat Finger Proof */
-            width: 100%;
+            background-color: rgba(5, 5, 5, 0.6);
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 15px 5px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             box-sizing: border-box;
-            padding: 0 5px;
         }
-        .checkbox-table td:hover { border-color: #4facfe; background-color: rgba(79, 172, 254, 0.05); }
+        .checkbox-table td:hover {
+            border-color: #4facfe;
+            background-color: rgba(79, 172, 254, 0.05);
+            transform: translateY(-2px);
+        }
 
         .checkbox-table label {
             color: #f0f0f0;
@@ -157,12 +188,11 @@
             font-weight: 800;
             cursor: pointer;
             margin-left: 8px;
-            white-space: nowrap;
         }
 
         .checkbox-table input[type="checkbox"] {
             accent-color: #4facfe;
-            transform: scale(1.2);
+            transform: scale(1.3);
             cursor: pointer;
             margin: 0;
         }
@@ -171,10 +201,10 @@
         .toggle-container {
             display: flex;
             align-items: center;
-            background: #0a0a0a;
-            padding: 12px 15px;
-            border-radius: 12px;
-            border: 1px solid #333;
+            background: rgba(5, 5, 5, 0.6);
+            padding: 15px 20px;
+            border-radius: 18px;
+            border: 1px solid #222;
             justify-content: space-between;
         }
 
@@ -187,8 +217,8 @@
         .switch {
             position: relative;
             display: inline-block;
-            width: 44px;
-            height: 24px;
+            width: 50px;
+            height: 28px;
         }
         .switch input { opacity: 0; width: 0; height: 0; }
 
@@ -203,58 +233,65 @@
         .slider:before {
             position: absolute;
             content: "";
-            height: 18px; width: 18px;
-            left: 3px; bottom: 3px;
+            height: 20px; width: 20px;
+            left: 4px; bottom: 4px;
             background-color: white;
             transition: .3s;
             border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         input:checked + .slider { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-        input:checked + .slider:before { transform: translateX(20px); }
+        input:checked + .slider:before { transform: translateX(22px); }
 
-        /* --- BUTTONS --- */
+        /* --- SUBMIT BUTTON --- */
         .btn-submit {
             width: 100%;
-            min-height: 56px;
+            min-height: 58px;
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: #050505;
             border: none;
-            border-radius: 16px;
+            border-radius: 18px;
             font-size: 1.1em;
-            font-weight: 800;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 10px;
+            letter-spacing: 1.5px;
+            margin-top: 15px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.2);
-            box-sizing: border-box;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 30px rgba(79, 172, 254, 0.3);
         }
-        .btn-submit:active { transform: scale(0.96); }
-        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4); }
+        .btn-submit:active { transform: scale(0.97); }
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(79, 172, 254, 0.5);
+        }
 
+        /* --- ERROR BOX --- */
         .error-box {
             background-color: rgba(255, 82, 82, 0.1);
-            border: 1px solid rgba(255, 82, 82, 0.3);
+            border: 1px solid rgba(255, 82, 82, 0.2);
             color: #ff5252;
             padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
             text-align: center;
             list-style: none;
             font-weight: 800;
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
 
         /* --- MOBILE OPTIMIERUNG --- */
         @media (max-width: 450px) {
             .checkbox-table tbody { grid-template-columns: 1fr 1fr; }
-            .card { padding: 20px; border-radius: 20px; }
+            .glass-card { padding: 30px 20px; }
         }
 	</style>
 </h:head>
 
 <h:body>
+	<div class="bg-glow glow-1"></div>
+	<div class="bg-glow glow-2"></div>
+
 	<div class="container">
 
 		<div class="header">
@@ -270,9 +307,10 @@
 				</h:panelGroup>
 			</div>
 
-			<div style="width: 44px;"></div> </div>
+			<div style="width: 44px;"></div>
+		</div>
 
-		<div class="card">
+		<div class="glass-card">
 			<h:form>
 				<h:messages globalOnly="true" styleClass="error-box" style="padding:0; margin:0;" />
 
@@ -280,7 +318,7 @@
 					<h:outputLabel value="Bezeichnung" styleClass="form-label"/>
 					<h:inputText value="#{planController.planName}"
 								 required="true"
-								 requiredMessage="Name fehlt."
+								 requiredMessage="Bitte eine Bezeichnung eingeben."
 								 styleClass="dark-input"
 								 f:passThroughAttribute="placeholder"
 								 f:passThroughValue="z.B. Push Pull Legs"/>
@@ -295,7 +333,7 @@
 					</h:selectManyCheckbox>
 				</div>
 
-				<div class="form-group" style="margin-bottom: 10px;">
+				<div class="form-group" style="margin-bottom: 15px;">
 					<h:outputLabel value="Optionen" styleClass="form-label"/>
 					<div class="toggle-container">
 						<span class="toggle-label">Sofort aktivieren</span>
@@ -306,7 +344,7 @@
 					</div>
 				</div>
 
-				<h:commandButton value="Speichern"
+				<h:commandButton value="Plan Erstellen"
 								 action="#{planController.save}"
 								 styleClass="btn-submit"/>
 			</h:form>
