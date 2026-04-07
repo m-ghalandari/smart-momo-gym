@@ -10,13 +10,16 @@ import jakarta.faces.view.ViewScoped; // Wichtig: Hält die Daten, solange man a
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import jakarta.annotation.PostConstruct; // Für das Laden der Daten beim Seitenaufruf
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.application.FacesMessage;
+import jakarta.servlet.http.Part;
 
 @Named("athleteDetailController")
 @ViewScoped
@@ -40,6 +43,8 @@ public class AthleteDetailController implements Serializable {
 
 	private final List<String> allWeekDays = List.of("Montag", "Dienstag", "Mittwoch", "Donnerstag",
 		"Freitag", "Samstag", "Sonntag");
+
+	private String croppedImageBase64;
 
 	/**
 	 * Diese Methode wird direkt nach Erstellung der Bean aufgerufen (@PostConstruct). Sie liest den
@@ -172,6 +177,26 @@ public class AthleteDetailController implements Serializable {
 
 	public List<String> getMissingDays() {
 		return missingDays;
+	}
+
+	public String getCroppedImageBase64() { return croppedImageBase64; }
+	public void setCroppedImageBase64(String croppedImageBase64) { this.croppedImageBase64 = croppedImageBase64; }
+
+	public void uploadProfilePicture() {
+		if (croppedImageBase64 != null && !croppedImageBase64.isEmpty()) {
+			try {
+				// Der String sieht so aus: "data:image/jpeg;base64,/9j/4AAQ..."
+				// Wir schneiden den vorderen Teil ab und decodieren den Rest
+				String base64Data = croppedImageBase64.split(",")[1];
+				byte[] bytes = Base64.getDecoder().decode(base64Data);
+
+				athlete.setProfilePicture(bytes);
+				athleteService.updateAthlete(athlete);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

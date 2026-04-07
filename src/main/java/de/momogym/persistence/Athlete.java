@@ -3,6 +3,7 @@ package de.momogym.persistence;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Entity
@@ -48,6 +49,10 @@ public class Athlete {
 
 	@Column(name = "PROFILE_PUBLIC")
 	private boolean profilePublic = true;
+
+	@Lob
+	@Column(name = "profile_picture", length = 5242880)
+	private byte[] profilePicture;
 
     public Athlete() {
     }
@@ -112,5 +117,15 @@ public class Athlete {
 	}
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
+	}
+
+	public byte[] getProfilePicture() { return profilePicture; }
+	public void setProfilePicture(byte[] profilePicture) { this.profilePicture = profilePicture; }
+
+	public String getProfilePictureBase64() {
+		if (this.profilePicture != null && this.profilePicture.length > 0) {
+			return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(this.profilePicture);
+		}
+		return null;
 	}
 }

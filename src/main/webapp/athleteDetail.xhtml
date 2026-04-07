@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-		<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:h="jakarta.faces.html"
 	  xmlns:f="jakarta.faces.core"
@@ -22,6 +22,7 @@
             min-height: 100vh;
         }
 
+        /* --- BACKGROUND GLOWS --- */
         .bg-glow {
             position: fixed;
             width: 450px;
@@ -37,8 +38,10 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 30px 20px 80px 20px;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
         }
 
         /* --- PROFIL HEADER --- */
@@ -58,6 +61,13 @@
             margin-bottom: 20px;
         }
 
+        /* --- NEU: AVATAR WRAPPER BADGE --- */
+        .avatar-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
         .avatar-large {
             width: 100px;
             height: 100px;
@@ -68,9 +78,9 @@
             align-items: center;
             justify-content: center;
             font-size: 2.5em;
-            margin-bottom: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             position: relative;
+            transition: border-color 0.3s;
         }
 
         .avatar-large::after {
@@ -83,6 +93,29 @@
             opacity: 0.3;
             filter: blur(10px);
         }
+
+        .avatar-edit-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #050505;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            border: 3px solid #050505;
+            transition: transform 0.2s;
+            z-index: 10;
+        }
+        .avatar-edit-badge:hover { transform: scale(1.1); }
+        .avatar-edit-badge:active { transform: scale(0.9); }
 
         h2 {
             font-size: 2em;
@@ -168,27 +201,13 @@
         .btn-delete-profile { color: #ff5252; border-color: rgba(255, 82, 82, 0.2); }
         .btn-delete-profile:hover { background: rgba(255, 82, 82, 0.1); border-color: #ff5252; }
 
-        /* Zentriert den Button-Bereich */
-        .add-plan-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-top: 30px;
-            width: 100%;
-        }
+        .add-plan-wrapper { display: flex; justify-content: center; margin-top: 30px; width: 100%; }
 
         .btn-add-plan {
-            /* Breite reduziert und fest definiert */
-            width: 100%;
-            max-width: 280px;
-            padding: 16px;
-            border-radius: 20px;
+            width: 100%; max-width: 280px; padding: 16px; border-radius: 20px;
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: #050505;
-            font-weight: 800;
-            text-align: center;
-            text-decoration: none;
-            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.2);
-            transition: 0.3s;
+            color: #050505; font-weight: 800; text-align: center; text-decoration: none;
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.2); transition: 0.3s;
         }
 
         .card-actions { display: flex; gap: 10px; z-index: 2; }
@@ -202,81 +221,26 @@
 
         /* --- MODAL STYLES */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 99999; /* Extrem hoch setzen */
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            z-index: 99999; display: flex; justify-content: center; align-items: center;
         }
-
         .modal-box {
-            background-color: #121212;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 32px;
-            padding: 30px;
-            width: 90%; /* Responsive für Handy */
-            max-width: 400px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
-
-            /* Absolute Zentrierung erzwingen */
-            position: relative;
-            margin: auto;
-
+            background-color: #121212; border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px; padding: 30px; width: 90%; max-width: 400px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8); position: relative; margin: auto;
             animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-
         .btn-submit {
-            width: 100%;
-            min-height: 50px;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: #050505;
-            border: none;
-            border-radius: 16px;
-            font-size: 1em;
-            font-weight: 800;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s ease;
+            width: 100%; min-height: 50px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #050505; border: none; border-radius: 16px; font-size: 1em; font-weight: 800; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease;
         }
-
         .btn-glass {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            border-radius: 16px;
-            font-weight: 800;
-            text-decoration: none;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; padding: 15px; border-radius: 16px; font-weight: 800; text-decoration: none; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); cursor: pointer; transition: all 0.2s;
         }
-
-        .btn-danger-glass {
-            background: rgba(255, 82, 82, 0.1);
-            color: #ff5252;
-            border-color: rgba(255, 82, 82, 0.2);
-        }
-
-        .dark-input-modal {
-            width: 100%;
-            background-color: #050505;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 1em;
-            outline: none;
-            box-sizing: border-box;
-        }
+        .btn-danger-glass { background: rgba(255, 82, 82, 0.1); color: #ff5252; border-color: rgba(255, 82, 82, 0.2); }
+        .dark-input-modal { width: 100%; background-color: #050505; border: 1px solid #333; color: #fff; padding: 16px; border-radius: 16px; font-size: 1em; outline: none; box-sizing: border-box; }
 
         /* --- TOGGLE --- */
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
@@ -287,13 +251,8 @@
         input:checked + .slider:before { transform: translateX(20px); }
 
         @media (max-width: 600px) {
-            .modal-box {
-                padding: 25px 20px;
-                border-radius: 24px;
-            }
-            .dark-input-modal {
-                font-size: 16px; /* Wichtig gegen Auto-Zoom auf iOS */
-            }
+            .modal-box { padding: 25px 20px; border-radius: 24px; }
+            .dark-input-modal { font-size: 16px; }
         }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -319,11 +278,34 @@
 				</h:panelGroup>
 			</nav>
 
-			<div class="avatar-large">👤</div>
-			<h2>#{athleteDetailController.athlete.username}</h2>
-		</div>
+			<h:form id="avatarForm" style="margin: 0; display: flex; flex-direction: column; align-items: center;">
+
+				<div class="avatar-wrapper">
+					<h:panelGroup rendered="#{not empty athleteDetailController.athlete.profilePictureBase64}">
+						<div class="avatar-large" style="background-image: url('#{athleteDetailController.athlete.profilePictureBase64}'); background-size: cover; background-position: center; border-color: #4facfe; color: transparent;"></div>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{empty athleteDetailController.athlete.profilePictureBase64}">
+						<div class="avatar-large">👤</div>
+					</h:panelGroup>
+
+					<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}">
+						<label for="fileInput" class="avatar-edit-badge" title="Profilbild ändern">
+							+
+						</label>
+
+						<input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="compressAndUploadImage(event)" />
+
+						<h:inputHidden id="croppedData" value="#{athleteDetailController.croppedImageBase64}" />
+
+						<h:commandButton id="uploadBtn" action="#{athleteDetailController.uploadProfilePicture}" style="display: none;" />
+					</h:panelGroup>
+				</div>
+
+				<h2>#{athleteDetailController.athlete.username}</h2>
+			</h:form>		</div>
 
 		<h:form id="mainForm">
+
 			<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="settings-glass">
 				<div class="settings-label-group">
 					<h:panelGroup id="privacyStatus">
@@ -421,5 +403,59 @@
 	</h:form>
 
 	<ui:include src="/WEB-INF/includes/confirmModal.xhtml" />
+	<script>
+        // <![CDATA[
+        function compressAndUploadImage(event) {
+            const fileInput = event.target;
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    // Canvas erstellen für Verkleinerung
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 500;
+                    const MAX_HEIGHT = 500;
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Proportionen beibehalten
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Komprimiertes Bild als Base64 holen (JPEG mit 80% Qualität = ca. 30-50 KB)
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+
+                    // 1. In das versteckte JSF-Feld schreiben
+                    document.getElementById('avatarForm:croppedData').value = dataUrl;
+
+                    // 2. WICHTIG: Das echte File-Feld leeren, damit das Handy nicht die 15 MB Datei mitschickt!
+                    fileInput.value = '';
+
+                    // 3. JSF Upload Button triggern
+                    document.getElementById('avatarForm:uploadBtn').click();
+                }
+            };
+        }
+        // ]]>
+	</script>
 </h:body>
 </html>

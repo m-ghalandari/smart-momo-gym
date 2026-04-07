@@ -52,7 +52,7 @@
         .logo-container {
             display: flex;
             justify-content: center;
-            margin-bottom: -50px; /* Zieht die Karte leicht über das Logo für mehr Tiefe */
+            margin-bottom: -50px;
             position: relative;
             z-index: 10;
         }
@@ -69,7 +69,7 @@
 
         .gym-logo {
             display: block;
-            width: 120px; /* Feste Größe für bessere Lesbarkeit des Textes im Logo */
+            width: 120px;
             height: 120px;
             object-fit: cover;
             border-radius: 20px;
@@ -78,7 +78,7 @@
         /* --- LOGIN CARD --- */
         .login-card {
             background: rgba(18, 18, 18, 0.7);
-            padding: 70px 35px 40px 35px; /* Oben mehr Padding wegen dem überlappenden Logo */
+            padding: 70px 35px 40px 35px;
             border-radius: 32px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px);
@@ -186,37 +186,41 @@
 </h:head>
 
 <h:body>
-	<div class="bg-glow glow-1"></div>
-	<div class="bg-glow glow-2"></div>
+	<f:view transient="true">
 
-	<div class="main-content">
-		<div class="logo-container">
-			<div class="logo-frame">
-				<h:graphicImage name="images/logo.png" styleClass="gym-logo" alt="Logo" />
+		<div class="bg-glow glow-1"></div>
+		<div class="bg-glow glow-2"></div>
+
+		<div class="main-content">
+			<div class="logo-container">
+				<div class="logo-frame">
+					<h:graphicImage name="images/logo.png" styleClass="gym-logo" alt="Logo" />
+				</div>
+			</div>
+
+			<div class="login-card">
+				<h2>MOMO GYM</h2>
+
+				<h:form>
+					<h:messages globalOnly="true" styleClass="global-messages" />
+
+					<div class="form-group">
+						<h:outputLabel for="usernameInput" value="Benutzername" styleClass="form-label" />
+						<h:inputText id="usernameInput" value="#{loginController.username}" required="true" styleClass="form-input" autocomplete="username"/>
+					</div>
+
+					<div class="form-group">
+						<h:outputLabel for="passwordInput" value="Passwort" styleClass="form-label" />
+						<h:inputSecret id="passwordInput" value="#{loginController.password}" required="true" styleClass="form-input" autocomplete="current-password"/>
+					</div>
+
+					<h:commandButton value="Login" action="#{loginController.login}" styleClass="btn-submit" />
+
+					<h:link value="NEUEN ACCOUNT ERSTELLEN" outcome="register.xhtml" styleClass="link-text" />
+				</h:form>
 			</div>
 		</div>
 
-		<div class="login-card">
-			<h2>MOMO GYM</h2>
-
-			<h:form>
-				<h:messages globalOnly="true" styleClass="global-messages" />
-
-				<div class="form-group">
-					<h:outputLabel for="usernameInput" value="Benutzername" styleClass="form-label" />
-					<h:inputText id="usernameInput" value="#{loginController.username}" required="true" styleClass="form-input" autocomplete="username"/>
-				</div>
-
-				<div class="form-group">
-					<h:outputLabel for="passwordInput" value="Passwort" styleClass="form-label" />
-					<h:inputSecret id="passwordInput" value="#{loginController.password}" required="true" styleClass="form-input" autocomplete="current-password"/>
-				</div>
-
-				<h:commandButton value="Login" action="#{loginController.login}" styleClass="btn-submit" />
-
-				<h:link value="NEUEN ACCOUNT ERSTELLEN" outcome="register.xhtml" styleClass="link-text" />
-			</h:form>
-		</div>
-	</div>
+	</f:view>
 </h:body>
 </html>

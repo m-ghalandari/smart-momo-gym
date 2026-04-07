@@ -27,7 +27,7 @@
             overflow-x: hidden;
         }
 
-        /* --- BACKGROUND GLOWS (Einheitlichkeit) --- */
+        /* --- BACKGROUND GLOWS --- */
         .bg-glow {
             position: fixed;
             width: 400px;
@@ -47,16 +47,46 @@
             box-sizing: border-box;
         }
 
-        /* --- WELCOME HEADER --- */
+        /* --- WELCOME HEADER AVATAR --- */
         .welcome-section {
             text-align: center;
             margin-bottom: 40px;
             animation: fadeInDown 0.6s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        .welcome-avatar-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .welcome-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #111;
+            border: 2px solid #333;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            transition: all 0.3s ease;
+        }
+
+        /* Wenn ein Bild da ist, leuchtet der Avatar blau */
+        .welcome-avatar.has-image {
+            border-color: #4facfe;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
         }
 
         .gym-title {
@@ -144,7 +174,7 @@
             background: rgba(20, 20, 20, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 24px;
-            padding: 20px;
+            padding: 15px 20px; /* Leicht angepasst für Avatar */
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -173,10 +203,11 @@
             z-index: 2;
         }
 
+        /* Avatar Box für die Liste */
         .athlete-avatar-box {
             width: 50px;
             height: 50px;
-            background: #000;
+            background-color: #000;
             border: 1px solid #333;
             border-radius: 16px;
             display: flex;
@@ -184,12 +215,20 @@
             justify-content: center;
             font-size: 1.2em;
             transition: all 0.3s ease;
+            background-size: cover;
+            background-position: center;
+            color: #888;
         }
 
         .athlete-card:hover .athlete-avatar-box {
             border-color: #4facfe;
-            color: #4facfe;
             box-shadow: 0 0 15px rgba(79, 172, 254, 0.2);
+            color: #4facfe;
+        }
+
+        .athlete-avatar-box.has-image {
+            border-color: rgba(79, 172, 254, 0.5); /* Subtiler blauer Rand für Bilder */
+            color: transparent;
         }
 
         .athlete-name {
@@ -248,10 +287,7 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        .btn-delete-admin:hover {
-            background: #ff5252;
-            color: #fff;
-        }
+        .btn-delete-admin:hover { background: #ff5252; color: #fff; }
 
         /* --- EMPTY STATE --- */
         .empty-state {
@@ -276,6 +312,15 @@
 	<div class="container">
 
 		<header class="welcome-section">
+			<div class="welcome-avatar-wrapper">
+				<h:panelGroup rendered="#{not empty userSession.loggedInAthlete.profilePictureBase64}">
+					<div class="welcome-avatar has-image" style="background-image: url('#{userSession.loggedInAthlete.profilePictureBase64}');"></div>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{empty userSession.loggedInAthlete.profilePictureBase64}">
+					<div class="welcome-avatar">👤</div>
+				</h:panelGroup>
+			</div>
+
 			<span class="gym-title">Smart Momo Gym</span>
 			<h2>Willkommen, #{userSession.loggedInAthlete.username}</h2>
 		</header>
@@ -305,7 +350,14 @@
 				<ui:repeat value="#{dashboardController.allAthletes}" var="athlete" varStatus="status">
 					<div class="athlete-card" style="animation-delay: #{status.index * 0.1}s">
 						<div class="athlete-info">
-							<div class="athlete-avatar-box">👤</div>
+
+							<h:panelGroup rendered="#{not empty athlete.profilePictureBase64}">
+								<div class="athlete-avatar-box has-image" style="background-image: url('#{athlete.profilePictureBase64}');"></div>
+							</h:panelGroup>
+							<h:panelGroup rendered="#{empty athlete.profilePictureBase64}">
+								<div class="athlete-avatar-box">👤</div>
+							</h:panelGroup>
+
 							<div class="athlete-details">
 								<h:link outcome="athleteDetail" styleClass="athlete-name athlete-link-overlay">
 									<f:param name="athleteId" value="#{athlete.id}" />

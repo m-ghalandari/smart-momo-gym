@@ -107,4 +107,9 @@ public class AthleteService {
 		}
 	}
 
+	public void updateAthlete(Athlete athlete) {
+		if (athlete != null) {
+			entityManager.merge(athlete);
+		}
+	}
 }
