@@ -61,7 +61,7 @@
             margin-bottom: 20px;
         }
 
-        /* --- NEU: AVATAR WRAPPER BADGE --- */
+        /* --- AVATAR WRAPPER BADGE --- */
         .avatar-wrapper {
             position: relative;
             display: inline-block;
@@ -280,7 +280,7 @@
 
 			<h:form id="avatarForm" style="margin: 0; display: flex; flex-direction: column; align-items: center;">
 
-				<div class="avatar-wrapper">
+				<div class="avatar-wrapper tour-avatar-step">
 					<h:panelGroup rendered="#{not empty athleteDetailController.athlete.profilePictureBase64}">
 						<div class="avatar-large" style="background-image: url('#{athleteDetailController.athlete.profilePictureBase64}'); background-size: cover; background-position: center; border-color: #4facfe; color: transparent;"></div>
 					</h:panelGroup>
@@ -302,11 +302,11 @@
 				</div>
 
 				<h2>#{athleteDetailController.athlete.username}</h2>
-			</h:form>		</div>
+			</h:form>     </div>
 
 		<h:form id="mainForm">
 
-			<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="settings-glass">
+			<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}" layout="block" styleClass="settings-glass tour-privacy-step">
 				<div class="settings-label-group">
 					<h:panelGroup id="privacyStatus">
 						<span class="settings-title">#{athleteDetailController.athlete.profilePublic ? 'Öffentliches Profil' : 'Privates Profil'}</span>
@@ -323,7 +323,7 @@
 
 			<span class="section-label">Trainingspläne</span>
 
-			<div class="plan-list">
+			<div class="plan-list tour-plans-step">
 				<ui:repeat value="#{athleteDetailController.athlete.trainingPlans}" var="plan">
 					<div class="plan-card">
 						<div class="plan-info">
@@ -351,7 +351,7 @@
 
 			<h:panelGroup rendered="#{athleteDetailController.athlete.id == userSession.loggedInAthlete.id}"
 						  layout="block"
-						  styleClass="add-plan-wrapper">
+						  styleClass="add-plan-wrapper tour-add-plan-step">
 				<h:link value="+ Neuer Trainingsplan"
 						outcome="/trainingPlan.xhtml"
 						styleClass="btn-add-plan">
@@ -416,14 +416,12 @@
                 const img = new Image();
                 img.src = e.target.result;
                 img.onload = function() {
-                    // Canvas erstellen für Verkleinerung
                     const canvas = document.createElement('canvas');
                     const MAX_WIDTH = 500;
                     const MAX_HEIGHT = 500;
                     let width = img.width;
                     let height = img.height;
 
-                    // Proportionen beibehalten
                     if (width > height) {
                         if (width > MAX_WIDTH) {
                             height *= MAX_WIDTH / width;
@@ -441,21 +439,57 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Komprimiertes Bild als Base64 holen (JPEG mit 80% Qualität = ca. 30-50 KB)
                     const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-
-                    // 1. In das versteckte JSF-Feld schreiben
                     document.getElementById('avatarForm:croppedData').value = dataUrl;
-
-                    // 2. WICHTIG: Das echte File-Feld leeren, damit das Handy nicht die 15 MB Datei mitschickt!
                     fileInput.value = '';
-
-                    // 3. JSF Upload Button triggern
                     document.getElementById('avatarForm:uploadBtn').click();
                 }
             };
         }
+
+        /* --- DRIVER.JS TOUR KONFIGURATION FÜR ATHLETEDETAIL --- */
+        const pageTourSteps = [
+            {
+                element: '.tour-avatar-step',
+                popover: {
+                    title: 'Dein Profilbild',
+                    description: 'Lade hier dein eigenes Profilbild hoch! Klicke auf das kleine "+"-Symbol. Das Bild wird automatisch optimiert und gespeichert, um Datenvolumen zu sparen.',
+                    side: "bottom",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.tour-privacy-step',
+                popover: {
+                    title: 'Deine Privatsphäre',
+                    description: 'Du bestimmst, wer deine Fortschritte sieht. Stelle dein Profil auf "Öffentlich", um deine Trainingspläne mit der Smart Momo Gym Community zu teilen, oder bleibe komplett inkognito.',
+                    side: "bottom",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.tour-plans-step',
+                popover: {
+                    title: 'Trainingspläne',
+                    description: 'Hier ist dein Archiv. Klicke auf den Namen eines Plans, um ihn im Editor zu öffnen, neue Übungen hinzuzufügen oder ein Workout zu starten.',
+                    side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.tour-add-plan-step',
+                popover: {
+                    title: 'Neuer Plan',
+                    description: 'Bereit für eine neue Routine? Klicke hier, um einen völlig neuen Trainingsplan von Grund auf zu erstellen.',
+                    side: "top",
+                    align: 'center'
+                }
+            }
+        ];
         // ]]>
 	</script>
+
+	<ui:include src="/WEB-INF/includes/helpWidget.xhtml" />
+
 </h:body>
 </html>

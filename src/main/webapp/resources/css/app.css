@@ -18,3 +18,51 @@
 .confirm-actions { display: flex; gap: 15px; justify-content: center; }
 .btn-confirm-no { background: #222; color: #fff; border: none; padding: 12px 24px; border-radius: 16px; cursor: pointer; font-weight: bold; width: 100%; }
 .btn-confirm-yes { background: #ff3333; color: #fff; border: none; padding: 12px 24px; border-radius: 16px; cursor: pointer; font-weight: bold; width: 100%; }
+
+/* --- DRIVER.JS OLED PRO SKIN (Global) --- */
+.driver-popover {
+    background: rgba(20, 20, 20, 0.85) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(79, 172, 254, 0.4) !important;
+    border-radius: 24px !important;
+    color: #fff !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(79, 172, 254, 0.2) !important;
+    font-family: 'Segoe UI', system-ui, sans-serif !important;
+}
+
+.driver-popover-title {
+    font-size: 1.3em !important;
+    font-weight: 800 !important;
+    color: #4facfe !important;
+    margin-bottom: 10px !important;
+}
+
+.driver-popover-description {
+    font-size: 0.95em !important;
+    color: #ccc !important;
+    line-height: 1.5 !important;
+}
+
+.driver-popover-footer button {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    color: #fff !important;
+    border-radius: 12px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    text-shadow: none !important;
+    transition: 0.2s !important;
+}
+
+.driver-popover-footer button:hover {
+    background: #4facfe !important;
+    color: #000 !important;
+}
+
+.driver-popover-footer .driver-popover-next-btn {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+    color: #000 !important;
+    border: none !important;
+}

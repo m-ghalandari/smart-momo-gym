@@ -2,7 +2,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:h="jakarta.faces.html"
-	  xmlns:f="jakarta.faces.core">
+	  xmlns:f="jakarta.faces.core"
+	  xmlns:ui="jakarta.faces.facelets"
+	  lang="de">
 
 <h:head>
 	<title>Neuen Plan erstellen - Smart Momo Gym</title>
@@ -37,7 +39,7 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 30px 20px 80px 20px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -314,17 +316,15 @@
 			<h:form>
 				<h:messages globalOnly="true" styleClass="error-box" style="padding:0; margin:0;" />
 
-				<div class="form-group">
+				<div class="form-group tour-name-step">
 					<h:outputLabel value="Bezeichnung" styleClass="form-label"/>
 					<h:inputText value="#{planController.planName}"
 								 required="true"
 								 requiredMessage="Bitte eine Bezeichnung eingeben."
-								 styleClass="dark-input"
-								 f:passThroughAttribute="placeholder"
-								 f:passThroughValue="z.B. Push Pull Legs"/>
+								 styleClass="dark-input" />
 				</div>
 
-				<div class="form-group">
+				<div class="form-group tour-days-step">
 					<h:outputLabel value="Tage auswählen" styleClass="form-label"/>
 					<h:selectManyCheckbox value="#{planController.selectedDays}"
 										  layout="pageDirection"
@@ -333,7 +333,7 @@
 					</h:selectManyCheckbox>
 				</div>
 
-				<div class="form-group" style="margin-bottom: 15px;">
+				<div class="form-group tour-activate-step" style="margin-bottom: 15px;">
 					<h:outputLabel value="Optionen" styleClass="form-label"/>
 					<div class="toggle-container">
 						<span class="toggle-label">Sofort aktivieren</span>
@@ -346,10 +346,56 @@
 
 				<h:commandButton value="Plan Erstellen"
 								 action="#{planController.save}"
-								 styleClass="btn-submit"/>
+								 styleClass="btn-submit tour-submit-step"/>
 			</h:form>
 		</div>
 
 	</div>
+
+	<script>
+        // <![CDATA[
+        const pageTourSteps = [
+            {
+                element: '.tour-name-step',
+                popover: {
+                    title: 'Gib deinem Plan einen Namen',
+                    description: 'Wie soll dein neuer Trainingsplan heißen? Beliebte Namen sind z.B. "Push Pull Legs", "Ganzkörper" oder "Sommer-Shred".',
+                    side: "bottom",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.tour-days-step',
+                popover: {
+                    title: 'Strukturiere deine Woche',
+                    description: 'Wähle aus, an welchen Tagen dieser Plan trainiert wird. Du kannst diese Auswahl später nicht mehr ändern, aber die Übungen an den Tagen bleiben völlig flexibel!',
+                    side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.tour-activate-step',
+                popover: {
+                    title: 'Direkt durchstarten?',
+                    description: 'Wenn du diesen Plan sofort zu deinem aktuellen Haupt-Plan machen willst, aktiviere diesen Schalter. Du kannst das aber auch später in deinem Profil tun.',
+                    side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.tour-submit-step',
+                popover: {
+                    title: 'Erstellen',
+                    description: 'Klicke hier, um den leeren Plan zu generieren. Danach landest du direkt im Editor und kannst ihn mit deinen Lieblingsübungen füllen!',
+                    side: "top",
+                    align: 'center'
+                }
+            }
+        ];
+        // ]]>
+	</script>
+
+	<ui:include src="/WEB-INF/includes/helpWidget.xhtml" />
+
 </h:body>
 </html>

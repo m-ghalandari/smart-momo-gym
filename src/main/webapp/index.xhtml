@@ -83,7 +83,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Wenn ein Bild da ist, leuchtet der Avatar blau */
         .welcome-avatar.has-image {
             border-color: #4facfe;
             box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
@@ -174,7 +173,7 @@
             background: rgba(20, 20, 20, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 24px;
-            padding: 15px 20px; /* Leicht angepasst für Avatar */
+            padding: 15px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -203,7 +202,6 @@
             z-index: 2;
         }
 
-        /* Avatar Box für die Liste */
         .athlete-avatar-box {
             width: 50px;
             height: 50px;
@@ -227,7 +225,7 @@
         }
 
         .athlete-avatar-box.has-image {
-            border-color: rgba(79, 172, 254, 0.5); /* Subtiler blauer Rand für Bilder */
+            border-color: rgba(79, 172, 254, 0.5);
             color: transparent;
         }
 
@@ -289,7 +287,6 @@
         }
         .btn-delete-admin:hover { background: #ff5252; color: #fff; }
 
-        /* --- EMPTY STATE --- */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -312,7 +309,7 @@
 	<div class="container">
 
 		<header class="welcome-section">
-			<div class="welcome-avatar-wrapper">
+			<div id="tour-avatar" class="welcome-avatar-wrapper">
 				<h:panelGroup rendered="#{not empty userSession.loggedInAthlete.profilePictureBase64}">
 					<div class="welcome-avatar has-image" style="background-image: url('#{userSession.loggedInAthlete.profilePictureBase64}');"></div>
 				</h:panelGroup>
@@ -326,7 +323,7 @@
 		</header>
 
 		<nav class="header-actions">
-			<h:link outcome="exercises.xhtml" styleClass="btn-glass btn-primary-glass">
+			<h:link id="tour-catalog-btn" outcome="exercises.xhtml" styleClass="btn-glass btn-primary-glass">
 				🏋️ Übungskatalog
 			</h:link>
 
@@ -337,7 +334,7 @@
 			</h:form>
 		</nav>
 
-		<section class="content-area">
+		<section id="tour-athlete-list" class="content-area">
 			<span class="section-label">Aktive Athleten</span>
 
 			<h:panelGroup rendered="#{empty dashboardController.allAthletes}">
@@ -392,5 +389,42 @@
 	</h:form>
 
 	<ui:include src="/WEB-INF/includes/confirmModal.xhtml" />
+
+	<script>
+        // <![CDATA[
+        const pageTourSteps = [
+            {
+                element: '#tour-avatar',
+                popover: {
+                    title: 'Dein Profil',
+                    description: 'Hier ist dein Hauptquartier! Klicke auf deinen Avatar oder Namen in der Liste, um dein Profilbild zu ändern, Trainingspläne zu erstellen oder deine Privatsphäre-Einstellungen anzupassen.',
+                    side: "bottom",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#tour-catalog-btn',
+                popover: {
+                    title: 'Der Übungskatalog',
+                    description: 'Bevor du einen Trainingsplan baust, schau hier vorbei. Hier pflegst du alle deine Übungen ein. Du kannst auch YouTube- oder GIF-Links hinterlegen, um beim Training direkt die perfekte Ausführung parat zu haben!',
+                    side: "bottom",
+                    align: 'center'
+                }
+            },
+            {
+                element: '#tour-athlete-list',
+                popover: {
+                    title: 'Die Community',
+                    description: 'Hier siehst du alle aktiven Athleten im Smart Momo Gym. Klicke auf einen Namen, um ihre öffentlichen Pläne zu durchstöbern und dich inspirieren zu lassen.',
+                    side: "top",
+                    align: 'center'
+                }
+            }
+        ];
+        // ]]>
+	</script>
+
+	<ui:include src="/WEB-INF/includes/helpWidget.xhtml" />
+
 </h:body>
 </html>

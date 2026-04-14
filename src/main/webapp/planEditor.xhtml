@@ -52,7 +52,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px; /* Reduziert, weil das Control Panel folgt */
+            margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
@@ -82,7 +82,7 @@
             text-overflow: ellipsis;
         }
 
-        /* --- NEU: PLAN CONTROL PANEL (UX Upgrade) --- */
+        /* --- PLAN CONTROL PANEL --- */
         .plan-controls {
             display: flex;
             align-items: center;
@@ -303,7 +303,7 @@
 			</div>
 
 			<div class="plan-controls">
-				<div class="control-group">
+				<div class="control-group tour-status-step">
 					<span class="control-label">Status</span>
 
 					<h:panelGroup rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}">
@@ -322,13 +322,13 @@
 					</h:panelGroup>
 				</div>
 
-				<h:link outcome="progress" styleClass="btn-progress" title="Fortschritt ansehen">
+				<h:link outcome="progress" styleClass="btn-progress tour-progress-step" title="Fortschritt ansehen">
 					<f:param name="planId" value="#{planEditorController.planId}" />
 					📊 Fortschritt
 				</h:link>
 			</div>
 
-			<div class="day-selector-wrapper" id="daySelectorWrapper">
+			<div class="day-selector-wrapper tour-day-selector-step" id="daySelectorWrapper">
 				<span class="section-label">Aktueller Trainingstag</span>
 
 				<div class="day-dropdown-header" onclick="document.getElementById('daySelectorWrapper').classList.toggle('open')">
@@ -419,7 +419,7 @@
 
 							<h:panelGroup rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}">
 
-								<button type="button" class="btn-toggle-add" onclick="document.getElementById('add-wrapper-#{day.id}').classList.toggle('open'); return false;">
+								<button type="button" class="btn-toggle-add tour-add-exercise-step" onclick="document.getElementById('add-wrapper-#{day.id}').classList.toggle('open'); return false;">
 									➕ Neue Übung hinzufügen
 								</button>
 
@@ -447,7 +447,7 @@
 							</h:panelGroup>
 
 							<h:link outcome="workoutSession"
-									styleClass="btn-start-workout"
+									styleClass="btn-start-workout tour-start-workout-step"
 									rendered="#{planEditorController.trainingPlan.athlete.id == userSession.loggedInAthlete.id}">
 								<f:param name="dayId" value="#{day.id}" />
 								<f:param name="planId" value="#{planEditorController.planId}" />
@@ -499,5 +499,60 @@
 	</h:form>
 
 	<ui:include src="/WEB-INF/includes/confirmModal.xhtml" />
+
+	<script>
+        // <![CDATA[
+        const pageTourSteps = [
+            {
+                element: '.tour-status-step',
+                popover: {
+                    title: 'Aktiviere deinen Plan',
+                    description: 'Du kannst mehrere Pläne erstellen, aber immer nur einer kann aktiv sein. Aktiviere ihn hier, um ihn auf dem Dashboard sichtbar zu machen.',
+                    side: "bottom",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.tour-progress-step',
+                popover: {
+                    title: 'Dein Fortschritt',
+                    description: 'Verfolge deine Gains! Klicke hier, um wunderschöne Statistiken und Graphen zu allen Übungen aus diesem Trainingsplan zu sehen.',
+                    side: "bottom",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.tour-day-selector-step',
+                popover: {
+                    title: 'Trainingstage wechseln',
+                    description: 'Hier kannst du ganz einfach zwischen deinen definierten Trainingstagen hin- und herschalten.',
+                    side: "bottom",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.tour-add-exercise-step',
+                popover: {
+                    title: 'Übungen hinzufügen',
+                    description: 'Ergänze den aktuellen Tag mit Übungen aus deinem Katalog. Lege hier direkt deine Ziel-Sätze, Wiederholungen und das Startgewicht fest.',
+                    side: "top",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.tour-start-workout-step',
+                popover: {
+                    title: 'Los geht’s!',
+                    description: 'Genug geplant, ab ans Eisen! Mit diesem Button startest du das Live-Workout für den aktuell ausgewählten Tag. Viel Erfolg!',
+                    side: "top",
+                    align: 'center'
+                }
+            }
+        ];
+        // ]]>
+	</script>
+
+	<ui:include src="/WEB-INF/includes/helpWidget.xhtml" />
+
 </h:body>
 </html>

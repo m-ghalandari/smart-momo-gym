@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="jakarta.faces.facelets"
+				xmlns:h="jakarta.faces.html">
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+	<script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+
+	<h:outputScript name="js/tour.js" />
+
+	<button type="button" class="global-help-btn" onclick="startAppTour(pageTourSteps)">
+		❓
+	</button>
+
+	<style>
+        .global-help-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid #4facfe;
+            color: #4facfe;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            z-index: 9990; /* Unter dem Modal, aber über der Seite */
+            transition: all 0.3s ease;
+        }
+        .global-help-btn:hover {
+            transform: scale(1.1);
+            background: rgba(79, 172, 254, 0.2);
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        }
+        .global-help-btn:active { transform: scale(0.9); }
+	</style>
+</ui:composition>

@@ -208,7 +208,7 @@
 
 		<h:messages globalOnly="true" styleClass="toast-notification" id="toastMsg"/>
 
-		<div class="header">
+		<div class="header tour-header-step">
 			<h:link outcome="index.xhtml" styleClass="btn-circle" title="Zurück">
 				❮
 			</h:link>
@@ -216,7 +216,7 @@
 			<div style="width: 44px;"></div>
 		</div>
 
-		<h:panelGroup rendered="#{userSession.loggedInAthlete.admin}" layout="block" styleClass="glass-card">
+		<h:panelGroup layout="block" styleClass="glass-card tour-add-step">
 			<h:form>
 				<div class="form-grid">
 					<div class="input-wrapper">
@@ -249,7 +249,7 @@
 		</h:panelGroup>
 
 		<h:form id="exerciseListForm">
-			<h:panelGroup layout="block" styleClass="exercise-list" rendered="#{not empty exerciseController.allExercises}">
+			<h:panelGroup layout="block" styleClass="exercise-list tour-exercise-list-step" rendered="#{not empty exerciseController.allExercises}">
 
 				<ui:repeat value="#{exerciseController.allExercises}" var="ex">
 					<div class="exercise-item">
@@ -348,6 +348,38 @@
                 }, 2000);
             }
         };
+
+        /* --- DRIVER.JS TOUR KONFIGURATION --- */
+        const pageTourSteps = [
+            {
+                element: '.tour-header-step',
+                popover: {
+                    title: 'Der globale Katalog',
+                    description: 'Willkommen in der Bibliothek von Smart Momo Gym. Hier findest du alle Übungen, die im gesamten System verfügbar sind.',
+                    side: "bottom",
+                    align: 'center'
+                }
+            },
+            {
+                // Dieser Schritt ist nun für alle da
+                element: '.tour-add-step',
+                popover: {
+                    title: 'Übungen anlegen',
+                    description: 'Fehlt eine Übung im Katalog? Lege sie hier für alle an! Füge am besten direkt einen YouTube- oder GIF-Link hinzu, um die perfekte Ausführung zu zeigen.',
+                    side: "bottom",
+                    align: 'center'
+                }
+            },
+            {
+                element: '.tour-exercise-list-step',
+                popover: {
+                    title: 'Die Datenbank',
+                    description: 'Hier sind alle Übungen aufgelistet. Klicke auf die Video- oder GIF-Badges, um dir die Ausführung direkt auf deinem Gerät anzusehen.',
+                    side: "top",
+                    align: 'center'
+                }
+            }
+        ];
 	</script>
 
 	<h:form style="display: none;">
@@ -357,6 +389,7 @@
 	</h:form>
 
 	<ui:include src="/WEB-INF/includes/confirmModal.xhtml" />
+	<ui:include src="/WEB-INF/includes/helpWidget.xhtml" />
 
 </h:body>
 </html>
