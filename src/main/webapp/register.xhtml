@@ -2,7 +2,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:h="jakarta.faces.html"
-	  xmlns:f="jakarta.faces.core">
+	  xmlns:f="jakarta.faces.core"
+	  xmlns:ui="jakarta.faces.facelets">
 
 <h:head>
 	<title>Registrieren - Smart Momo Gym</title>
@@ -195,6 +196,7 @@
 </h:head>
 
 <h:body>
+	<f:view transient="true">
 	<div class="bg-glow glow-1"></div>
 	<div class="bg-glow glow-2"></div>
 
@@ -241,5 +243,38 @@
 			</h:form>
 		</div>
 	</div>
+		<script>
+            // <![CDATA[
+            const pageTourSteps = [
+                {
+                    element: '.link-text', // Zielt auf den "BEREITS MITGLIED? LOGIN" Link
+                    popover: {
+                        title: 'Schon angemeldet?',
+                        description: 'Wenn du bereits einen Account hast, klicke einfach hier, um zum Login zurückzukehren.',
+                        side: "top",
+                        align: 'center'
+                    },
+                    // Der leuchtende White-Box-Effekt (wie beim Login)
+                    onHighlightStarted: (element) => {
+                        element.style.background = '#ffffff';
+                        element.style.color = '#050505';
+                        element.style.padding = '10px 20px';
+                        element.style.borderRadius = '12px';
+                        element.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.5)';
+                    },
+                    onDeselected: (element) => {
+                        element.style.background = 'transparent';
+                        element.style.color = '#555';
+                        element.style.padding = '0';
+                        element.style.boxShadow = 'none';
+                    }
+                }
+            ];
+            // ]]>
+		</script>
+
+		<ui:include src="/WEB-INF/includes/helpWidget.xhtml" />
+
+	</f:view>
 </h:body>
 </html>

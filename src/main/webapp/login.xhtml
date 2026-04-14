@@ -2,7 +2,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:h="jakarta.faces.html"
-	  xmlns:f="jakarta.faces.core">
+	  xmlns:f="jakarta.faces.core"
+	  xmlns:ui="jakarta.faces.facelets">
 
 <h:head>
 	<title>Login - Smart Momo Gym</title>
@@ -220,7 +221,35 @@
 				</h:form>
 			</div>
 		</div>
-
+		<script>
+            // <![CDATA[
+            const pageTourSteps = [
+                {
+                    element: '.link-text',
+                    popover: {
+                        title: 'Neu hier?',
+                        description: 'Willkommen bei Smart Momo Gym! Wenn du noch keinen Account hast, klicke hier, um dich kostenlos zu registrieren und direkt loszulegen.',
+                        side: "top",
+                        align: 'center'
+                    },
+                    onHighlightStarted: (element) => {
+                        element.style.background = '#ffffff';
+                        element.style.color = '#050505';
+                        element.style.padding = '10px 20px';
+                        element.style.borderRadius = '12px';
+                        element.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.5)';
+                    },
+                    onDeselected: (element) => {
+                        element.style.background = 'transparent';
+                        element.style.color = '#555';
+                        element.style.padding = '0';
+                        element.style.boxShadow = 'none';
+                    }
+                }
+            ];
+            // ]]>
+		</script>
+		<ui:include src="/WEB-INF/includes/helpWidget.xhtml" />
 	</f:view>
 </h:body>
 </html>
