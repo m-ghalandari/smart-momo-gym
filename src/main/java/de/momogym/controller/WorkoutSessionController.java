@@ -62,7 +62,11 @@ public class WorkoutSessionController implements Serializable {
 					for (int i = 0; i < dto.getSets().size(); i++) {
 						WorkoutSetDTO set = dto.getSets().get(i);
 						set.setCompleted(true);
-						set.setWeight(log.getWeight());
+
+						String weightStr = String.valueOf(log.getWeight());
+						if(weightStr.endsWith(".0")) weightStr = weightStr.substring(0, weightStr.length()-2);
+						set.setWeight(weightStr);
+
 						if (i < loggedReps.length) {
 							set.setReps(loggedReps[i]);
 						}
@@ -86,7 +90,7 @@ public class WorkoutSessionController implements Serializable {
 				.orElse("");
 
 			Double maxWeight = exercise.getSets().stream()
-				.mapToDouble(WorkoutSetDTO::getWeight)
+				.mapToDouble(s -> parseMaxWeight(s.getWeight()))
 				.max().orElse(0.0);
 
 			trainingPlanService.logWorkoutExercise(
@@ -102,22 +106,30 @@ public class WorkoutSessionController implements Serializable {
 		}
 	}
 
+	/**
+	 * Extrahiert aus einem String (z.B. "20/25 kg" oder "10 p.S") das höchste Gewicht.
+	 */
+	private Double parseMaxWeight(String weightStr) {
+		if (weightStr == null || weightStr.isBlank()) return 0.0;
+		try {
+			java.util.regex.Matcher m = java.util.regex.Pattern.compile("\\d+(\\.\\d+)?").matcher(weightStr.replace(",", "."));
+			double max = 0.0;
+			while (m.find()) {
+				double val = Double.parseDouble(m.group());
+				if (val > max) max = val;
+			}
+			return max;
+		} catch (Exception e) {
+			return 0.0;
+		}
+	}
+
 	public String finishWorkout(){
 		return "planEditor?faces-redirect=true&planId=" + this.planId + "&dayId=" + this.trainingDay.getId();
 	}
 
-	public TrainingDay getTrainingDay() {
-		return trainingDay;
-	}
-
-	public Long getPlanId() {
-		return planId;
-	}
-
-	public List<WorkoutExerciseDTO> getPendingExercises() {
-		return pendingExercises;
-	}
-	public List<WorkoutExerciseDTO> getCompletedExercises() {
-		return completedExercises;
-	}
+	public TrainingDay getTrainingDay() { return trainingDay; }
+	public Long getPlanId() { return planId; }
+	public List<WorkoutExerciseDTO> getPendingExercises() { return pendingExercises; }
+	public List<WorkoutExerciseDTO> getCompletedExercises() { return completedExercises; }
 }

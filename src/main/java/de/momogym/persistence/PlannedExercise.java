@@ -2,6 +2,9 @@ package de.momogym.persistence;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "PLANNED_EXERCISE")
 public class PlannedExercise {
@@ -21,6 +24,10 @@ public class PlannedExercise {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "EXERCISE_ID", nullable = false)
     private Exercise exercise;
+
+	@OneToMany(mappedBy = "plannedExercise", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OrderBy("setNumber ASC")
+	private List<PlannedSet> plannedSets = new ArrayList<>();
 
     @Column(name = "SETS")
     private int sets; // Sätze (z.B. 3)
@@ -44,6 +51,25 @@ public class PlannedExercise {
         this.reps = reps;
         this.sortOrder = sortOrder;
     }
+
+	// Prüft, ob alle generierten Sätze exakt gleich sind (für die UI-Anzeige)
+	@Transient
+	public boolean isUniform() {
+		if (plannedSets == null || plannedSets.isEmpty()) {
+			return true;
+		}
+
+		String firstReps = plannedSets.get(0).getReps();
+		String firstWeight = plannedSets.get(0).getWeight();
+
+		for (PlannedSet ps : plannedSets) {
+			if (!java.util.Objects.equals(firstReps, ps.getReps()) ||
+				!java.util.Objects.equals(firstWeight, ps.getWeight())) {
+				return false;
+			}
+		}
+		return true;
+	}
 
     public Long getId() {
         return id;
@@ -94,5 +120,12 @@ public class PlannedExercise {
 	}
 	public void setWeight(Double weight) {
 		this.weight = weight;
+	}
+
+	public List<PlannedSet> getPlannedSets() {
+		return plannedSets;
+	}
+	public void setPlannedSets(List<PlannedSet> plannedSets) {
+		this.plannedSets = plannedSets;
 	}
 }

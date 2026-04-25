@@ -271,15 +271,11 @@
 
 									<h:inputText value="#{set.weight}"
 												 styleClass="set-input-mini"
-												 disabled="#{set.completed}"
-												 f:passThroughAttribute="inputmode"
-												 f:passThroughValue="decimal" />
+												 disabled="#{set.completed}" />
 
 									<h:inputText value="#{set.reps}"
 												 styleClass="set-input-mini"
-												 disabled="#{set.completed}"
-												 f:passThroughAttribute="inputmode"
-												 f:passThroughValue="decimal" />
+												 disabled="#{set.completed}" />
 
 									<h:commandButton action="#{workoutSessionController.markSetAsDone(pe, set)}"
 													 value="#{set.completed ? '✔️' : '☐'}"
@@ -291,7 +287,6 @@
 								</div>
 							</ui:repeat>
 						</div>
-
 					</div>
 				</ui:repeat>
 			</h:panelGroup>

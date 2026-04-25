@@ -4,12 +4,14 @@ import de.momogym.persistence.Athlete;
 import de.momogym.persistence.Exercise;
 import de.momogym.persistence.ExerciseLog;
 import de.momogym.persistence.PlannedExercise;
+import de.momogym.persistence.PlannedSet;
 import de.momogym.persistence.TrainingDay;
 import de.momogym.persistence.TrainingPlan;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Subgraph;
 import jakarta.persistence.TypedQuery;
 
 import java.util.HashMap;
@@ -96,15 +98,75 @@ public class TrainingPlanService {
 
 		plannedExercise.setSortOrder(day.getPlannedExercises().size() + 1);
 
+		// Automatische Sätze (PlannedSets) generieren ---
+		for (int i = 1; i <= sets; i++) {
+			PlannedSet plannedSet = new PlannedSet();
+			plannedSet.setPlannedExercise(plannedExercise);
+			plannedSet.setSetNumber(i);
+			plannedSet.setReps(reps);
+
+			String weightStr = (weight != null) ? String.valueOf(weight) : "0";
+			if (weightStr.endsWith(".0")) {
+				weightStr = weightStr.substring(0, weightStr.length() - 2);
+			}
+			plannedSet.setWeight(weightStr);
+
+			plannedExercise.getPlannedSets().add(plannedSet);
+		}
+
 		entityManager.persist(plannedExercise);
 	}
 
-	public void updatePlannedExercise(Long id, int sets, String reps, Double weight){
-		PlannedExercise exercise = entityManager.find(PlannedExercise.class, id);
-		if( exercise != null){
-			exercise.setSets(sets);
-			exercise.setReps(reps);
-			exercise.setWeight(weight);
+	public void updatePlannedExercise(PlannedExercise exerciseToUpdate) {
+		// 1. Die Übung aus der Datenbank laden, um sie sicher zu aktualisieren
+		PlannedExercise managedExercise = entityManager.find(PlannedExercise.class, exerciseToUpdate.getId());
+
+		if (managedExercise != null) {
+			// Basiswerte aktualisieren
+			managedExercise.setSets(exerciseToUpdate.getSets());
+			managedExercise.setReps(exerciseToUpdate.getReps());
+			managedExercise.setWeight(exerciseToUpdate.getWeight());
+
+			List<PlannedSet> managedSets = managedExercise.getPlannedSets();
+			List<PlannedSet> incomingSets = exerciseToUpdate.getPlannedSets();
+
+			// 2. Bestehende Sätze mit den neuen Freitext-Eingaben (Wdh/Gewicht) überschreiben
+			for (int i = 0; i < managedSets.size() && i < incomingSets.size(); i++) {
+				managedSets.get(i).setReps(incomingSets.get(i).getReps());
+				managedSets.get(i).setWeight(incomingSets.get(i).getWeight());
+			}
+
+			// 3. SYNCHRONISATION: Hat der User die Anzahl der Sätze geändert?
+			int targetSets = managedExercise.getSets();
+
+			// Fall A: Sätze wurden hinzugefügt (z.B. von 3 auf 4)
+			if (managedSets.size() < targetSets) {
+				for (int i = managedSets.size() + 1; i <= targetSets; i++) {
+					PlannedSet newSet = new PlannedSet();
+					newSet.setPlannedExercise(managedExercise);
+					newSet.setSetNumber(i);
+
+					// Wir kopieren als Standard einfach die Werte aus dem letzten Satz
+					if (!managedSets.isEmpty()) {
+						PlannedSet lastSet = managedSets.get(managedSets.size() - 1);
+						newSet.setReps(lastSet.getReps());
+						newSet.setWeight(lastSet.getWeight());
+					} else {
+						newSet.setReps(managedExercise.getReps());
+						newSet.setWeight(String.valueOf(managedExercise.getWeight()));
+					}
+					managedSets.add(newSet);
+				}
+			}
+			// Fall B: Sätze wurden reduziert (z.B. von 4 auf 2)
+			else if (managedSets.size() > targetSets) {
+				while (managedSets.size() > targetSets) {
+					// Den letzten Satz entfernen
+					managedSets.remove(managedSets.size() - 1);
+				}
+			}
+
+			entityManager.merge(managedExercise);
 		}
 	}
 
@@ -160,9 +222,12 @@ public class TrainingPlanService {
 	 * Lädt genau einen Tag inklusive seiner Übungen (Sortierung passiert automatisch durch @OrderBy in der Entity)
 	 */
 	public TrainingDay findTrainingDayWithExercises(Long dayId) {
-
 		EntityGraph<TrainingDay> graph = entityManager.createEntityGraph(TrainingDay.class);
-		graph.addSubgraph("plannedExercises").addAttributeNodes("exercise");
+
+		Subgraph<PlannedExercise> peSubgraph = graph.addSubgraph("plannedExercises");
+
+		peSubgraph.addAttributeNodes("exercise");
+		peSubgraph.addAttributeNodes("plannedSets");
 
 		Map<String, Object> properties = new HashMap<>();
 		properties.put("jakarta.persistence.fetchgraph", graph);

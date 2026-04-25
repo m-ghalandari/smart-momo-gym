@@ -68,12 +68,8 @@ public class PlanEditorController implements Serializable {
 
 	public void saveEdit() {
 		if (exerciseToEdit != null) {
-			trainingPlanService.updatePlannedExercise(
-				exerciseToEdit.getId(),
-				exerciseToEdit.getSets(),
-				exerciseToEdit.getReps(),
-				exerciseToEdit.getWeight()
-			);
+
+			trainingPlanService.updatePlannedExercise(exerciseToEdit);
 
 			this.exerciseToEdit = null;
 			loadTrainingPlan();

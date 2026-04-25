@@ -4,20 +4,20 @@ import java.io.Serializable;
 
 public class WorkoutSetDTO implements Serializable {
 	private int setNumber;
-	private Double weight;
+	private String weight;
 	private String reps;
 	private boolean completed;
 
-	public WorkoutSetDTO(int setNumber, Double targetWeight, String targetReps) {
+	public WorkoutSetDTO(int setNumber, String targetWeight, String targetReps) {
 		this.setNumber = setNumber;
-		this.weight = targetWeight != null ? targetWeight : 0.0;
+		this.weight = targetWeight != null ? targetWeight : "0";
 		this.reps = targetReps;
 		this.completed = false;
 	}
 
 	public int getSetNumber() { return setNumber; }
-	public Double getWeight() { return weight; }
-	public void setWeight(Double weight) { this.weight = weight; }
+	public String getWeight() { return weight; }
+	public void setWeight(String weight) { this.weight = weight; }
 	public String getReps() { return reps; }
 	public void setReps(String reps) { this.reps = reps; }
 	public boolean isCompleted() { return completed; }
